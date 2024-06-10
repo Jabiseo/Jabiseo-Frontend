@@ -12,19 +12,17 @@ const GoogleButton = () => {
     console.log(idToken);
   };
   return (
-    <GoogleOAuthProvider clientId={googleID || ""}>
-      <div>
+    <>
+      <GoogleOAuthProvider clientId={googleID || ""}>
         <GoogleLogin
           onSuccess={data => {
             submitIdToken(data.credential ?? "");
           }}
           onError={() => {}}
-          type="icon"
-          shape="circle"
-          size="small"
+          width="300"
         />
-      </div>
-    </GoogleOAuthProvider>
+      </GoogleOAuthProvider>
+    </>
   );
 };
 

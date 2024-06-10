@@ -1,7 +1,8 @@
 "use client";
 
-import { SiKakaotalk } from "react-icons/si";
+import Image from "next/image";
 import KakaoLogin from "react-kakao-login";
+import Icon from "@/public/kakaoIcon.png";
 
 const KakaoButton: React.FC = () => {
   const kakaoClientId: string | undefined = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
@@ -24,7 +25,7 @@ const KakaoButton: React.FC = () => {
       onSuccess={kakaoOnSuccess}
       onFail={kakaoOnFailure}
       render={props => (
-        <div>
+        <div style={{ width: "300px", height: "45px" }}>
           <KaKaoIcon onClick={props.onClick} />
         </div>
       )}
@@ -38,10 +39,14 @@ interface props {
 
 const KaKaoIcon: React.FC<props> = ({ onClick }) => {
   return (
-    <SiKakaotalk
+    <button
       onClick={onClick}
-      style={{ background: "black", color: "yellow", borderRadius: "9999px" }}
-    />
+      style={{
+        cursor: "pointer",
+      }}
+    >
+      <Image src={Icon} alt="kakao" width={300} height={45} />
+    </button>
   );
 };
 export default KakaoButton;

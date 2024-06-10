@@ -1,9 +1,9 @@
-"use client";
-import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+("use client");
 export default function Home() {
   return (
-    <main>
-      <Button variant="contained">sad</Button>
-    </main>
+    <Container maxWidth="lg">
+      <p>asd</p>
+    </Container>
   );
 }
