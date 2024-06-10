@@ -1,5 +1,5 @@
+"use client";
 import Container from "@mui/material/Container";
-("use client");
 export default function Home() {
   return (
     <Container maxWidth="lg">

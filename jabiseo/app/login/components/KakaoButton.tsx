@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import KakaoLogin from "react-kakao-login";
-import Icon from "@/public/kakaoIcon.png";
+import Icon from "../../../public/kakaoIcon.png";
 
 const KakaoButton: React.FC = () => {
   const kakaoClientId: string | undefined = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
