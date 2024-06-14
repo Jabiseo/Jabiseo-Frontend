@@ -1,10 +1,12 @@
 "use client";
 import { Box, Container, Grid } from "@mui/material";
 import MakeProblemSetUI from "./components/MakeProblemSet";
+import Appbar from "@/src/components/Appbar";
 
 const makeProblemSetBase = () => {
   return (
     <Container maxWidth={false} disableGutters>
+      <Appbar />
       <Box
         sx={{
           margin: "0 auto",

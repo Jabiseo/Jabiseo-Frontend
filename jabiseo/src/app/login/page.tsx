@@ -2,15 +2,21 @@
 
 import KakaoButton from "./components/KakaoButton";
 import GoogleButton from "./components/GoogleButton";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Box, ThemeProvider, Typography, createTheme, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import Appbar from "@/src/components/Appbar";
 
 const Login = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
-
+  const th = createTheme({
+    typography: {
+      fontFamily: "Pretendard-Regular",
+    },
+  });
   return (
-    <>
+    <ThemeProvider theme={th}>
+      <Appbar />
       <Box
         component="div"
         sx={{
@@ -20,7 +26,7 @@ const Login = () => {
           justifyContent: "center",
           alignItems: "center",
           padding: isSmallScreen ? "1rem" : "2rem",
-          bgcolor: "#f7f7f5ff",
+          bgcolor: "var(--c-grey)",
           transition: "all 0.5s",
         }}
       >
@@ -62,7 +68,7 @@ const Login = () => {
           <GoogleButton />
         </Box>
       </Box>
-    </>
+    </ThemeProvider>
   );
 };
 

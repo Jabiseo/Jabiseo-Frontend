@@ -8,12 +8,10 @@ const GoogleButton = () => {
    * @param idToken
    * @todo Submit the idToken to the backend
    */
-  const submitIdToken = async (idToken: string) => {
-    console.log(idToken);
-  };
+  const submitIdToken = async (idToken: string) => {};
   return (
     <>
-      <GoogleOAuthProvider clientId={googleID || ""}>
+      <GoogleOAuthProvider clientId={googleID!}>
         <GoogleLogin
           onSuccess={data => {
             submitIdToken(data.credential ?? "");

@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import KakaoLogin from "react-kakao-login";
-import Icon from "../../../public/kakaoIcon.png";
+import Icon from "@/public/kakaoIcon.png";
 
 const KakaoButton: React.FC = () => {
-  const kakaoClientId: string | undefined = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+  const kakaoClientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
 
   /**
    *
@@ -14,14 +14,11 @@ const KakaoButton: React.FC = () => {
    */
   const kakaoOnSuccess = async (data: any) => {
     const idToken = data.response.id_token;
-    console.log(idToken);
   };
-  const kakaoOnFailure = (error: any) => {
-    console.log(error);
-  };
+  const kakaoOnFailure = (error: any) => {};
   return (
     <KakaoLogin
-      token={kakaoClientId?.toString() || ""}
+      token={kakaoClientId!.toString()}
       onSuccess={kakaoOnSuccess}
       onFail={kakaoOnFailure}
       render={props => (

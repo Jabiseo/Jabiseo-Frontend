@@ -1,0 +1,26 @@
+:root {
+  --c-brown: #a1824a;
+  --c-light-brown: #e8decf;
+  --c-green: #009963;
+  --c-grey: #f7f7f5ff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+button {
+  padding: 0px;
+  border: none;
+  background-color: white;
+}
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}

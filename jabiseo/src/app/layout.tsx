@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import CssBaseline from "@mui/material/CssBaseline";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { Noto_Sans } from "next/font/google";
+import "./globals.css";
+import { Metadata } from "next";
 
-import AppBar from "@/components/Appbar";
-
-const inter = Inter({ subsets: ["latin"] });
+const font = Noto_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,8 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AppBar mode={"light"} />
+      <body className={font.className}>
+        <CssBaseline />
         <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
       </body>
     </html>
