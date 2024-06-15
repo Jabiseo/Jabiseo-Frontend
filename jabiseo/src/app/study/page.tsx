@@ -1,18 +1,22 @@
 "use client";
 
 import ProblemUI from "./components/problemUI";
-import { use, useEffect, useState } from "react";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Button, Container, Grid, Tab, Tabs, Typography } from "@mui/material";
 import Appbar from "@/src/components/Appbar";
 import { getProblems } from "@/src/api/types/apis/problem";
 
 const StudyPage = () => {
   const [problem, setProblem] = useState<Problem | null>(null);
-  const problems = getProblems();
-  const [problemNumber, setProblemNumber] = useState(1);
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [problemNumber, setProblemNumber] = useState<number>(1);
   const [time, setTime] = useState(0);
-  const [chooseNumbers, setChooseNumbers] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [viewTime, setViewTime] = useState("00분 00초");
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(prev => prev ^ 1);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,14 +38,19 @@ const StudyPage = () => {
   }, [time]);
 
   useEffect(() => {
-    setProblem(problems[problemNumber - 1]);
-  }, [problemNumber]);
+    const fetchProblems = async () => {
+      const fetchedProblems = await getProblems();
+      setProblems(fetchedProblems);
+      setProblem(fetchedProblems[0]);
+    };
 
-  const chooseAnswer = (number: number) => {
-    const temp = chooseNumbers;
-    temp[problemNumber] = number;
-    setChooseNumbers(temp);
-  };
+    fetchProblems();
+  }, []);
+
+  useEffect(() => {
+    setProblem(problems[problemNumber - 1]);
+    setTabValue(0);
+  }, [problemNumber]);
 
   const nextProblem = () => {
     setProblemNumber(problemNumber + 1);
@@ -51,9 +60,25 @@ const StudyPage = () => {
     setProblemNumber(problemNumber - 1);
   };
 
+  const chooseAnswer = (number: number) => {
+    setProblem(prev => {
+      if (!prev) return null;
+      return { ...prev, chooseNumber: number };
+    });
+    problems[problemNumber - 1].chooseNumber = number;
+  };
   return (
     <>
-      <Container maxWidth={false} disableGutters sx={{ minHeight: "105vh" }}>
+      <Container
+        maxWidth={false}
+        disableGutters
+        sx={{
+          minHeight: {
+            xs: "130vh",
+            md: "110vh",
+          },
+        }}
+      >
         <Appbar />
         <Box
           sx={{
@@ -128,11 +153,17 @@ const StudyPage = () => {
                       {viewTime}
                     </Typography>
                   </Box>
-                  <ProblemUI
-                    props={problem}
-                    chooseAnswer={chooseAnswer}
-                    choosedNumber={chooseNumbers[problemNumber]}
-                  />
+                  <Tabs
+                    value={tabValue}
+                    onChange={handleChange}
+                    centered
+                    variant="fullWidth"
+                    sx={{ mt: 2 }}
+                  >
+                    <Tab label="문제" sx={{ flex: 1 }} />
+                    <Tab label="해설" sx={{ flex: 1 }} />
+                  </Tabs>
+                  <ProblemUI props={problem} chooseAnswer={chooseAnswer} isSolution={tabValue} />
                 </>
               ) : (
                 <div>Loading problem...</div>

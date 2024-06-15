@@ -1,19 +1,44 @@
 "use client";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
-import { memo, useEffect, useState } from "react";
+import { memo, use, useEffect, useState } from "react";
 import { Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle } from "react-icons/bs";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
+import SolutionUI from "./solutionUI";
 
 const ProblemUI: React.FC<{
   props: Problem;
   chooseAnswer: (number: number) => void;
-  choosedNumber: number;
-}> = memo(({ props, chooseAnswer, choosedNumber }) => {
+  isSolution: number;
+}> = memo(({ props, chooseAnswer, isSolution }) => {
   const problem = props;
   const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
+  const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
+  const changeColor = () => {
+    if (problem.chooseNumber === 0) {
+      setColors(["white", "white", "white", "white", "white"]);
+      return;
+    }
+    if (problem.chooseNumber === problem.answerNumber) {
+      setColors(prev => {
+        const newColors = ["white", "white", "white", "white", "white"];
+        newColors[problem.chooseNumber - 1] = "var(--c-light-green)";
+        return newColors;
+      });
+    } else {
+      setColors(prev => {
+        const newColors = ["white", "white", "white", "white", "white"];
+        newColors[problem.chooseNumber - 1] = "var(--c-light-red)";
+        newColors[problem.answerNumber - 1] = "var(--c-light-green)";
+        return newColors;
+      });
+    }
+  };
+  useEffect(() => {
+    changeColor();
+  }, [problem.chooseNumber]);
 
   return (
     <>
@@ -80,7 +105,7 @@ const ProblemUI: React.FC<{
               <Grid item xs={12} key={idx}>
                 <Box
                   onClick={() => {
-                    chooseAnswer(idx);
+                    chooseAnswer(idx + 1);
                   }}
                   sx={{
                     display: "flex",
@@ -88,8 +113,9 @@ const ProblemUI: React.FC<{
                     alignItems: "center",
                     borderRadius: 2,
                     "&:hover": {
-                      bgcolor: "var(--c-grey)",
+                      bgcolor: problem.chooseNumber === 0 ? "var(--c-grey)" : "",
                     },
+                    backgroundColor: colors[idx],
                   }}
                 >
                   <Box
@@ -105,6 +131,7 @@ const ProblemUI: React.FC<{
               </Grid>
             ))}
           </Grid>
+          {isSolution === 1 ? <SolutionUI solution={problem.solution} /> : <></>}
         </Box>
       </Container>
     </>

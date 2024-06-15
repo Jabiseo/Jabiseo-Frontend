@@ -19,4 +19,5 @@ interface Problem {
   answerNumber: number;
   theory: string;
   solution: string;
+  chooseNumber: number;
 }
