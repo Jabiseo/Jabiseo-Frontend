@@ -1,17 +1,21 @@
+import { getProblems } from "@/src/api/types/apis/problem";
 import {
   Box,
   Button,
+  Card,
+  CardContent,
   Container,
+  Grid,
+  MenuItem,
   Select,
   Typography,
-  MenuItem,
-  Grid,
-  CardContent,
-  Card,
 } from "@mui/material";
-import SubjectSlider from "./subjectSlider";
 import { useEffect, useState } from "react";
-import { getProblems } from "@/src/api/types/apis/problem";
+import Markdown from "react-markdown";
+import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
+import remarkMath from "remark-math";
+import SubjectSlider from "./subjectSlider";
 
 const subjects = [
   { name: "awfaegsrgsf", subjectId: 1 },
@@ -33,16 +37,49 @@ const exams = [
 
 const BookMarkMain = () => {
   const [selectedExam, setSelectedExam] = useState(exams[0]);
-  const [problems, setProblems] = useState<Problem[]>([]);
+  const [problems, setProblems] = useState<BookMarkProblem[]>([]);
+  const [selectedProblems, setSelectedProblems] = useState<number[]>([]);
 
   useEffect(() => {
     const fetchProblems = async () => {
       const fetchedProblems = await getProblems();
-      setProblems(fetchedProblems);
+      const parsedProblems = fetchedProblems.map(problem => {
+        const bookmarkProblem: BookMarkProblem = {
+          isBookmark: true,
+          description: "",
+          examInfo: { examId: 0, description: "" },
+          problemId: 0,
+          subject: { name: "", subjectId: 0 },
+        };
+        bookmarkProblem.isBookmark = true;
+        bookmarkProblem.description = problem.description.split("<br>!")[0];
+        bookmarkProblem.examInfo = problem.examInfo;
+        bookmarkProblem.problemId = problem.problemId;
+        bookmarkProblem.subject = problem.subject;
+        return bookmarkProblem;
+      });
+      return setProblems(parsedProblems);
     };
 
     fetchProblems();
   }, []);
+
+  const selectProblem = (problemId: number) => {
+    if (selectedProblems.includes(problemId)) {
+      setSelectedProblems(selectedProblems.filter(id => id !== problemId));
+    } else {
+      setSelectedProblems([...selectedProblems, problemId]);
+    }
+  };
+
+  const selectAllProblems = () => {
+    const allProblems = problems.map(problem => problem.problemId);
+    setSelectedProblems(allProblems);
+  };
+
+  const deselectAllProblems = () => {
+    setSelectedProblems([]);
+  };
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
@@ -64,26 +101,51 @@ const BookMarkMain = () => {
         <Typography variant="h6" gutterBottom>
           {problems.length} 문제
         </Typography>
-        <Button variant="contained" sx={{ mr: 1 }}>
+        <Button variant="contained" sx={{ mr: 1 }} onClick={selectAllProblems}>
           전체 선택
         </Button>
-        <Button variant="outlined">전체 해제</Button>
+        <Button variant="outlined" onClick={deselectAllProblems}>
+          전체 해제
+        </Button>
       </Box>
 
       <Grid container spacing={2}>
         {problems.map((problem, index) => (
           <Grid item xs={12} key={index}>
-            <Card>
+            <Card
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                  border: "2px solid black",
+                },
+                backgroundColor: selectedProblems.includes(problem.problemId)
+                  ? "var(--c-light-red)"
+                  : "",
+              }}
+              onClick={() => selectProblem(problem.problemId)}
+            >
               <CardContent
                 sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
               >
                 <Box>
-                  <Typography variant="h6">
-                    {problem.examInfo.year}회 {problem.examInfo.round}회 시험
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
+                  <Typography variant="h6">{problem.examInfo.description} 시험</Typography>
+                  <Markdown
+                    remarkPlugins={[remarkMath]}
+                    rehypePlugins={[rehypeKatex, rehypeRaw]}
+                    components={{
+                      p: ({ node, ...content }) => (
+                        <Box
+                          sx={{
+                            width: "100%",
+                          }}
+                        >
+                          {content.children}
+                        </Box>
+                      ),
+                    }}
+                  >
                     {problem.description}
-                  </Typography>
+                  </Markdown>
                 </Box>
               </CardContent>
             </Card>

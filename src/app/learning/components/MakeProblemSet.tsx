@@ -15,6 +15,7 @@ import {
   createTheme,
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
+import { useRouter } from "next/navigation";
 
 const marks = [
   { value: 0, label: "0" },
@@ -58,6 +59,15 @@ const ExamSettings = () => {
     setSelectedSubjects(prev =>
       prev.includes(value) ? prev.filter(subject => subject !== value) : [...prev, value]
     );
+  };
+
+  const router = useRouter();
+  const gotoStudyMode = () => {
+    router.push("/study");
+  };
+
+  const gotoExamMode = () => {
+    router.push("/exam");
   };
 
   const theme = createTheme({
@@ -190,6 +200,7 @@ const ExamSettings = () => {
             variant="contained"
             sx={{ backgroundColor: "var(--c-green)", borderRadius: "12px", minWidth: "150px" }}
             size="large"
+            onClick={gotoStudyMode}
           >
             공부모드
           </Button>
@@ -202,6 +213,7 @@ const ExamSettings = () => {
               minWidth: "150px",
             }}
             size="large"
+            onClick={gotoExamMode}
           >
             시험모드
           </Button>

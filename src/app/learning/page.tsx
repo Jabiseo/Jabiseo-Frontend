@@ -1,15 +1,12 @@
 "use client";
-import { Box, Container, Grid } from "@mui/material";
-import MakeProblemSetUI from "./components/MakeProblemSet";
-import Appbar from "@/src/components/Appbar";
 import GridBase from "@/src/components/gridBase";
+import MakeProblemSetUI from "./components/MakeProblemSet";
 
 const makeProblemSetBase = () => {
   return (
     <>
       <GridBase main={<MakeProblemSetUI />} />;
     </>
-
   );
 };
 

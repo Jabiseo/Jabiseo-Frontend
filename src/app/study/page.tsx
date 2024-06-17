@@ -150,7 +150,7 @@ const StudyPage = () => {
                           },
                         }}
                       >
-                        {problem.examInfo.year}년도 {problem.examInfo.round}회
+                        {problem.examInfo.description} 시험
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center" }}>

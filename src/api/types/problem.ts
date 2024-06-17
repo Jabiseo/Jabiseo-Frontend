@@ -1,7 +1,6 @@
 interface ExamInfo {
   examId: number;
-  year: number;
-  round: number;
+  description: string;
 }
 
 interface Subject {
