@@ -624,6 +624,14 @@
   dependencies:
     tslib "^2.4.0"
 
+"@types/create-react-class@*":
+  version "15.6.8"
+  resolved "https://registry.yarnpkg.com/@types/create-react-class/-/create-react-class-15.6.8.tgz#5cc2fa17bcdda0e88b2cee9d416604178cc70541"
+  integrity sha512-s5HocgHXvN4Phoypsz8+4TLFreWRUrMcq9MHgwVleqNNR5EipSrFN49LCU/N7j8nIiQoRExY9n79LBrTDdsE1Q==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/react" "*"
+
 "@types/debug@^4.0.0":
   version "4.1.12"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.12.tgz#a155f21690871953410df4b6b6f53187f0500917"
@@ -660,6 +668,14 @@
   resolved "https://registry.yarnpkg.com/@types/katex/-/katex-0.16.7.tgz#03ab680ab4fa4fbc6cb46ecf987ecad5d8019868"
   integrity sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==
 
+"@types/material-ui@^0.21.17":
+  version "0.21.17"
+  resolved "https://registry.yarnpkg.com/@types/material-ui/-/material-ui-0.21.17.tgz#18423ab578a212f259b664f9f8d38c84dcf3af91"
+  integrity sha512-3iyPhFkqI856UBWRxaO7ZZDpOtWM3XPl5gdKKkVBPn3TqNBdgDuFFhHx8BFLL85o5oYy5Y/SX5s0bs7a2VdLTw==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-addons-linked-state-mixin" "*"
+
 "@types/mdast@^4.0.0":
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/@types/mdast/-/mdast-4.0.4.tgz#7ccf72edd2f1aa7dd3437e180c64373585804dd6"
@@ -688,6 +704,14 @@
   version "15.7.12"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.12.tgz#12bb1e2be27293c1406acb6af1c3f3a1481d98c6"
   integrity sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==
+
+"@types/react-addons-linked-state-mixin@*":
+  version "0.14.27"
+  resolved "https://registry.yarnpkg.com/@types/react-addons-linked-state-mixin/-/react-addons-linked-state-mixin-0.14.27.tgz#8f2a31b9d988ce430775983bbb0d0965e8b537a3"
+  integrity sha512-yVxzQcKDiq32uziGQ/ka586qSFxz2ePYZ3dTCp4JHJKk/E6M0LP0R28ft3oFAnTGJRFBAB3if3pkP8w57Y04IA==
+  dependencies:
+    "@types/create-react-class" "*"
+    "@types/react" "*"
 
 "@types/react-dom@^18":
   version "18.3.0"

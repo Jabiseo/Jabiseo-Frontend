@@ -66,6 +66,29 @@ const ProblemUI: React.FC<{
           flexDirection: "column",
         }}
       >
+        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+          <Box
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+              marginRight: 2,
+            }}
+            onClick={bookmarking}
+          >
+            {problem.isBookmark ? <FaRegBookmark size={25} /> : <FaBookmark size={25} />}
+          </Box>
+          <Box
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+            onClick={alerting}
+          >
+            <PiSirenFill size={30} />
+          </Box>
+        </Box>
         <Box sx={{ marginBottom: 2 }}>
           <Box
             sx={{

@@ -48,9 +48,15 @@ const Appbar = () => {
               />
             </Typography>
           </Box>
-          <Button sx={{ color: "black", display: { xs: "none", sm: "flex" } }}>홈</Button>
-          <Button sx={{ color: "black", display: { xs: "none", sm: "flex" } }}>문제풀이</Button>
-          <Button sx={{ color: "black", display: { xs: "none", sm: "flex" } }}>북마크</Button>
+          <Button sx={{ color: "black", display: { xs: "none", sm: "flex" } }} href="/">
+            홈
+          </Button>
+          <Button sx={{ color: "black", display: { xs: "none", sm: "flex" } }} href="/learning">
+            문제풀이
+          </Button>
+          <Button sx={{ color: "black", display: { xs: "none", sm: "flex" } }} href="/bookmark">
+            북마크
+          </Button>
           {!isLogin ? (
             <Button
               variant="contained"
