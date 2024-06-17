@@ -1,24 +1,20 @@
 "use client";
 
-import ProblemUI from "./components/problemUI";
-import { useEffect, useState } from "react";
-import { Box, Button, Container, Grid, Modal, Tab, Tabs, Typography } from "@mui/material";
-import Appbar from "@/src/components/Appbar";
 import { getProblems } from "@/src/api/types/apis/problem";
+import Appbar from "@/src/components/Appbar";
+import { Box, Button, Container, Grid, Modal, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import ProblemUI from "./components/problemUI";
 
-const StudyPage = () => {
+const ExamPage = () => {
   const [problem, setProblem] = useState<Problem | null>(null);
   const [problems, setProblems] = useState<Problem[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
   const [time, setTime] = useState(0);
   const [viewTime, setViewTime] = useState("00분 00초");
-  const [tabValue, setTabValue] = useState(0);
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(prev => prev ^ 1);
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,7 +47,6 @@ const StudyPage = () => {
 
   useEffect(() => {
     setProblem(problems[problemNumber - 1]);
-    setTabValue(0);
   }, [problemNumber]);
 
   const nextProblem = () => {
@@ -78,6 +73,7 @@ const StudyPage = () => {
   const handleModal = () => {
     setOpen(!open);
   };
+
   return (
     <>
       <Container
@@ -164,17 +160,7 @@ const StudyPage = () => {
                       {viewTime}
                     </Typography>
                   </Box>
-                  <Tabs
-                    value={tabValue}
-                    onChange={handleChange}
-                    centered
-                    variant="fullWidth"
-                    sx={{ mt: 2 }}
-                  >
-                    <Tab label="문제" sx={{ flex: 1 }} />
-                    <Tab label="해설" sx={{ flex: 1 }} />
-                  </Tabs>
-                  <ProblemUI props={problem} chooseAnswer={chooseAnswer} isSolution={tabValue} />
+                  <ProblemUI props={problem} chooseAnswer={chooseAnswer} />
                 </>
               ) : (
                 <div>Loading problem...</div>
@@ -267,4 +253,4 @@ const StudyPage = () => {
   );
 };
 
-export default StudyPage;
+export default ExamPage;
