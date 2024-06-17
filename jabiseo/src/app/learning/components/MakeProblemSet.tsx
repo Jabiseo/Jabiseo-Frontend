@@ -81,7 +81,6 @@ const ExamSettings = () => {
             variant="h3"
             gutterBottom
             sx={{
-              // borderBottom: "2px solid var(--c-light-brown)",
               paddingBottom: 1,
               marginBottom: 2,
               display: "inline-block",
@@ -104,7 +103,7 @@ const ExamSettings = () => {
                   borderColor: "var(--c-light-brown)",
                 },
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--c-light-brown)", // hover 상태일 때의 border 색상
+                  borderColor: "var(--c-light-brown)",
                 },
               },
             }}

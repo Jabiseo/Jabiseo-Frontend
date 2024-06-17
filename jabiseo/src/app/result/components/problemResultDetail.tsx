@@ -1,30 +1,38 @@
 "use client";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import { Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle } from "react-icons/bs";
-import { FaRegBookmark } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa6";
-import { PiSirenFill } from "react-icons/pi";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
-import SolutionUI from "./solutionUI";
+import SolutionUI from "../../study/components/solutionUI";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { PiSirenFill } from "react-icons/pi";
 
-const ProblemUI: React.FC<{
+const ProblemResultDetail: React.FC<{
   props: Problem;
-  chooseAnswer: (number: number) => void;
-  isSolution: number;
-}> = memo(({ props, chooseAnswer, isSolution }) => {
+  problemNumber: number;
+  nextProblem: () => void;
+  prevProblem: () => void;
+  gotoResult: () => void;
+}> = memo(({ props, problemNumber, nextProblem, prevProblem, gotoResult }) => {
   const problem = props;
   const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
+  const [tabValue, setTabValue] = useState(0);
+  const handleChange = () => {
+    setTabValue(prev => prev ^ 1);
+  };
+
   const changeColor = () => {
     if (problem.chooseNumber === 0) {
-      setColors(["white", "white", "white", "white", "white"]);
-      return;
-    }
-    if (problem.chooseNumber === problem.answerNumber) {
+      setColors(prev => {
+        const newColors = ["white", "white", "white", "white", "white"];
+        newColors[problem.answerNumber - 1] = "var(--c-light-green)";
+        return newColors;
+      });
+    } else if (problem.chooseNumber === problem.answerNumber) {
       setColors(prev => {
         const newColors = ["white", "white", "white", "white", "white"];
         newColors[problem.chooseNumber - 1] = "var(--c-light-green)";
@@ -39,6 +47,7 @@ const ProblemUI: React.FC<{
       });
     }
   };
+
   /**
    * @todo 북마크 기능
    */
@@ -53,48 +62,53 @@ const ProblemUI: React.FC<{
   };
   useEffect(() => {
     changeColor();
-  }, [problem.chooseNumber]);
+  }, [problemNumber]);
 
   return (
-    <>
+    <Container sx={{ minHeight: "120vh" }}>
+      <Button onClick={gotoResult}>결과창으로 돌아가기</Button>
+      <Tabs value={tabValue} onChange={handleChange} centered variant="fullWidth" sx={{ mt: 2 }}>
+        <Tab label="문제" sx={{ flex: 1 }} />
+        <Tab label="해설" sx={{ flex: 1 }} />
+      </Tabs>
       <Container
         maxWidth={false}
         sx={{
-          paddingTop: 2,
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
+          pt: 2,
         }}
       >
         <Box sx={{ marginBottom: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+            <Box
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+              onClick={bookmarking}
+            >
+              {problem.isBookmark ? <FaRegBookmark size={25} /> : <FaBookmark size={25} />}
+            </Box>
+            <Box
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+              onClick={alerting}
+            >
+              <PiSirenFill size={30} />
+            </Box>
+          </Box>
           <Box
             sx={{
               fontSize: "16px",
               fontFamily: "Pretendard-Regular",
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-              <Box
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-                onClick={bookmarking}
-              >
-                {problem.isBookmark ? <FaRegBookmark size={25} /> : <FaBookmark size={25} />}
-              </Box>
-              <Box
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-                onClick={alerting}
-              >
-                <PiSirenFill size={30} />
-              </Box>
-            </Box>
             <Typography variant="body1">1번</Typography>
             <Box
               sx={{
@@ -141,9 +155,6 @@ const ProblemUI: React.FC<{
             {problem.choices.map((choice, idx) => (
               <Grid item xs={12} key={idx}>
                 <Box
-                  onClick={() => {
-                    chooseAnswer(idx + 1);
-                  }}
                   sx={{
                     display: "flex",
                     justifyContent: "flex-start",
@@ -153,7 +164,7 @@ const ProblemUI: React.FC<{
                       bgcolor: problem.chooseNumber === 0 ? "var(--c-grey)" : "",
                     },
                     backgroundColor: colors[idx],
-                    fontSize: "1rem",
+                    fontSize: { xs: "1rem", md: "1rem" },
                   }}
                 >
                   <Box
@@ -169,10 +180,44 @@ const ProblemUI: React.FC<{
               </Grid>
             ))}
           </Grid>
-          {isSolution === 1 ? <SolutionUI solution={problem.solution} /> : <></>}
+          {tabValue === 1 ? <SolutionUI solution={problem.solution} /> : <></>}
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            padding: "16px",
+            borderTop: "1px solid #ddd",
+            backgroundColor: "var(--c-grey)",
+          }}
+        >
+          <Button
+            variant="outlined"
+            sx={{
+              visibility: problemNumber === 1 ? "hidden" : "visible",
+            }}
+            onClick={prevProblem}
+          >
+            이전
+          </Button>
+          <Typography>{problemNumber}/100</Typography>
+          <Button
+            variant="outlined"
+            sx={{
+              visibility: problemNumber === 100 ? "hidden" : "visible",
+            }}
+            onClick={nextProblem}
+          >
+            다음
+          </Button>
         </Box>
       </Container>
-    </>
+    </Container>
   );
 });
-export default ProblemUI;
+export default ProblemResultDetail;

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Box, Button, Container, Grid, Tab, Tabs, Typography } from "@mui/material";
 import Appbar from "@/src/components/Appbar";
 import { getProblems } from "@/src/api/types/apis/problem";
+import { useRouter } from "next/navigation";
 
 const StudyPage = () => {
   const [problem, setProblem] = useState<Problem | null>(null);
@@ -13,7 +14,7 @@ const StudyPage = () => {
   const [time, setTime] = useState(0);
   const [viewTime, setViewTime] = useState("00분 00초");
   const [tabValue, setTabValue] = useState(0);
-
+  const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(prev => prev ^ 1);
   };
@@ -66,6 +67,11 @@ const StudyPage = () => {
       return { ...prev, chooseNumber: number };
     });
     problems[problemNumber - 1].chooseNumber = number;
+  };
+
+  const sendResult = () => {
+    localStorage.setItem("problems", JSON.stringify(problems));
+    router.push("/result");
   };
   return (
     <>
@@ -143,7 +149,7 @@ const StudyPage = () => {
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Button variant="contained" color="primary">
+                      <Button variant="contained" color="primary" onClick={sendResult}>
                         제출하기
                       </Button>
                     </Box>
