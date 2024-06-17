@@ -87,6 +87,7 @@ const ProblemResultDetail: React.FC<{
                 "&:hover": {
                   cursor: "pointer",
                 },
+                marginRight: 2,
               }}
               onClick={bookmarking}
             >
@@ -160,9 +161,6 @@ const ProblemResultDetail: React.FC<{
                     justifyContent: "flex-start",
                     alignItems: "center",
                     borderRadius: 2,
-                    "&:hover": {
-                      bgcolor: problem.chooseNumber === 0 ? "var(--c-grey)" : "",
-                    },
                     backgroundColor: colors[idx],
                     fontSize: { xs: "1rem", md: "1rem" },
                   }}

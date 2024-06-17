@@ -2,54 +2,28 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import { Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle } from "react-icons/bs";
-import { FaRegBookmark } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa6";
-import { PiSirenFill } from "react-icons/pi";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
-import SolutionUI from "./solutionUI";
 
 const ProblemUI: React.FC<{
   props: Problem;
   chooseAnswer: (number: number) => void;
-  isSolution: number;
-}> = memo(({ props, chooseAnswer, isSolution }) => {
+}> = memo(({ props, chooseAnswer }) => {
   const problem = props;
   const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
   const changeColor = () => {
     if (problem.chooseNumber === 0) {
       setColors(["white", "white", "white", "white", "white"]);
-      return;
-    }
-    if (problem.chooseNumber === problem.answerNumber) {
-      setColors(prev => {
-        const newColors = ["white", "white", "white", "white", "white"];
-        newColors[problem.chooseNumber - 1] = "var(--c-light-green)";
-        return newColors;
-      });
     } else {
-      setColors(prev => {
+      setColors(() => {
         const newColors = ["white", "white", "white", "white", "white"];
-        newColors[problem.chooseNumber - 1] = "var(--c-light-red)";
-        newColors[problem.answerNumber - 1] = "var(--c-light-green)";
+        newColors[problem.chooseNumber - 1] = "var(--c-grey)";
         return newColors;
       });
     }
-  };
-  /**
-   * @todo 북마크 기능
-   */
-  const bookmarking = () => {
-    problem.isBookmark = !problem.isBookmark;
-  };
-  /**
-   * @todo 신고하기 기능
-   */
-  const alerting = () => {
-    alert("신고하기 기능은 준비중입니다.");
   };
   useEffect(() => {
     changeColor();
@@ -77,7 +51,7 @@ const ProblemUI: React.FC<{
             <Box
               sx={{
                 fontSize: { xs: "1.1rem", md: "1rem" },
-                overflowWrap: "break-word", // Ensure long words break to fit within the box
+                overflowWrap: "break-word",
               }}
             >
               <Markdown
@@ -128,7 +102,7 @@ const ProblemUI: React.FC<{
                     alignItems: "center",
                     borderRadius: 2,
                     "&:hover": {
-                      bgcolor: problem.chooseNumber === 0 ? "var(--c-grey)" : "",
+                      bgcolor: "var(--c-grey)",
                     },
                     backgroundColor: colors[idx],
                     fontSize: "1rem",
@@ -147,7 +121,6 @@ const ProblemUI: React.FC<{
               </Grid>
             ))}
           </Grid>
-          {isSolution === 1 ? <SolutionUI solution={problem.solution} /> : <></>}
         </Box>
       </Container>
     </>
