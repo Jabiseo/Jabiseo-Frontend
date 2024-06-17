@@ -2,20 +2,16 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import { Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle } from "react-icons/bs";
-import { FaRegBookmark } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa6";
-import { PiSirenFill } from "react-icons/pi";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
-import SolutionUI from "./solutionUI";
 
-const ProblemUI: React.FC<{
+const ProblemItem: React.FC<{
   props: Problem;
-  chooseAnswer: (number: number) => void;
-  isSolution: number;
-}> = memo(({ props, chooseAnswer, isSolution }) => {
+  problemNumber: number;
+  gotoProblem: (number: number) => void;
+}> = memo(({ props, problemNumber, gotoProblem }) => {
   const problem = props;
   const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
@@ -39,21 +35,9 @@ const ProblemUI: React.FC<{
       });
     }
   };
-  /**
-   * @todo 북마크 기능
-   */
-  const bookmarking = () => {
-    problem.isBookmark = !problem.isBookmark;
-  };
-  /**
-   * @todo 신고하기 기능
-   */
-  const alerting = () => {
-    alert("신고하기 기능은 준비중입니다.");
-  };
   useEffect(() => {
     changeColor();
-  }, [problem.chooseNumber]);
+  }, []);
 
   return (
     <>
@@ -64,7 +48,20 @@ const ProblemUI: React.FC<{
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
+          border:
+            problem.chooseNumber === 0
+              ? "1px solid #ccc"
+              : problem.chooseNumber === problem.answerNumber
+              ? "1px solid var(--c-light-green)"
+              : "1px solid var(--c-light-red)",
+          borderRadius: 2,
+          mb: 2,
+          "&:hover": {
+            cursor: "pointer",
+            border: "2px solid black",
+          },
         }}
+        onClick={() => gotoProblem(problemNumber)}
       >
         <Box sx={{ marginBottom: 2 }}>
           <Box
@@ -73,28 +70,6 @@ const ProblemUI: React.FC<{
               fontFamily: "Pretendard-Regular",
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-              <Box
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-                onClick={bookmarking}
-              >
-                {problem.isBookmark ? <FaRegBookmark size={25} /> : <FaBookmark size={25} />}
-              </Box>
-              <Box
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-                onClick={alerting}
-              >
-                <PiSirenFill size={30} />
-              </Box>
-            </Box>
             <Typography variant="body1">1번</Typography>
             <Box
               sx={{
@@ -141,9 +116,6 @@ const ProblemUI: React.FC<{
             {problem.choices.map((choice, idx) => (
               <Grid item xs={12} key={idx}>
                 <Box
-                  onClick={() => {
-                    chooseAnswer(idx + 1);
-                  }}
                   sx={{
                     display: "flex",
                     justifyContent: "flex-start",
@@ -153,7 +125,7 @@ const ProblemUI: React.FC<{
                       bgcolor: problem.chooseNumber === 0 ? "var(--c-grey)" : "",
                     },
                     backgroundColor: colors[idx],
-                    fontSize: "1rem",
+                    fontSize: { xs: "1rem", md: "1rem" },
                   }}
                 >
                   <Box
@@ -169,10 +141,9 @@ const ProblemUI: React.FC<{
               </Grid>
             ))}
           </Grid>
-          {isSolution === 1 ? <SolutionUI solution={problem.solution} /> : <></>}
         </Box>
       </Container>
     </>
   );
 });
-export default ProblemUI;
+export default ProblemItem;

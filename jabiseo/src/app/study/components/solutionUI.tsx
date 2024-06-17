@@ -22,12 +22,13 @@ const SolutionUI: React.FC<SolutionUIProps> = ({ solution }) => {
           justifyContent: "center",
           flexDirection: "column",
           padding: 2,
+          marginBottom: "70px",
         }}
       >
         <Box
           sx={{
             fontSize: { xs: "1.1rem", md: "1rem" },
-            overflowWrap: "break-word", // Ensure long words break to fit within the box
+            overflowWrap: "break-word",
           }}
         >
           <Markdown
@@ -37,7 +38,7 @@ const SolutionUI: React.FC<SolutionUIProps> = ({ solution }) => {
               p: ({ node, ...content }) => (
                 <Box
                   sx={{
-                    width: "100%", // Box의 너비를 100%로 설정
+                    width: "100%",
                   }}
                 >
                   {content.children}
@@ -46,9 +47,9 @@ const SolutionUI: React.FC<SolutionUIProps> = ({ solution }) => {
               img: ({ node, ...content }) => (
                 <Box
                   sx={{
-                    height: "100%", // Box의 높이를 100%로 설정
-                    width: "100%", // Box의 너비를 100%로 설정
-                    display: "flex", // Flexbox 레이아웃 사용
+                    height: "100%",
+                    width: "100%",
+                    display: "flex",
                     flexDirection: "column",
                   }}
                 >
