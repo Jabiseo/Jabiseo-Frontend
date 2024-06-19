@@ -1,3 +1,4 @@
+"use client";
 import { getProblems } from "@/src/api/types/apis/problem";
 import {
   Box,

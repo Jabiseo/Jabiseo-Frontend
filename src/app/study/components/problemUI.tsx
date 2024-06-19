@@ -100,7 +100,7 @@ const ProblemUI: React.FC<{
             <Box
               sx={{
                 fontSize: { xs: "1.1rem", md: "1rem" },
-                overflowWrap: "break-word", // Ensure long words break to fit within the box
+                overflowWrap: "break-word",
               }}
             >
               <Markdown

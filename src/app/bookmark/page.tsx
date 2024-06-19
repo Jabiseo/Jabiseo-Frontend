@@ -1,4 +1,3 @@
-"use client";
 import GridBase from "@/src/components/gridBase";
 import BookMarkMain from "./components/bookMarkMain";
 
