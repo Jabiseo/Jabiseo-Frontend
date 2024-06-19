@@ -1,20 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
+import { mainfetch } from "@/src/api/apis/mainFetch";
+import { ThemeProvider } from "@emotion/react";
 import {
   Box,
-  Grid,
-  Typography,
-  Select,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-  Slider,
   Button,
+  Checkbox,
   Container,
+  FormControlLabel,
+  Grid,
+  MenuItem,
+  Select,
   SelectChangeEvent,
+  Slider,
+  Typography,
   createTheme,
 } from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import StatusBox from "./statusBox";
 
 const marks = [
   { value: 0, label: "0" },
@@ -25,10 +28,11 @@ function valuetext(value: number) {
   return `${value}`;
 }
 
-const ExamSettings = () => {
+const MakeProblemSetUI = () => {
   const [year, setYear] = useState("");
   const [questionsCount, setQuestionsCount] = useState(20);
   const [numberOfQuestions, setNumberOfQuestions] = useState(20);
+  const [certificateId, setCertificateId] = useState(0);
   const [selectedSubjects, setSelectedSubjects] = useState([
     "소프트웨어 설계",
     "소프트웨어 개발",
@@ -48,7 +52,6 @@ const ExamSettings = () => {
   ) => {
     setQuestionsCount(value as number);
   };
-
   useEffect(() => {
     setNumberOfQuestions(questionsCount * selectedSubjects.length);
   }, [questionsCount, selectedSubjects]);
@@ -60,11 +63,30 @@ const ExamSettings = () => {
     );
   };
 
+  const router = useRouter();
+  const gotoStudyMode = () => {
+    router.push("/study");
+  };
+
+  const gotoExamMode = () => {
+    router.push("/exam");
+  };
+
   const theme = createTheme({
     typography: {
       fontFamily: "Pretendard-Regular",
     },
   });
+
+  /**
+   * @todo 자격증 정보 불러오기
+   */
+  const getCertificateInfo = async () => {
+    const response = await mainfetch("/certificate/" + certificateId, { method: "GET" }, false)
+      .then(res => res.json())
+      .catch();
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="md">
@@ -77,6 +99,7 @@ const ExamSettings = () => {
             marginTop: { xs: 0, md: 4 },
           }}
         >
+          <StatusBox />
           <Typography
             variant="h3"
             gutterBottom
@@ -190,6 +213,7 @@ const ExamSettings = () => {
             variant="contained"
             sx={{ backgroundColor: "var(--c-green)", borderRadius: "12px", minWidth: "150px" }}
             size="large"
+            onClick={gotoStudyMode}
           >
             공부모드
           </Button>
@@ -202,6 +226,7 @@ const ExamSettings = () => {
               minWidth: "150px",
             }}
             size="large"
+            onClick={gotoExamMode}
           >
             시험모드
           </Button>
@@ -211,4 +236,4 @@ const ExamSettings = () => {
   );
 };
 
-export default ExamSettings;
+export default MakeProblemSetUI;
