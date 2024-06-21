@@ -1,5 +1,6 @@
 "use client";
-import { mainfetch } from "@/src/api/apis/mainFetch";
+import { globalTheme } from "@/src/components/globalStyle";
+import useCertificateInfo from "@/src/hooks/useCertificateInfo";
 import { ThemeProvider } from "@emotion/react";
 import {
   Box,
@@ -13,14 +14,20 @@ import {
   SelectChangeEvent,
   Slider,
   Typography,
-  createTheme,
+  List,
+  ListItem,
+  Radio,
+  CircularProgress,
 } from "@mui/material";
+
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import StatusBox from "./statusBox";
+import { useEffect, useRef, useState } from "react";
 
 const marks = [
   { value: 0, label: "0" },
+  { value: 5, label: "5" },
+  { value: 10, label: "10" },
+  { value: 15, label: "15" },
   { value: 20, label: "20" },
 ];
 
@@ -29,20 +36,14 @@ function valuetext(value: number) {
 }
 
 const MakeProblemSetUI = () => {
-  const [year, setYear] = useState("");
+  const { certificateInfo, loading, error } = useCertificateInfo();
   const [questionsCount, setQuestionsCount] = useState(20);
-  const [numberOfQuestions, setNumberOfQuestions] = useState(20);
-  const [certificateId, setCertificateId] = useState(0);
-  const [selectedSubjects, setSelectedSubjects] = useState([
-    "소프트웨어 설계",
-    "소프트웨어 개발",
-    "데이터베이스 구축",
-    "프로그래밍 언어 활용",
-    "정보시스템 구축관리",
-  ]);
-
-  const handleYearChange = (event: SelectChangeEvent<string>) => {
-    setYear(event.target.value as string);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedExam, setSelectedExam] = useState("");
+  const [selectedExamId, setSelectedExamId] = useState<string>("0");
+  const [numberOfQuestions, setNumberOfQuestions] = useState(0);
+  const handleExamChange = (event: SelectChangeEvent<string>) => {
+    setSelectedExam(event.target.value as string);
   };
 
   const handleQuestionsCountChange = (
@@ -63,172 +64,339 @@ const MakeProblemSetUI = () => {
     );
   };
 
+  useEffect(() => {
+    if (certificateInfo === undefined) return;
+    const subjects = certificateInfo?.subjects.map(subject => subject.name) || [];
+    setSelectedSubjects(subjects);
+  }, [certificateInfo]);
+
   const router = useRouter();
   const gotoStudyMode = () => {
-    router.push("/study");
+    const certificateId = certificateInfo?.certificateId;
+    const examId = selectedExamId;
+    let path;
+    if (examId === "0") {
+      path = `/study/certificate-id=${certificateId}&subjectids=${selectedSubjects.join(
+        ","
+      )}&count=${questionsCount}`;
+    } else {
+      path = `/study/certificate-id=${certificateId}&exam-id=${examId}&subjectids=${selectedSubjects.join(
+        ","
+      )}&count=${questionsCount}`;
+    }
+    router.push(path);
   };
 
   const gotoExamMode = () => {
-    router.push("/exam");
+    const certificateId = certificateInfo?.certificateId;
+    const examId = selectedExamId;
+    let path;
+    if (examId === "0") {
+      path = `/exam/certificate-id=${certificateId}&subjectids=${selectedSubjects.join(
+        ","
+      )}&count=${questionsCount}`;
+    } else {
+      path = `/exam/certificate-id=${certificateId}&exam-id=${examId}&subjectids=${selectedSubjects.join(
+        ","
+      )}&count=${questionsCount}`;
+    }
+    router.push(path);
   };
 
-  const theme = createTheme({
-    typography: {
-      fontFamily: "Pretendard-Regular",
-    },
-  });
+  const rightBoxRef = useRef<HTMLDivElement | null>(null);
+  const [leftBoxHeight, setLeftBoxHeight] = useState(0);
+  const rightBoxRef2 = useRef<HTMLDivElement | null>(null);
+  const [leftBoxHeight2, setLeftBoxHeight2] = useState(0);
 
-  /**
-   * @todo 자격증 정보 불러오기
-   */
-  const getCertificateInfo = async () => {
-    const response = await mainfetch("/certificate/" + certificateId, { method: "GET" }, false)
-      .then(res => res.json())
-      .catch();
-  };
+  useEffect(() => {
+    if (rightBoxRef.current) {
+      setLeftBoxHeight(rightBoxRef.current.offsetHeight);
+    }
+    if (rightBoxRef2.current) {
+      setLeftBoxHeight2(rightBoxRef2.current.offsetHeight);
+    }
+  }, [loading]);
+
+  if (loading) {
+    return (
+      <ThemeProvider theme={globalTheme}>
+        <Container>
+          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+            <CircularProgress />
+          </Box>
+        </Container>
+      </ThemeProvider>
+    );
+  }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container maxWidth="md">
+    <ThemeProvider theme={globalTheme}>
+      <Container>
+        <Box>
+          <Grid
+            container
+            spacing={{
+              xs: 4,
+              md: 8,
+              lg: 12,
+            }}
+          >
+            <Grid item xs={12} md={6}>
+              <Box>
+                <Typography variant="body1">1. 연도를 선택해주세요</Typography>
+                <Box
+                  sx={{
+                    marginTop: 2,
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    border: "1px solid var(--c-gray2)",
+                    padding: "6px",
+                    height: { md: `${leftBoxHeight}px` },
+                    overflowY: "auto",
+                  }}
+                >
+                  <List>
+                    {certificateInfo &&
+                      certificateInfo.exams.map(exam => (
+                        <ListItem key={exam.examId}>
+                          <FormControlLabel
+                            control={
+                              <Radio
+                                checked={selectedExam === exam.description}
+                                onChange={e => {
+                                  handleExamChange(e);
+                                  setSelectedExamId(exam.examId);
+                                }}
+                                value={exam.description}
+                                sx={{
+                                  "&.Mui-checked": {
+                                    color: "var(--c-sub3)",
+                                  },
+                                }}
+                              />
+                            }
+                            label={<Typography variant="body2">{exam.description}</Typography>}
+                          />
+                        </ListItem>
+                      ))}
+                  </List>
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography variant="body1">2. 과목을 선택해주세요</Typography>
+                <Box
+                  ref={rightBoxRef}
+                  sx={{
+                    marginTop: 2,
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    border: "1px solid var(--c-gray2)",
+                    padding: {
+                      xs: "12px",
+                      md: "36px",
+                    },
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {certificateInfo &&
+                    certificateInfo.subjects.map(subject => (
+                      <FormControlLabel
+                        key={subject.subjectId}
+                        control={
+                          <Checkbox
+                            checked={selectedSubjects.includes(subject.name)}
+                            onChange={handleSubjectChange}
+                            value={subject.name}
+                            sx={{
+                              "&.Mui-checked": {
+                                color: "var(--c-sub3)",
+                              },
+                            }}
+                          />
+                        }
+                        label={<Typography variant="body2">{subject.name}</Typography>}
+                      />
+                    ))}
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box
+          mt={{
+            xs: 4,
+            md: 8,
+          }}
+        >
+          <Grid
+            container
+            spacing={{
+              xs: 4,
+              md: 8,
+              lg: 12,
+            }}
+          >
+            <Grid item xs={12} md={6}>
+              <Box>
+                <Typography variant="body1">3. 과목 문제 수를 설정해주세요</Typography>
+                <Box
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    border: "1px solid var(--c-gray2)",
+                    height: { md: `${leftBoxHeight2}px` },
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    mt: 4,
+                    padding: 4,
+                  }}
+                >
+                  <Slider
+                    aria-label="Question Count"
+                    defaultValue={20}
+                    value={questionsCount}
+                    onChange={handleQuestionsCountChange}
+                    getAriaValueText={valuetext}
+                    step={1}
+                    marks={marks}
+                    min={0}
+                    max={20}
+                    valueLabelDisplay="auto"
+                    sx={{ color: "var(--c-sub3)", width: "80%" }}
+                  />
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography variant="body1">4. 총 문제 수를 확인하세요</Typography>
+                <Box
+                  ref={rightBoxRef2}
+                  sx={{
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                    height: "100%",
+                    mt: 4,
+                    py: 6,
+                  }}
+                >
+                  <Box sx={{ flexGrow: 1, p: 2 }}>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", mr: 2 }}>
+                      <Typography variant="body2">선택 과목</Typography>
+                      <Typography variant="body2">{selectedSubjects.length}과목</Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", mr: 2 }}>
+                      <Typography variant="body2">과목 당 문제 수</Typography>
+                      <Typography variant="body2">{questionsCount}문제</Typography>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      backgroundColor: "white",
+                      border: "1px solid var(--c-sub3)",
+                      borderRadius: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <Typography variant="body1">{numberOfQuestions}문제</Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "start",
-            marginBottom: 4,
-            marginTop: { xs: 0, md: 4 },
+            justifyContent: "center",
+            gap: 6,
+            marginTop: 12,
+            marginBottom: 8,
           }}
         >
-          <StatusBox />
-          <Typography
-            variant="h3"
-            gutterBottom
+          <Button
             sx={{
-              paddingBottom: 1,
-              marginBottom: 2,
-              display: "inline-block",
-              fontWeight: { xs: 700, md: 800 },
-              fontSize: { xs: "1.8rem", md: "2rem" },
+              borderRadius: "40px",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              px: {
+                xs: 3,
+                md: 6,
+              },
+              py: {
+                xs: 3,
+                md: 4,
+              },
+              backgroundColor: "white",
+              border: "2px solid white",
+              "&:hover": {
+                border: "2px solid var(--c-sub3)",
+                backgroundColor: "white",
+              },
             }}
+            onClick={gotoStudyMode}
           >
-            기출 시험 문제 년도 설정
-          </Typography>
-          <Select
-            value={year}
-            onChange={handleYearChange}
-            displayEmpty
+            <Typography
+              sx={{
+                color: "var(--c-sub4)",
+                variant: {
+                  xs: "body1",
+                  md: "h3",
+                },
+              }}
+            >
+              공부 모드
+            </Typography>
+          </Button>
+          <Button
             sx={{
-              minWidth: 300,
-              marginBottom: 4,
-              borderRadius: 2,
-              "&.MuiOutlinedInput-root": {
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--c-light-brown)",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--c-light-brown)",
-                },
+              borderRadius: "40px",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              px: {
+                xs: 3,
+                md: 6,
+              },
+              py: {
+                xs: 3,
+                md: 4,
+              },
+              backgroundColor: "white",
+              border: "2px solid white",
+              "&:hover": {
+                border: "2px solid var(--c-sub3)",
+                backgroundColor: "white",
               },
             }}
           >
-            <MenuItem value="">무작위 모의고사</MenuItem>
-            <MenuItem value={1}>2020년 3회</MenuItem>
-            <MenuItem value={2}>2020년 2회</MenuItem>
-            <MenuItem value={3}>2020년 1회</MenuItem>
-          </Select>
-        </Box>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Box>
-              <Typography variant="h5" gutterBottom>
-                과목 선택
-              </Typography>
-              {[
-                "소프트웨어 설계",
-                "소프트웨어 개발",
-                "데이터베이스 구축",
-                "프로그래밍 언어 활용",
-                "정보시스템 구축관리",
-              ].map((subject, index) => (
-                <Grid item xs={12} key={index}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedSubjects.includes(subject)}
-                        onChange={handleSubjectChange}
-                        value={subject}
-                        sx={{
-                          color: "var(--c-light-brown)",
-                          "&.Mui-checked": {
-                            color: "var(--c-brown)",
-                          },
-                        }}
-                      />
-                    }
-                    label={`${index + 1}과목: ${subject}`}
-                  />
-                </Grid>
-              ))}
-            </Box>{" "}
-          </Grid>
-          <Grid item xs={12}>
-            <Box>
-              <Typography variant="h6" gutterBottom mb={2}>
-                문제 수 선택
-              </Typography>
-              <Slider
-                aria-label="Question Count"
-                defaultValue={20}
-                value={questionsCount}
-                onChange={handleQuestionsCountChange}
-                getAriaValueText={valuetext}
-                step={1}
-                marks={marks}
-                min={1}
-                max={20}
-                valueLabelDisplay="auto"
-                sx={{ color: "var(--c-green)" }}
-              />
-            </Box>{" "}
-            <Box sx={{ marginTop: 2 }}>
-              <Typography variant="h5" gutterBottom>
-                선택한 총 문제수
-              </Typography>
-              <Typography
-                variant="h4"
-                sx={{
-                  color: "var(--c-brown)",
-                }}
-              >
-                {numberOfQuestions}문제
-              </Typography>
-            </Box>{" "}
-          </Grid>
-        </Grid>
-        <Box
-          sx={{ display: "flex", justifyContent: "center", gap: 2, marginTop: 4, marginBottom: 8 }}
-        >
-          <Button
-            variant="contained"
-            sx={{ backgroundColor: "var(--c-green)", borderRadius: "12px", minWidth: "150px" }}
-            size="large"
-            onClick={gotoStudyMode}
-          >
-            공부모드
-          </Button>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "var(--c-light-brown)",
-              color: "black",
-              borderRadius: "12px",
-              minWidth: "150px",
-            }}
-            size="large"
-            onClick={gotoExamMode}
-          >
-            시험모드
+            <Typography
+              sx={{
+                color: "var(--c-sub4)",
+                variant: {
+                  xs: "body1",
+                  md: "h3",
+                },
+              }}
+            >
+              시험 모드
+            </Typography>
           </Button>
         </Box>
       </Container>

@@ -8,7 +8,7 @@ import ProblemResultDetail from "./problemResultDetail";
 import Link from "next/link";
 
 const ProblemList = () => {
-  const [problems, setProblems] = useState<Problem[]>([]);
+  const [problems, setProblems] = useState<ProblemWithChooseNumber[]>([]);
   const [isDetail, setIsDetail] = useState(false);
   const [problemNumber, setProblemNumber] = useState<number>(1);
 

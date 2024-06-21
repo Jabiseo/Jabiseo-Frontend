@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import ProblemUI from "./components/problemUI";
 
 const ExamPage = () => {
-  const [problem, setProblem] = useState<Problem | null>(null);
-  const [problems, setProblems] = useState<Problem[]>([]);
+  const [problem, setProblem] = useState<ProblemWithChooseNumber | null>(null);
+  const [problems, setProblems] = useState<ProblemWithChooseNumber[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
   const [time, setTime] = useState(0);
   const [viewTime, setViewTime] = useState("00분 00초");
@@ -35,15 +35,15 @@ const ExamPage = () => {
     setViewTime(secondsToMMSS(time));
   }, [time]);
 
-  useEffect(() => {
-    const fetchProblems = async () => {
-      const fetchedProblems = await getProblems();
-      setProblems(fetchedProblems);
-      setProblem(fetchedProblems[0]);
-    };
+  // useEffect(() => {
+  //   const fetchProblems = async () => {
+  //     const fetchedProblems = await getProblems();
+  //     setProblems(fetchedProblems);
+  //     setProblem(fetchedProblems[0]);
+  //   };
 
-    fetchProblems();
-  }, []);
+  //   fetchProblems();
+  // }, []);
 
   useEffect(() => {
     setProblem(problems[problemNumber - 1]);
