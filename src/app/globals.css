@@ -5,6 +5,18 @@
   --c-light-green: #b4edc4;
   --c-light-red: #ffbbc3;
   --c-grey: #f7f7f5ff;
+  --c-main: #1a8fd4;
+  --c-sub1: #edfaf8;
+  --c-sub2: #64d7ca;
+  --c-sub3: #44bbd4;
+  --c-sub4: #1c77b6;
+  --c-sub5: #16396f;
+  --c-point: #ffb54f;
+  --c-gray1: #f8f8f8;
+  --c-gray2: #dbdbdb;
+  --c-gray3: #b5b5b5;
+  --c-gray4: #808080;
+  --c-gray5: #2c2c2c;
 }
 
 body {
@@ -12,6 +24,7 @@ body {
   padding: 0;
   font-optical-sizing: auto;
   font-style: normal;
+  background-color: var(--c-gray1);
 }
 
 button {
@@ -19,6 +32,7 @@ button {
   border: none;
   background-color: white;
 }
+
 @font-face {
   font-family: "Pretendard-Regular";
   src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")

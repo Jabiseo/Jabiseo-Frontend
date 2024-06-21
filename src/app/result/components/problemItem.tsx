@@ -8,7 +8,7 @@ import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
 
 const ProblemItem: React.FC<{
-  props: Problem;
+  props: ProblemWithChooseNumber;
   problemNumber: number;
   gotoProblem: (number: number) => void;
 }> = memo(({ props, problemNumber, gotoProblem }) => {

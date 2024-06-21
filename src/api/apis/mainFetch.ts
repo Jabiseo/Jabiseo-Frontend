@@ -15,39 +15,42 @@ interface Options<T> {
  * const res = await mainfetch("/auth/login", { method: "POST", body: { email, password } }, false);
  * const data = await res.json();
  */
-export const mainfetch = async <T>(url: string, options: Options<T>, needLogin: boolean) => {
+export const mainfetch = async <T>(
+  path: string,
+  options: Options<T>,
+  needLogin: boolean
+): Promise<Response> => {
+  const url = process.env.NEXT_PUBLIC_SERVER_URL + path;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
   if (needLogin) {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-    // todo : accessToken 없을 경우 로그인 페이지로 이동
     if (!accessToken || !refreshToken) {
-      throw new Error("accessToken or refreshToken is not exist");
+      throw new Error("Access token or refresh token is missing");
     }
-    const res = await fetch(url, {
-      method: options.method,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: options.body ? JSON.stringify(options.body) : null,
-    });
-    if (res.status === 401) {
-      if (!refreshToken) {
-        throw new Error("accessToken or refreshToken is not exist");
-      }
-      const accessToken = await refreshTokenInterceptor();
-      return await fetch(url, {
-        method: options.method,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: options.body ? JSON.stringify(options.body) : null,
-      });
-    }
-    return res;
-  } else {
-    return await fetch(url, {
-      method: options.method,
-      body: options.body ? JSON.stringify(options.body) : null,
-    });
+    headers.Authorization = `Bearer ${accessToken}`;
   }
+
+  const fetchOptions: RequestInit = {
+    method: options.method,
+    headers,
+    body: options.body ? JSON.stringify(options.body) : null,
+  };
+
+  let response = await fetch(url, fetchOptions);
+  if (response.status === 401 && needLogin) {
+    const newAccessToken = await refreshTokenInterceptor();
+    headers.Authorization = `Bearer ${newAccessToken}`;
+    response = await fetch(url, { ...fetchOptions, headers });
+  }
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Error: ${response.status} - ${errorText}`);
+  }
+
+  return response;
 };

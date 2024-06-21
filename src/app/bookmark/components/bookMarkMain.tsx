@@ -19,12 +19,12 @@ import remarkMath from "remark-math";
 import SubjectSlider from "./subjectSlider";
 
 const subjects = [
-  { name: "awfaegsrgsf", subjectId: 1 },
-  { name: "awfawgsegsrhser", subjectId: 2 },
-  { name: "awfaegsrgsf", subjectId: 3 },
-  { name: "awfawgsegsrhser", subjectId: 4 },
-  { name: "awfaegsrgsf", subjectId: 5 },
-  { name: "awfawgsegsrhser", subjectId: 6 },
+  { name: "awfaegsrgsf", subjectId: "1", sequence: 0 },
+  { name: "awfawgsegsrhser", subjectId: "2", sequence: 0 },
+  { name: "awfaegsrgsf", subjectId: "3", sequence: 0 },
+  { name: "awfawgsegsrhser", subjectId: "4", sequence: 0 },
+  { name: "awfaegsrgsf", subjectId: "5", sequence: 0 },
+  { name: "awfawgsegsrhser", subjectId: "6", sequence: 0 },
 ];
 
 const exams = [
@@ -40,30 +40,6 @@ const BookMarkMain = () => {
   const [selectedExam, setSelectedExam] = useState(exams[0]);
   const [problems, setProblems] = useState<BookMarkProblem[]>([]);
   const [selectedProblems, setSelectedProblems] = useState<number[]>([]);
-
-  useEffect(() => {
-    const fetchProblems = async () => {
-      const fetchedProblems = await getProblems();
-      const parsedProblems = fetchedProblems.map(problem => {
-        const bookmarkProblem: BookMarkProblem = {
-          isBookmark: true,
-          description: "",
-          examInfo: { examId: 0, description: "" },
-          problemId: 0,
-          subject: { name: "", subjectId: 0 },
-        };
-        bookmarkProblem.isBookmark = true;
-        bookmarkProblem.description = problem.description.split("<br>!")[0];
-        bookmarkProblem.examInfo = problem.examInfo;
-        bookmarkProblem.problemId = problem.problemId;
-        bookmarkProblem.subject = problem.subject;
-        return bookmarkProblem;
-      });
-      return setProblems(parsedProblems);
-    };
-
-    fetchProblems();
-  }, []);
 
   const selectProblem = (problemId: number) => {
     if (selectedProblems.includes(problemId)) {

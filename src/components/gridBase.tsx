@@ -14,31 +14,31 @@ const GridBase: React.FC<GridBaseProps> = ({ sideleft, main, sideright }) => {
       <Box
         sx={{
           margin: "0 auto",
-          maxWidth: "1440px",
+          maxWidth: "1920px",
           minWidth: "320px",
-          paddingX: { xs: "20px", sm: "40px", md: "60px" },
+          paddingX: { xs: "10px", sm: "20px", md: "40px" },
           marginTop: "90px",
         }}
       >
         <Grid container spacing={3}>
-          <Grid item xs={0} md={2}>
+          <Grid item sm={0} lg={1}>
             <Box
               sx={{
-                height: { xs: "0", md: "100vh" },
-                display: { xs: "none", md: "block" },
+                height: { sm: "0", lg: "100vh" },
+                display: { sm: "none", lg: "block" },
               }}
             >
               {sideleft}
             </Box>
           </Grid>
-          <Grid item xs={12} md={8}>
+          <Grid item sm={12} lg={10}>
             {main}
           </Grid>
-          <Grid item xs={0} md={2}>
+          <Grid item sm={0} lg={1}>
             <Box
               sx={{
-                height: { xs: "0", md: "100vh" },
-                display: { xs: "none", md: "block" },
+                height: { sm: "0", lg: "100vh" },
+                display: { sm: "none", lg: "block" },
               }}
             >
               {sideright}

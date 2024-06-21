@@ -12,7 +12,7 @@ import remarkMath from "remark-math";
 import SolutionUI from "./solutionUI";
 
 const ProblemUI: React.FC<{
-  props: Problem;
+  props: ProblemWithChooseNumber;
   chooseAnswer: (number: number) => void;
   isSolution: number;
 }> = memo(({ props, chooseAnswer, isSolution }) => {
