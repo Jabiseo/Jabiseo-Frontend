@@ -12,10 +12,9 @@ import remarkMath from "remark-math";
 import SolutionUI from "./solutionUI";
 
 const ProblemUI: React.FC<{
-  props: ProblemWithChooseNumber;
+  props: ProblemViewType;
   chooseAnswer: (number: number) => void;
-  isSolution: number;
-}> = memo(({ props, chooseAnswer, isSolution }) => {
+}> = memo(({ props, chooseAnswer }) => {
   const problem = props;
   const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
@@ -90,16 +89,38 @@ const ProblemUI: React.FC<{
           </Box>
         </Box>
         <Box sx={{ marginBottom: 2 }}>
-          <Box
-            sx={{
-              fontSize: "16px",
-              fontFamily: "Pretendard-Regular",
-            }}
-          >
-            <Typography variant="body1">1번</Typography>
+          <Box>
             <Box
               sx={{
-                fontSize: { xs: "1.1rem", md: "1rem" },
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 2,
+              }}
+            >
+              <Typography
+                variant="h3"
+                fontSize={{
+                  xs: "14px",
+                  sm: "18px",
+                }}
+                marginRight={1}
+              >
+                1.
+              </Typography>
+              <Typography
+                variant="h3"
+                fontSize={{
+                  xs: "14px",
+                  sm: "18px",
+                }}
+                color="var(--c-gray3)"
+              >
+                ({problem.examInfo.description})
+              </Typography>
+            </Box>
+            <Box
+              sx={{
                 overflowWrap: "break-word",
               }}
             >
@@ -113,7 +134,15 @@ const ProblemUI: React.FC<{
                         width: "100%",
                       }}
                     >
-                      {content.children}
+                      <Typography
+                        variant="h3"
+                        fontSize={{
+                          xs: "14px",
+                          sm: "18px",
+                        }}
+                      >
+                        {content.children}
+                      </Typography>
                     </Box>
                   ),
                   img: ({ node, ...content }) => (
@@ -138,7 +167,7 @@ const ProblemUI: React.FC<{
               </Markdown>
             </Box>
           </Box>
-          <Grid container>
+          <Grid container marginTop={2}>
             {problem.choices.map((choice, idx) => (
               <Grid item xs={12} key={idx}>
                 <Box
@@ -155,6 +184,7 @@ const ProblemUI: React.FC<{
                     },
                     backgroundColor: colors[idx],
                     fontSize: "1rem",
+                    paddingY: 2,
                   }}
                 >
                   <Box
@@ -163,14 +193,35 @@ const ProblemUI: React.FC<{
                   >
                     {circles[idx].call(null, { size: 20 })}
                   </Box>
-                  <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex, rehypeRaw]}>
+                  <Markdown
+                    remarkPlugins={[remarkMath]}
+                    rehypePlugins={[rehypeKatex, rehypeRaw]}
+                    components={{
+                      p: ({ node, ...content }) => (
+                        <Box
+                          sx={{
+                            width: "100%",
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            fontSize={{
+                              xs: "14px",
+                              sm: "18px",
+                            }}
+                          >
+                            {content.children}
+                          </Typography>
+                        </Box>
+                      ),
+                    }}
+                  >
                     {choice}
                   </Markdown>
                 </Box>
               </Grid>
             ))}
           </Grid>
-          {isSolution === 1 ? <SolutionUI solution={problem.solution} /> : <></>}
         </Box>
       </Container>
     </>

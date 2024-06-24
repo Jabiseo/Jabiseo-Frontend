@@ -2,17 +2,18 @@ let problems = [];
 
 for (let i = 0; i < 20; i++) {
   let newProblem = {
-    problemId: i + 1,
+    problemId: `${i + 1}`,
     examInfo: {
-      examId: i + 1,
+      examId: `${i + 1}`,
       description: `${2020 + i}년 ${i}회차`,
     },
     subject: {
-      subjectId: i + 1,
+      subjectId: `${i + 1}`,
       name: `소프트웨어 설계 ${i + 1}`,
+      sequence: i + 1,
     },
     isBookmark: true,
-    description: `인터페이스 구현 검증도구 중 아래에서 설명하는 것은? ${i + 1}<br>`,
+    description: `인터페이스 구현 검증도구 중 아래에서 설명하는 것은?<br>`,
     choices: [
       `빌드 검증 ${i + 1}<br>`,
       `동료 검토 ${i + 1}<br>`,
@@ -31,7 +32,7 @@ for (let i = 0; i < 20; i++) {
 }
 const getProblems = () => {
   const newProblems = problems.map(problem => {
-    return { ...problem, chooseNumber: 0 };
+    return { ...problem, chooseNumber: 0, viewSolution: false, viewTheory: false };
   });
   return newProblems;
 };

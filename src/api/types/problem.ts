@@ -21,6 +21,11 @@ interface Problem {
   solution: string;
 }
 
-interface ProblemWithChooseNumber extends Problem {
+/**
+ * Backend의 ProblemType에서 이론, 해설 보기 선택을 위한 viewSolution, viewTheory가 추가된 타입입니다.
+ */
+interface ProblemViewType extends Problem {
   chooseNumber: number;
+  viewSolution: boolean;
+  viewTheory: boolean;
 }

@@ -11,7 +11,7 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { PiSirenFill } from "react-icons/pi";
 
 const ProblemResultDetail: React.FC<{
-  props: ProblemWithChooseNumber;
+  props: ProblemViewType;
   problemNumber: number;
   nextProblem: () => void;
   prevProblem: () => void;
@@ -178,7 +178,7 @@ const ProblemResultDetail: React.FC<{
               </Grid>
             ))}
           </Grid>
-          {tabValue === 1 ? <SolutionUI solution={problem.solution} /> : <></>}
+          {/* {tabValue === 1 ? <SolutionUI solution={problem.solution} /> : <></>} */}
         </Box>
         <Box
           sx={{

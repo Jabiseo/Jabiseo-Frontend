@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import ProblemUI from "./components/problemUI";
 
 const ExamPage = () => {
-  const [problem, setProblem] = useState<ProblemWithChooseNumber | null>(null);
-  const [problems, setProblems] = useState<ProblemWithChooseNumber[]>([]);
+  const [problem, setProblem] = useState<ProblemViewType | null>(null);
+  const [problems, setProblems] = useState<ProblemViewType[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
   const [time, setTime] = useState(0);
   const [viewTime, setViewTime] = useState("00분 00초");

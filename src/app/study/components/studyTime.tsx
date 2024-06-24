@@ -16,7 +16,7 @@ const StudyTime = () => {
   const secondsToMMSS = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}분 ${
+    return `${minutes < 10 ? `${minutes}` : minutes}분 ${
       remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds
     }초`;
   };
@@ -26,7 +26,15 @@ const StudyTime = () => {
   }, [time]);
   return (
     <>
-      <Typography variant="body1">{viewTime}</Typography>
+      <Typography
+        variant="h4"
+        fontSize={{
+          xs: "14px",
+          sm: "20px",
+        }}
+      >
+        경과시간: {viewTime}
+      </Typography>
     </>
   );
 };
