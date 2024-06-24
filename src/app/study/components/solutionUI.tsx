@@ -45,7 +45,13 @@ const SolutionUI: React.FC<SolutionUIProps> = props => {
                       width: "100%",
                     }}
                   >
-                    <Typography variant="body2" fontSize="18px">
+                    <Typography
+                      variant="h3"
+                      fontSize={{
+                        xs: "14px",
+                        sm: "18px",
+                      }}
+                    >
                       {content.children}
                     </Typography>
                   </Box>
@@ -96,7 +102,14 @@ const SolutionUI: React.FC<SolutionUIProps> = props => {
               }}
             >
               <RxEyeOpen size={28} color="var(--c-gray5)" />
-              <Typography variant="subtitle1" fontSize="18px" ml={1}>
+              <Typography
+                variant="subtitle1"
+                fontSize={{
+                  xs: "14px",
+                  sm: "18px",
+                }}
+                ml={1}
+              >
                 해설 보기
               </Typography>
             </Button>
@@ -125,7 +138,14 @@ const SolutionUI: React.FC<SolutionUIProps> = props => {
               }}
             >
               <RxEyeOpen size={28} color="var(--c-gray5)" />
-              <Typography variant="subtitle1" fontSize="18px" ml={1}>
+              <Typography
+                variant="subtitle1"
+                fontSize={{
+                  xs: "14px",
+                  sm: "18px",
+                }}
+                ml={1}
+              >
                 이론 보기
               </Typography>
             </Button>

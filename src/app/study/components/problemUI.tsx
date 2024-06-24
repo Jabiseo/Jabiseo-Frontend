@@ -12,7 +12,7 @@ import remarkMath from "remark-math";
 import SolutionUI from "./solutionUI";
 
 const ProblemUI: React.FC<{
-  props: ProblemWithChooseNumber;
+  props: ProblemViewType;
   chooseAnswer: (number: number) => void;
 }> = memo(({ props, chooseAnswer }) => {
   const problem = props;
@@ -95,12 +95,27 @@ const ProblemUI: React.FC<{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
+                marginBottom: 2,
               }}
             >
-              <Typography variant="subtitle1" fontSize="18px" marginRight={1}>
+              <Typography
+                variant="h3"
+                fontSize={{
+                  xs: "14px",
+                  sm: "18px",
+                }}
+                marginRight={1}
+              >
                 1.
               </Typography>
-              <Typography variant="subtitle1" fontSize="18px" color="var(--c-gray3)">
+              <Typography
+                variant="h3"
+                fontSize={{
+                  xs: "14px",
+                  sm: "18px",
+                }}
+                color="var(--c-gray3)"
+              >
                 ({problem.examInfo.description})
               </Typography>
             </Box>
@@ -119,7 +134,13 @@ const ProblemUI: React.FC<{
                         width: "100%",
                       }}
                     >
-                      <Typography variant="subtitle1" fontSize="18px">
+                      <Typography
+                        variant="h3"
+                        fontSize={{
+                          xs: "14px",
+                          sm: "18px",
+                        }}
+                      >
                         {content.children}
                       </Typography>
                     </Box>
@@ -182,7 +203,13 @@ const ProblemUI: React.FC<{
                             width: "100%",
                           }}
                         >
-                          <Typography variant="body2" fontSize="18px">
+                          <Typography
+                            variant="body2"
+                            fontSize={{
+                              xs: "14px",
+                              sm: "18px",
+                            }}
+                          >
                             {content.children}
                           </Typography>
                         </Box>

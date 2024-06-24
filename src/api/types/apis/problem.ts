@@ -32,7 +32,7 @@ for (let i = 0; i < 20; i++) {
 }
 const getProblems = () => {
   const newProblems = problems.map(problem => {
-    return { ...problem, chooseNumber: 0 };
+    return { ...problem, chooseNumber: 0, viewSolution: false, viewTheory: false };
   });
   return newProblems;
 };
