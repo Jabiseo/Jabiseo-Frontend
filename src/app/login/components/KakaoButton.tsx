@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import KakaoLogin from "react-kakao-login";
-import Icon from "@/public/kakaoIcon.png";
+
+import { mainfetch } from "@/src/api/apis/mainFetch";
 
 const KakaoButton: React.FC = () => {
   const kakaoClientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
@@ -10,11 +11,27 @@ const KakaoButton: React.FC = () => {
   /**
    *
    * @param data
-   * @todo Submit the idToken to the backend
+   * @todo idToken 서버로 전송 및 토큰 받아오기
    */
   const kakaoOnSuccess = async (data: any) => {
     const idToken = data.response.id_token;
+    submitIdToken(idToken);
   };
+
+  const submitIdToken = async (idToken: string) => {
+    const res = await mainfetch("/auth/login", { method: "POST", body: { idToken } }, false)
+      .then(res => res.json())
+      .catch();
+
+    if (res.status === 200) {
+      localStorage.setItem("accessToken", res.accessToken);
+      localStorage.setItem("refreshToken", res.refreshToken);
+      window.location.href = "/";
+    } else {
+      // todo : error handling
+    }
+  };
+
   const kakaoOnFailure = (error: any) => {};
   return (
     <KakaoLogin
@@ -42,7 +59,7 @@ const KaKaoIcon: React.FC<props> = ({ onClick }) => {
         cursor: "pointer",
       }}
     >
-      <Image src={Icon} alt="kakao" width={300} height={45} />
+      <Image src="/kakaoIcon.png" alt="kakao" width={300} height={45} />
     </button>
   );
 };

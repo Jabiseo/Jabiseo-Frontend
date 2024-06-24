@@ -1,16 +1,16 @@
 interface ExamInfo {
-  examId: number;
-  year: number;
-  round: number;
+  examId: string;
+  description: string;
 }
 
 interface Subject {
-  subjectId: number;
+  subjectId: string;
+  sequence: number;
   name: string;
 }
 
 interface Problem {
-  problemId: number;
+  problemId: string;
   examInfo: ExamInfo;
   subject: Subject;
   isBookmark: boolean;
@@ -19,5 +19,8 @@ interface Problem {
   answerNumber: number;
   theory: string;
   solution: string;
+}
+
+interface ProblemWithChooseNumber extends Problem {
   chooseNumber: number;
 }

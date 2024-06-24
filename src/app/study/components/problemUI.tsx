@@ -12,7 +12,7 @@ import remarkMath from "remark-math";
 import SolutionUI from "./solutionUI";
 
 const ProblemUI: React.FC<{
-  props: Problem;
+  props: ProblemWithChooseNumber;
   chooseAnswer: (number: number) => void;
   isSolution: number;
 }> = memo(({ props, chooseAnswer, isSolution }) => {
@@ -66,6 +66,29 @@ const ProblemUI: React.FC<{
           flexDirection: "column",
         }}
       >
+        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+          <Box
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+              marginRight: 2,
+            }}
+            onClick={bookmarking}
+          >
+            {problem.isBookmark ? <FaRegBookmark size={25} /> : <FaBookmark size={25} />}
+          </Box>
+          <Box
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+            onClick={alerting}
+          >
+            <PiSirenFill size={30} />
+          </Box>
+        </Box>
         <Box sx={{ marginBottom: 2 }}>
           <Box
             sx={{
@@ -77,7 +100,7 @@ const ProblemUI: React.FC<{
             <Box
               sx={{
                 fontSize: { xs: "1.1rem", md: "1rem" },
-                overflowWrap: "break-word", // Ensure long words break to fit within the box
+                overflowWrap: "break-word",
               }}
             >
               <Markdown

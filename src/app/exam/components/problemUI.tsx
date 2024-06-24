@@ -8,7 +8,7 @@ import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
 
 const ProblemUI: React.FC<{
-  props: Problem;
+  props: ProblemWithChooseNumber;
   chooseAnswer: (number: number) => void;
 }> = memo(({ props, chooseAnswer }) => {
   const problem = props;

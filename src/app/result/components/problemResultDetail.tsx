@@ -11,7 +11,7 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { PiSirenFill } from "react-icons/pi";
 
 const ProblemResultDetail: React.FC<{
-  props: Problem;
+  props: ProblemWithChooseNumber;
   problemNumber: number;
   nextProblem: () => void;
   prevProblem: () => void;

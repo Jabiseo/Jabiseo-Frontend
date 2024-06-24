@@ -1,53 +1,25 @@
 "use client";
 
-import ProblemUI from "./components/problemUI";
+import ProblemUI from "../components/problemUI";
 import { useEffect, useState } from "react";
 import { Box, Button, Container, Grid, Modal, Tab, Tabs, Typography } from "@mui/material";
 import Appbar from "@/src/components/Appbar";
-import { getProblems } from "@/src/api/types/apis/problem";
 import { useRouter } from "next/navigation";
+import StudyTime from "../components/studyTime";
+import useProblems from "@/src/hooks/useProblems";
 
 const StudyPage = () => {
-  const [problem, setProblem] = useState<Problem | null>(null);
-  const [problems, setProblems] = useState<Problem[]>([]);
+  const { Problems, loading, error } = useProblems();
+  const [problem, setProblem] = useState<ProblemWithChooseNumber | null>(null);
+  const [problems, setProblems] = useState<ProblemWithChooseNumber[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
-  const [time, setTime] = useState(0);
-  const [viewTime, setViewTime] = useState("00분 00초");
   const [tabValue, setTabValue] = useState(0);
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(prev => prev ^ 1);
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(time => time + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [time]);
-
-  const secondsToMMSS = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}분 ${
-      remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds
-    }초`;
-  };
-
-  useEffect(() => {
-    setViewTime(secondsToMMSS(time));
-  }, [time]);
-
-  useEffect(() => {
-    const fetchProblems = async () => {
-      const fetchedProblems = await getProblems();
-      setProblems(fetchedProblems);
-      setProblem(fetchedProblems[0]);
-    };
-
-    fetchProblems();
-  }, []);
 
   useEffect(() => {
     setProblem(problems[problemNumber - 1]);
@@ -150,7 +122,7 @@ const StudyPage = () => {
                           },
                         }}
                       >
-                        {problem.examInfo.year}년도 {problem.examInfo.round}회
+                        {problem.examInfo.description} 시험
                       </Typography>
                     </Box>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -160,9 +132,7 @@ const StudyPage = () => {
                     </Box>
                   </Box>
                   <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Typography variant="body1" mx={3}>
-                      {viewTime}
-                    </Typography>
+                    <StudyTime />
                   </Box>
                   <Tabs
                     value={tabValue}
