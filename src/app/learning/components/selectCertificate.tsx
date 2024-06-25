@@ -19,13 +19,29 @@ const SelectCertificateUI: React.FC<CertificateProps> = ({ handleIsCertificate }
   return (
     <>
       <ThemeProvider theme={globalTheme}>
-        <Container>
-          <Box textAlign="center" my={5}>
-            <Typography variant="h3">자격증을 먼저 선택해주세요!</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <Box>
+            <Typography
+              variant="h1"
+              fontSize={{
+                xs: "26px",
+                sm: "32px",
+              }}
+            >
+              자격증을 먼저 선택해주세요!
+            </Typography>
           </Box>
           <Grid container spacing={2}>
             {certificates.map(certificate => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={certificate.certificateId}>
+              <Grid item xs={6} md={4} lg={3} key={certificate.certificateId}>
                 <Box
                   onClick={() => selectCertificate(certificate)}
                   sx={{
@@ -41,14 +57,23 @@ const SelectCertificateUI: React.FC<CertificateProps> = ({ handleIsCertificate }
                     "&:hover": {
                       borderColor: "var(--c-sub3)",
                     },
+                    backgroundColor: "white",
                   }}
                 >
-                  <Typography variant="body2">{certificate.name}</Typography>
+                  <Typography
+                    variant="body2"
+                    fontSize={{
+                      xs: "16px",
+                      sm: "20px",
+                    }}
+                  >
+                    {certificate.name}
+                  </Typography>
                 </Box>
               </Grid>
             ))}
           </Grid>
-        </Container>
+        </Box>
       </ThemeProvider>
     </>
   );

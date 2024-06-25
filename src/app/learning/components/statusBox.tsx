@@ -71,7 +71,13 @@ const StatusBox = () => {
   return (
     <>
       <ThemeProvider theme={globalTheme}>
-        <Box sx={{ mt: "64px", padding: "0" }}>
+        <Box
+          sx={{
+            padding: "0",
+            backgroundColor: "white",
+            marginBottom: "40px",
+          }}
+        >
           <Box
             sx={{
               display: "flex",

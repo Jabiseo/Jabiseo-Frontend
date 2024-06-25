@@ -1,27 +1,28 @@
 "use client";
 import { globalTheme } from "@/src/components/globalStyle";
 import useCertificateInfo from "@/src/hooks/useCertificateInfo";
-import { ThemeProvider } from "@emotion/react";
+import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   Container,
   FormControlLabel,
   Grid,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Slider,
-  Typography,
   List,
   ListItem,
   Radio,
-  CircularProgress,
+  SelectChangeEvent,
+  Slider,
+  Typography,
+  useMediaQuery,
+  ThemeProvider,
 } from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { BsChevronDoubleRight } from "react-icons/bs";
 
 const marks = [
   { value: 0, label: "0" },
@@ -117,6 +118,9 @@ const MakeProblemSetUI = () => {
     }
   }, [loading]);
 
+  const theme = useTheme();
+  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
+
   if (loading) {
     return (
       <ThemeProvider theme={globalTheme}>
@@ -137,21 +141,27 @@ const MakeProblemSetUI = () => {
             container
             spacing={{
               xs: 4,
-              md: 8,
-              lg: 12,
             }}
           >
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={5.5}>
               <Box>
-                <Typography variant="body1">1. 연도를 선택해주세요</Typography>
+                <Typography
+                  variant="body1"
+                  fontSize={{
+                    xs: "16px",
+                    sm: "20px",
+                  }}
+                >
+                  1. 연도를 선택해주세요
+                </Typography>
                 <Box
                   sx={{
                     marginTop: 2,
                     backgroundColor: "white",
-                    borderRadius: "12px",
+                    borderRadius: "14px",
                     border: "1px solid var(--c-gray2)",
                     padding: "6px",
-                    height: { md: `${leftBoxHeight}px` },
+                    height: { sm: `${leftBoxHeight}px` },
                     overflowY: "auto",
                   }}
                 >
@@ -175,7 +185,17 @@ const MakeProblemSetUI = () => {
                                 }}
                               />
                             }
-                            label={<Typography variant="body2">{exam.description}</Typography>}
+                            label={
+                              <Typography
+                                variant="body2"
+                                fontSize={{
+                                  xs: "14px",
+                                  sm: "20px",
+                                }}
+                              >
+                                {exam.description}
+                              </Typography>
+                            }
                           />
                         </ListItem>
                       ))}
@@ -183,24 +203,33 @@ const MakeProblemSetUI = () => {
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={0} sm={1}></Grid>
+            <Grid item xs={12} sm={5.5}>
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
                 }}
               >
-                <Typography variant="body2">2. 과목을 선택해주세요</Typography>
+                <Typography
+                  variant="body1"
+                  fontSize={{
+                    xs: "16px",
+                    sm: "20px",
+                  }}
+                >
+                  2. 과목을 선택해주세요
+                </Typography>
                 <Box
                   ref={rightBoxRef}
                   sx={{
                     marginTop: 2,
                     backgroundColor: "white",
-                    borderRadius: "12px",
+                    borderRadius: "14px",
                     border: "1px solid var(--c-gray2)",
                     padding: {
-                      xs: "12px",
-                      md: "36px",
+                      xs: "14px",
+                      sm: "36px",
                     },
                     flexGrow: 1,
                     display: "flex",
@@ -223,7 +252,17 @@ const MakeProblemSetUI = () => {
                             }}
                           />
                         }
-                        label={<Typography variant="body2">{subject.name}</Typography>}
+                        label={
+                          <Typography
+                            variant="body2"
+                            fontSize={{
+                              xs: "14px",
+                              sm: "20px",
+                            }}
+                          >
+                            {subject.name}
+                          </Typography>
+                        }
                       />
                     ))}
                 </Box>
@@ -234,116 +273,293 @@ const MakeProblemSetUI = () => {
         <Box
           mt={{
             xs: 4,
-            md: 8,
+            sm: 8,
           }}
         >
-          <Grid
-            container
-            spacing={{
-              xs: 4,
-              md: 8,
-              lg: 12,
-            }}
-          >
-            <Grid item xs={12} md={6}>
-              <Box>
-                <Typography variant="body1">3. 과목 문제 수를 설정해주세요</Typography>
-                <Box
-                  sx={{
-                    backgroundColor: "white",
-                    borderRadius: "12px",
-                    border: "1px solid var(--c-gray2)",
-                    height: { md: `${leftBoxHeight2}px` },
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    mt: 4,
-                    padding: 4,
-                  }}
-                >
-                  <Slider
-                    aria-label="Question Count"
-                    defaultValue={20}
-                    value={questionsCount}
-                    onChange={handleQuestionsCountChange}
-                    getAriaValueText={valuetext}
-                    step={1}
-                    marks={marks}
-                    min={0}
-                    max={20}
-                    valueLabelDisplay="auto"
-                    sx={{ color: "var(--c-sub3)", width: "80%" }}
-                  />
-                </Box>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Typography variant="body1">4. 총 문제 수를 확인하세요</Typography>
-                <Box
-                  ref={rightBoxRef2}
-                  sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    flexDirection: "row",
-                    height: "100%",
-                    mt: 4,
-                    py: 6,
-                  }}
-                >
-                  <Box sx={{ flexGrow: 1, p: 2 }}>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mr: 2 }}>
-                      <Typography variant="body2">선택 과목</Typography>
-                      <Typography variant="body2">{selectedSubjects.length}과목</Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mr: 2 }}>
-                      <Typography variant="body2">과목 당 문제 수</Typography>
-                      <Typography variant="body2">{questionsCount}문제</Typography>
-                    </Box>
-                  </Box>
+          {!isSm ? (
+            <Grid
+              container
+              spacing={{
+                xs: 4,
+              }}
+            >
+              <Grid item xs={12} sm={5.5}>
+                <Box>
+                  <Typography
+                    variant="body1"
+                    fontSize={{
+                      xs: "16px",
+                      sm: "20px",
+                    }}
+                  >
+                    3. 과목 문제 수를 설정해주세요
+                  </Typography>
                   <Box
                     sx={{
                       backgroundColor: "white",
-                      border: "1px solid var(--c-sub3)",
-                      borderRadius: "12px",
+                      borderRadius: "14px",
+                      border: "1px solid var(--c-gray2)",
+                      height: { sm: `${leftBoxHeight2}px` },
                       display: "flex",
-                      alignItems: "center",
                       justifyContent: "center",
-                      flexGrow: 1,
+                      alignItems: "center",
+                      mt: 4,
+                      padding: 4,
                     }}
                   >
-                    <Typography variant="body1">{numberOfQuestions}문제</Typography>
+                    <Slider
+                      aria-label="Question Count"
+                      defaultValue={20}
+                      value={questionsCount}
+                      onChange={handleQuestionsCountChange}
+                      getAriaValueText={valuetext}
+                      step={1}
+                      marks={marks}
+                      min={0}
+                      max={20}
+                      valueLabelDisplay="auto"
+                      sx={{
+                        color: "var(--c-sub3)",
+                        width: "80%",
+                        "& .MuiSlider-thumb": {
+                          boxShadow: "0 0 0 10px rgba(68,187,212, 0.16)",
+                        },
+                        "& .MuiSlider-thumb:hover": {
+                          boxShadow: "0 0 0 10px rgba(68,187,212, 0.16)",
+                        },
+                        "& .MuiSlider-thumbActive": {
+                          boxShadow: "0 0 0 10px rgba(68,187,212, 0.16)",
+                        },
+                      }}
+                    />
                   </Box>
                 </Box>
-              </Box>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={1}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <BsChevronDoubleRight size={"50px"} />
+              </Grid>
+              <Grid item xs={12} sm={5.5}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    fontSize={{
+                      xs: "16px",
+                      sm: "20px",
+                    }}
+                  >
+                    4. 총 문제 수를 확인하세요
+                  </Typography>
+                  <Box
+                    ref={rightBoxRef2}
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      flexDirection: "row",
+                      height: "100%",
+                      mt: 2,
+                      py: 6,
+                    }}
+                  >
+                    <Box sx={{ flexGrow: 1, p: 1 }}>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", mr: 2 }}>
+                        <Typography variant="body2">선택 과목</Typography>
+                        <Typography variant="body2">{selectedSubjects.length}과목</Typography>
+                      </Box>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", mr: 2 }}>
+                        <Typography variant="body2">과목 당 문제 수</Typography>
+                        <Typography variant="body2">{questionsCount}문제</Typography>
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        backgroundColor: "white",
+                        border: "1px solid var(--c-sub3)",
+                        borderRadius: "14px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Typography variant="body1">{numberOfQuestions}문제</Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
+          ) : (
+            <>
+              <Typography
+                variant="body1"
+                fontSize={{
+                  xs: "16px",
+                  sm: "20px",
+                }}
+              >
+                3. 과목 문제 수 설정과 총 문제 수 확인해주세요.
+              </Typography>
+              <Box
+                sx={{
+                  backgroundColor: "white",
+                  mt: 4,
+                  paddingX: 1.5,
+                  paddingY: 1,
+                  borderRadius: "8px",
+                  border: "1px solid var(--c-gray2)",
+                  minHeight: "160px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Grid container>
+                  <Grid
+                    item
+                    xs={5.5}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        padding: 2,
+                      }}
+                    >
+                      <Slider
+                        aria-label="Question Count"
+                        defaultValue={20}
+                        value={questionsCount}
+                        onChange={handleQuestionsCountChange}
+                        getAriaValueText={valuetext}
+                        step={1}
+                        marks={marks}
+                        min={0}
+                        max={20}
+                        valueLabelDisplay="auto"
+                        sx={{
+                          color: "var(--c-sub3)",
+                          width: "100%",
+                          "& .MuiSlider-markLabel": {
+                            fontSize: "14px",
+                          },
+                        }}
+                        size="medium"
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={1}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <BsChevronDoubleRight size={"20px"} />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={5.5}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                        <Typography variant="body2" fontSize={"14px"}>
+                          선택 과목
+                        </Typography>
+                        <Typography variant="body2" fontSize={"14px"}>
+                          {selectedSubjects.length}과목
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                        <Typography variant="body2" fontSize={"14px"}>
+                          과목 문제 수
+                        </Typography>
+                        <Typography variant="body2" fontSize={"14px"}>
+                          {questionsCount}문제
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="body1" fontSize={"12px"} color={"var(--c-gray3)"}>
+                        총 문제수
+                      </Typography>
+                      <Box
+                        sx={{
+                          backgroundColor: "white",
+                          border: "1px solid var(--c-sub3)",
+                          borderRadius: "4px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          py: 1,
+                          width: "70%",
+                          mt: 0.5,
+                        }}
+                      >
+                        <Typography variant="body1" fontSize={"14px"}>
+                          {numberOfQuestions}문제
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Box>
+            </>
+          )}
         </Box>
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
-            gap: 6,
-            marginTop: 12,
+            gap: {
+              xs: 3,
+              sm: 6,
+            },
+            marginTop: {
+              xs: 6,
+              sm: 12,
+            },
             marginBottom: 8,
           }}
         >
           <Button
             sx={{
               borderRadius: "40px",
-              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
               px: {
                 xs: 3,
-                md: 6,
+                sm: 6,
               },
               py: {
-                xs: 3,
-                md: 4,
+                xs: 2,
+                sm: 2,
               },
               backgroundColor: "white",
               border: "2px solid white",
@@ -359,8 +575,9 @@ const MakeProblemSetUI = () => {
                 color: "var(--c-sub4)",
                 variant: {
                   xs: "body1",
-                  md: "h3",
+                  sm: "h3",
                 },
+                fontSize: { xs: "16px", sm: "20px" },
               }}
             >
               공부 모드
@@ -369,14 +586,14 @@ const MakeProblemSetUI = () => {
           <Button
             sx={{
               borderRadius: "40px",
-              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
               px: {
                 xs: 3,
-                md: 6,
+                sm: 6,
               },
               py: {
-                xs: 3,
-                md: 4,
+                xs: 2,
+                sm: 2,
               },
               backgroundColor: "white",
               border: "2px solid white",
@@ -391,8 +608,9 @@ const MakeProblemSetUI = () => {
                 color: "var(--c-sub4)",
                 variant: {
                   xs: "body1",
-                  md: "h3",
+                  sm: "h3",
                 },
+                fontSize: { xs: "16px", sm: "20px" },
               }}
             >
               시험 모드

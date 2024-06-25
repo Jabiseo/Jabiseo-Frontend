@@ -1,7 +1,10 @@
 "use client";
-import GridBase from "@/src/components/gridBase";
-import MakeProblemSetUI from "./components/MakeProblemSet";
+import Appbar from "@/src/components/Appbar";
+import { useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
+import LearningFooter from "../../components/Footer";
+import MakeProblemSetUI from "./components/MakeProblemSet";
+import LearningHeader from "./components/learningHeader";
 import SelectCertificate from "./components/selectCertificate";
 import StatusBox from "./components/statusBox";
 
@@ -18,19 +21,21 @@ const makeProblemSetBase = () => {
   const handleIsCertificate = () => {
     setisCertificate(true);
   };
+  const theme = useTheme();
+  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <>
-      <StatusBox />
-      <GridBase
-        main={
-          isCertificate == true ? (
-            <MakeProblemSetUI />
-          ) : (
-            <SelectCertificate handleIsCertificate={handleIsCertificate} />
-          )
-        }
-      />
-      ;
+      <Appbar />
+      <LearningHeader />
+      {isCertificate == true ? (
+        <>
+          <StatusBox />
+          <MakeProblemSetUI />
+        </>
+      ) : (
+        <SelectCertificate handleIsCertificate={handleIsCertificate} />
+      )}
+      {!isSm && <LearningFooter />}
     </>
   );
 };
