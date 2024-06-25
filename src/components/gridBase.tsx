@@ -9,18 +9,22 @@ interface GridBaseProps {
 
 const GridBase: React.FC<GridBaseProps> = ({ sideleft, main, sideright }) => {
   return (
-    <Container maxWidth={false} disableGutters>
+    <Container maxWidth={false}>
       <Appbar />
       <Box
         sx={{
-          margin: "0 auto",
+          width: "100%",
           maxWidth: "1920px",
           minWidth: "320px",
-          paddingX: { xs: "10px", sm: "20px", md: "40px" },
-          marginTop: "90px",
         }}
       >
-        <Grid container spacing={3}>
+        <Grid
+          container
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <Grid item sm={0} lg={1}>
             <Box
               sx={{
@@ -31,7 +35,7 @@ const GridBase: React.FC<GridBaseProps> = ({ sideleft, main, sideright }) => {
               {sideleft}
             </Box>
           </Grid>
-          <Grid item sm={12} lg={10}>
+          <Grid item sm={12} lg={10} sx={{ width: "100%" }}>
             {main}
           </Grid>
           <Grid item sm={0} lg={1}>
