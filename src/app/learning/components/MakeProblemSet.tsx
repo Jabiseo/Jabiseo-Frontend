@@ -190,7 +190,7 @@ const MakeProblemSetUI = () => {
                   flexDirection: "column",
                 }}
               >
-                <Typography variant="body1">2. 과목을 선택해주세요</Typography>
+                <Typography variant="body2">2. 과목을 선택해주세요</Typography>
                 <Box
                   ref={rightBoxRef}
                   sx={{

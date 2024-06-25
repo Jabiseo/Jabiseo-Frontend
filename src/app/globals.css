@@ -32,11 +32,27 @@ button {
   border: none;
   background-color: white;
 }
-
+@font-face {
+  font-family: "Pretendard-Bold";
+  src: url(../../public/font/Pretendard-Bold.otf) format("otf");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Pretendard-SemiBold";
+  src: url(../../public/font/Pretendard-SemiBold.otf) format("otf");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Pretendard-Medium";
+  src: url(../../public/font/Pretendard-Medium.otf) format("otf");
+  font-weight: 500;
+  font-style: normal;
+}
 @font-face {
   font-family: "Pretendard-Regular";
-  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-    format("woff");
+  src: url(../../public/font/Pretendard-Regular.otf) format("otf");
   font-weight: 400;
   font-style: normal;
 }

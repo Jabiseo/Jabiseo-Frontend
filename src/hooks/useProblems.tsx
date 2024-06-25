@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { mainfetch } from "../api/apis/mainFetch";
 
 const useProblems = () => {
-  const [Problems, setProblems] = useState<ProblemWithChooseNumber>();
+  const [Problems, setProblems] = useState<ProblemViewType>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const path = usePathname().split("/study/")[1];
@@ -14,7 +14,7 @@ const useProblems = () => {
         const data = await response.json();
         // 선택 정답을 추가한 데이터
         const modifyData = data.map((problem: Problem) => {
-          return { ...problem, chooseNumber: 0 };
+          return { ...problem, chooseNumber: 0, viewSolution: false, viewTheory: false };
         });
         setProblems(modifyData);
       } catch (err: any) {
