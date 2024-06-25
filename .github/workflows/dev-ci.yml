@@ -1,7 +1,7 @@
 name: dev ci build
 on:
   pull_request:
-    types: [opened, reopened, review_requested] # test용도로 review_requested 셋팅
+    types: [opened, reopened] # test용도로 review_requested 셋팅
     branches:
       - "develop"
 
@@ -21,7 +21,7 @@ jobs:
           text: "PullRequest 요청"
           statusColor: "#ebe834"
         env:
-          SLACK_TOKNE: "${{ secrets.SLACK_BOT_TOKEN }}"
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       - name: setup environment
         env:
