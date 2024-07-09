@@ -1,15 +1,23 @@
 "use client";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Divider, Drawer, MenuItem, ThemeProvider } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  IconButton,
+  MenuItem,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { globalTheme } from "./globalStyle";
+import { IoMdClose } from "react-icons/io";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { SlArrowRight } from "react-icons/sl";
 const logoStyle = {
   width: "23px",
   height: "auto",
@@ -24,7 +32,7 @@ const Appbar = () => {
   };
 
   React.useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accessToken");
     if (token) {
       setIsLogin(true);
     } else {
@@ -100,35 +108,69 @@ const Appbar = () => {
                   marginLeft: 2,
                   backgroundColor: "white",
                   display: { xs: "none", sm: "flex" },
+                  borderRadius: "10px",
+                  border: "1px solid var(--c-main)",
+                  boxShadow: "none",
+                  "&:hover": {
+                    backgroundColor: "white",
+                    boxShadow: "none",
+                  },
                 }}
+                href="/login"
               >
-                로그아웃
+                <Typography variant="h4" fontSize={"16px"} color="var(--c-main)">
+                  로그아웃
+                </Typography>
               </Button>
-              <IconButton sx={{ marginLeft: 2 }}>
+              <IconButton sx={{ marginLeft: 2, display: { xs: "none", sm: "flex" } }}>
                 <Avatar alt="User" src="user-avatar.jpg" />
               </IconButton>
             </>
           )}
 
           <Box sx={{ display: { xs: "", sm: "none" } }}>
-            <Button
-              sx={{
-                marginRight: 1,
-                backgroundColor: "white",
-                borderRadius: "30px",
-                border: "1px solid var(--c-main)",
-                boxShadow: "none",
-                "&:hover": {
-                  backgroundColor: "white",
-                  boxShadow: "none",
-                },
-              }}
-              href="/login"
-            >
-              <Typography variant="h4" fontSize={"14px"} color="var(--c-main)">
-                로그인
-              </Typography>
-            </Button>
+            {
+              // Mobile View
+              isLogin ? (
+                <Button
+                  sx={{
+                    marginRight: 1,
+                    backgroundColor: "white",
+                    borderRadius: "30px",
+                    border: "1px solid var(--c-main)",
+                    boxShadow: "none",
+                    "&:hover": {
+                      backgroundColor: "white",
+                      boxShadow: "none",
+                    },
+                  }}
+                  href="/login"
+                >
+                  <Typography variant="h4" fontSize={"14px"} color="var(--c-main)">
+                    로그아웃
+                  </Typography>
+                </Button>
+              ) : (
+                <Button
+                  sx={{
+                    marginRight: 1,
+                    backgroundColor: "white",
+                    borderRadius: "30px",
+                    border: "1px solid var(--c-main)",
+                    boxShadow: "none",
+                    "&:hover": {
+                      backgroundColor: "white",
+                      boxShadow: "none",
+                    },
+                  }}
+                  href="/login"
+                >
+                  <Typography variant="h4" fontSize={"14px"} color="var(--c-main)">
+                    로그인
+                  </Typography>
+                </Button>
+              )
+            }
             <Button
               variant="text"
               color="primary"
@@ -142,66 +184,135 @@ const Appbar = () => {
             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
               <Box
                 sx={{
-                  minWidth: "60dvw",
-                  p: 2,
-                  backgroundColor: "background.paper",
+                  minWidth: "100dvw",
+                  p: 3,
+                  backgroundColor: "var(--c-gray1)",
                   flexGrow: 1,
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
                 }}
               >
-                <MenuItem
+                <Box
                   sx={{
-                    fontSize: "1.5rem",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    px: 2,
+                    mb: 4,
                   }}
                 >
-                  문제풀이
-                </MenuItem>
-                <MenuItem
-                  sx={{
-                    fontSize: "1.5rem",
-                  }}
-                >
-                  북마크
-                </MenuItem>
-                {!isLogin || (
-                  <MenuItem
+                  <Box
                     sx={{
-                      fontSize: "1.5rem",
+                      display: "flex",
+                      alignItems: "center",
                     }}
                   >
-                    마이페이지
-                  </MenuItem>
-                )}
-                <Divider />
-                {isLogin ? (
-                  <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="text"
-                      component="a"
-                      href="/logout"
-                      target="_blank"
-                      sx={{ width: "100%", fontSize: "1.5rem" }}
+                    <img
+                      src="https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
+                      alt="Sitemark"
+                      style={logoStyle}
+                    />
+                    <Typography variant="h1" sx={{ ml: 2 }} fontSize={"24px"}>
+                      자비서
+                    </Typography>
+                  </Box>
+                  <IoMdClose size={28} onClick={toggleDrawer(false)} />
+                </Box>
+
+                <Box>
+                  {isLogin ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     >
-                      로그아웃
-                    </Button>
-                  </MenuItem>
-                ) : (
-                  <MenuItem>
+                      <IconButton>
+                        <Avatar alt="User" src="user-avatar.jpg" />
+                      </IconButton>
+                      <Typography variant="h4" fontSize={"16px"} color="var(--c-gray5)">
+                        닉네임입니다
+                      </Typography>
+                    </Box>
+                  ) : (
                     <Button
-                      color="primary"
-                      variant="contained"
+                      variant="text"
                       component="a"
                       href="/login"
                       target="_blank"
-                      sx={{ width: "100%", fontSize: "1.5rem", backgroundColor: "var(--c-green)" }}
+                      sx={{
+                        width: "100%",
+                        backgroundColor: "var(--c-sub5)",
+                        p: 2,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        borderRadius: "8px",
+                        "&:hover": {
+                          backgroundColor: "var(--c-sub5)",
+                        },
+                      }}
                     >
-                      로그인
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <IoPersonCircleSharp size={24} color="#CCCCCC" />
+                        <Typography variant="subtitle1" fontSize={"14px"} color="white" ml={1}>
+                          로그인을 해주세요
+                        </Typography>
+                      </Box>
+                      <SlArrowRight size={16} color="white" />
                     </Button>
-                  </MenuItem>
+                  )}
+                </Box>
+                <Typography
+                  variant="body2"
+                  fontSize={"14px"}
+                  color={"var(--c-gray4)"}
+                  sx={{ mt: 4, mb: 2 }}
+                >
+                  카테고리
+                </Typography>
+                <Divider />
+
+                <Box
+                  sx={{
+                    py: 3,
+                    textDecoration: "none",
+                  }}
+                  component={"a"}
+                  href="/learning"
+                >
+                  <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
+                    문제풀이
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    py: 3,
+                    textDecoration: "none",
+                  }}
+                  component={"a"}
+                  href="/bookmark"
+                >
+                  <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
+                    북마크
+                  </Typography>
+                </Box>
+                {!isLogin || (
+                  <Box
+                    sx={{
+                      py: 3,
+                      textDecoration: "none",
+                    }}
+                    component={"a"}
+                    href="/mypage"
+                  >
+                    <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
+                      마이페이지
+                    </Typography>
+                  </Box>
                 )}
               </Box>
             </Drawer>
