@@ -6,7 +6,9 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -17,6 +19,7 @@
     "@mui/material-nextjs": "^5.15.11",
     "@next/third-parties": "^14.2.4",
     "@react-oauth/google": "^0.12.1",
+    "@types/jest": "^29.5.12",
     "eslint-config-next": "^15.0.0-rc.0",
     "next": "^15.0.0-rc.0",
     "react": "^19.0.0-rc-dfd30974ab-20240613",
@@ -30,11 +33,18 @@
     "sharp": "^0.33.4"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.3.1",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
     "@types/gtag.js": "^0.0.20",
     "@types/material-ui": "^0.21.17",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
