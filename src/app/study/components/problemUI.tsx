@@ -9,7 +9,6 @@ import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
-import SolutionUI from "./solutionUI";
 
 const ProblemUI: React.FC<{
   props: ProblemViewType;
@@ -19,7 +18,7 @@ const ProblemUI: React.FC<{
   const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
   const changeColor = () => {
-    if (problem.chooseNumber === 0) {
+    if (problem.chooseNumber === -1) {
       setColors(["white", "white", "white", "white", "white"]);
       return;
     }
@@ -106,7 +105,7 @@ const ProblemUI: React.FC<{
                 }}
                 marginRight={1}
               >
-                1.
+                {problem.problemNumber}.
               </Typography>
               <Typography
                 variant="h3"
@@ -145,6 +144,12 @@ const ProblemUI: React.FC<{
                       </Typography>
                     </Box>
                   ),
+                  // span: ({ node, ...content }) =>
+                  //   node?.properties.className == "katex-html" ? (
+                  //     <></>
+                  //   ) : (
+                  //     <span>{content.children}</span>
+                  //   ),
                   img: ({ node, ...content }) => (
                     <Box
                       sx={{
@@ -180,7 +185,7 @@ const ProblemUI: React.FC<{
                     alignItems: "center",
                     borderRadius: 2,
                     "&:hover": {
-                      bgcolor: problem.chooseNumber === 0 ? "var(--c-grey)" : "",
+                      bgcolor: problem.chooseNumber === -1 ? "var(--c-grey)" : "",
                     },
                     backgroundColor: colors[idx],
                     fontSize: "1rem",
@@ -216,7 +221,7 @@ const ProblemUI: React.FC<{
                       ),
                     }}
                   >
-                    {choice}
+                    {choice.choice}
                   </Markdown>
                 </Box>
               </Grid>

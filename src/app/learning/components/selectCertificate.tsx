@@ -2,7 +2,6 @@ import { globalTheme } from "@/src/components/globalStyle";
 import useCertificates from "@/src/hooks/useCertificates";
 import { ThemeProvider } from "@emotion/react";
 import { Box, Grid, Typography } from "@mui/material";
-import Container from "@mui/material/Container";
 
 interface CertificateProps {
   handleIsCertificate: () => void;

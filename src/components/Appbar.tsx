@@ -13,7 +13,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { globalTheme } from "./globalStyle";
 import { IoMdClose } from "react-icons/io";
 import { IoPersonCircleSharp } from "react-icons/io5";
@@ -24,14 +24,14 @@ const logoStyle = {
   cursor: "pointer",
 };
 const Appbar = () => {
-  const [open, setOpen] = React.useState(false);
-  const [isLogin, setIsLogin] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       setIsLogin(true);
