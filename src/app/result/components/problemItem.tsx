@@ -132,7 +132,7 @@ const ProblemItem: React.FC<{
                     {circles[idx].call(null, { size: 20 })}
                   </Box>
                   <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex, rehypeRaw]}>
-                    {choice}
+                    {choice.choice}
                   </Markdown>
                 </Box>
               </Grid>
