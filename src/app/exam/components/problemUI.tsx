@@ -2,6 +2,9 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import { Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle } from "react-icons/bs";
+import { FaRegBookmark } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa6";
+import { PiSirenFill } from "react-icons/pi";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -15,7 +18,7 @@ const ProblemUI: React.FC<{
   const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
   const changeColor = () => {
-    if (problem.chooseNumber === 0) {
+    if (problem.chooseNumber === -1) {
       setColors(["white", "white", "white", "white", "white"]);
     } else {
       setColors(() => {
@@ -28,6 +31,18 @@ const ProblemUI: React.FC<{
   useEffect(() => {
     changeColor();
   }, [problem.chooseNumber]);
+  /**
+   * @todo 북마크 기능
+   */
+  const bookmarking = () => {
+    problem.isBookmark = !problem.isBookmark;
+  };
+  /**
+   * @todo 신고하기 기능
+   */
+  const alerting = () => {
+    alert("신고하기 기능은 준비중입니다.");
+  };
 
   return (
     <>
@@ -40,17 +55,62 @@ const ProblemUI: React.FC<{
           flexDirection: "column",
         }}
       >
-        <Box sx={{ marginBottom: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
           <Box
             sx={{
-              fontSize: "16px",
-              fontFamily: "Pretendard-Regular",
+              "&:hover": {
+                cursor: "pointer",
+              },
+              marginRight: 2,
             }}
+            onClick={bookmarking}
           >
-            <Typography variant="body1">1번</Typography>
+            {problem.isBookmark ? <FaRegBookmark size={25} /> : <FaBookmark size={25} />}
+          </Box>
+          <Box
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+            onClick={alerting}
+          >
+            <PiSirenFill size={30} />
+          </Box>
+        </Box>
+        <Box sx={{ marginBottom: 2 }}>
+          <Box>
             <Box
               sx={{
-                fontSize: { xs: "1.1rem", md: "1rem" },
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 2,
+              }}
+            >
+              <Typography
+                variant="h3"
+                fontSize={{
+                  xs: "14px",
+                  sm: "18px",
+                }}
+                marginRight={1}
+              >
+                {problem.problemNumber}.
+              </Typography>
+              <Typography
+                variant="h3"
+                fontSize={{
+                  xs: "14px",
+                  sm: "18px",
+                }}
+                color="var(--c-gray3)"
+              >
+                ({problem.examInfo.description})
+              </Typography>
+            </Box>
+            <Box
+              sx={{
                 overflowWrap: "break-word",
               }}
             >
@@ -64,7 +124,15 @@ const ProblemUI: React.FC<{
                         width: "100%",
                       }}
                     >
-                      {content.children}
+                      <Typography
+                        variant="h3"
+                        fontSize={{
+                          xs: "14px",
+                          sm: "18px",
+                        }}
+                      >
+                        {content.children}
+                      </Typography>
                     </Box>
                   ),
                   img: ({ node, ...content }) => (
@@ -89,7 +157,7 @@ const ProblemUI: React.FC<{
               </Markdown>
             </Box>
           </Box>
-          <Grid container>
+          <Grid container marginTop={2}>
             {problem.choices.map((choice, idx) => (
               <Grid item xs={12} key={idx}>
                 <Box
@@ -102,10 +170,11 @@ const ProblemUI: React.FC<{
                     alignItems: "center",
                     borderRadius: 2,
                     "&:hover": {
-                      bgcolor: "var(--c-grey)",
+                      bgcolor: problem.chooseNumber === -1 ? "var(--c-grey)" : "",
                     },
                     backgroundColor: colors[idx],
                     fontSize: "1rem",
+                    paddingY: 2,
                   }}
                 >
                   <Box
@@ -114,8 +183,30 @@ const ProblemUI: React.FC<{
                   >
                     {circles[idx].call(null, { size: 20 })}
                   </Box>
-                  <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex, rehypeRaw]}>
-                    {choice}
+                  <Markdown
+                    remarkPlugins={[remarkMath]}
+                    rehypePlugins={[rehypeKatex, rehypeRaw]}
+                    components={{
+                      p: ({ node, ...content }) => (
+                        <Box
+                          sx={{
+                            width: "100%",
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            fontSize={{
+                              xs: "14px",
+                              sm: "18px",
+                            }}
+                          >
+                            {content.children}
+                          </Typography>
+                        </Box>
+                      ),
+                    }}
+                  >
+                    {choice.choice}
                   </Markdown>
                 </Box>
               </Grid>

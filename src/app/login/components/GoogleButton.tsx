@@ -19,7 +19,7 @@ const GoogleButton = () => {
       localStorage.setItem("refreshToken", res.refreshToken);
       window.location.href = "/";
     } else {
-      // todo : error handling
+      // todo : 회원 탈퇴
     }
   };
   return (

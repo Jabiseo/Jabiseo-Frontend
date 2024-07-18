@@ -39,7 +39,7 @@ function valuetext(value: number) {
 const MakeProblemSetUI = () => {
   const { certificateInfo, loading, error } = useCertificateInfo();
   const [questionsCount, setQuestionsCount] = useState(20);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
   const [selectedExam, setSelectedExam] = useState("");
   const [selectedExamId, setSelectedExamId] = useState<string>("0");
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
@@ -60,14 +60,29 @@ const MakeProblemSetUI = () => {
 
   const handleSubjectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSelectedSubjects(prev =>
-      prev.includes(value) ? prev.filter(subject => subject !== value) : [...prev, value]
-    );
+    setSelectedSubjects(prevSelectedSubjects => {
+      // subject.name이 value와 일치하는지 확인하는 함수
+      const isSelected = prevSelectedSubjects.some(subject => subject.name === value);
+
+      // 만약 isSelected가 true이면 해당 항목을 제거한 배열을 반환
+      if (isSelected) {
+        return prevSelectedSubjects.filter(subject => subject.name !== value);
+      } else {
+        // isSelected가 false이면 해당 항목을 추가한 배열을 반환
+        const selectedSubject = certificateInfo?.subjects.find(subject => subject.name === value);
+        if (selectedSubject) {
+          return [...prevSelectedSubjects, selectedSubject];
+        } else {
+          // 만약 해당하는 subject.name을 찾지 못했을 경우 기존 배열을 반환
+          return prevSelectedSubjects;
+        }
+      }
+    });
   };
 
   useEffect(() => {
     if (certificateInfo === undefined) return;
-    const subjects = certificateInfo?.subjects.map(subject => subject.name) || [];
+    const subjects = certificateInfo?.subjects;
     setSelectedSubjects(subjects);
   }, [certificateInfo]);
 
@@ -77,13 +92,13 @@ const MakeProblemSetUI = () => {
     const examId = selectedExamId;
     let path;
     if (examId === "0") {
-      path = `/study/certificate-id=${certificateId}&subjectids=${selectedSubjects.join(
-        ","
-      )}&count=${questionsCount}`;
+      path = `/study/certificate-id=${certificateId}&subject-id=${selectedSubjects
+        .map(subject => subject.subjectId)
+        .join(",")}&count=${questionsCount}`;
     } else {
-      path = `/study/certificate-id=${certificateId}&exam-id=${examId}&subjectids=${selectedSubjects.join(
-        ","
-      )}&count=${questionsCount}`;
+      path = `/study/certificate-id=${certificateId}&exam-id=${examId}&subject-id=${selectedSubjects
+        .map(subject => subject.subjectId)
+        .join(",")}&count=${questionsCount}`;
     }
     router.push(path);
   };
@@ -93,13 +108,13 @@ const MakeProblemSetUI = () => {
     const examId = selectedExamId;
     let path;
     if (examId === "0") {
-      path = `/exam/certificate-id=${certificateId}&subjectids=${selectedSubjects.join(
-        ","
-      )}&count=${questionsCount}`;
+      path = `/exam/certificate-id=${certificateId}&subject-id=${selectedSubjects
+        .map(subject => subject.subjectId)
+        .join(",")}&count=${questionsCount}`;
     } else {
-      path = `/exam/certificate-id=${certificateId}&exam-id=${examId}&subjectids=${selectedSubjects.join(
-        ","
-      )}&count=${questionsCount}`;
+      path = `/exam/certificate-id=${certificateId}&exam-id=${examId}&subject-id=${selectedSubjects
+        .map(subject => subject.subjectId)
+        .join(",")}&count=${questionsCount}`;
     }
     router.push(path);
   };
@@ -172,7 +187,7 @@ const MakeProblemSetUI = () => {
                           <FormControlLabel
                             control={
                               <Radio
-                                checked={selectedExam === exam.description}
+                                checked={selectedExamId === exam.examId}
                                 onChange={e => {
                                   handleExamChange(e);
                                   setSelectedExamId(exam.examId);
@@ -242,7 +257,7 @@ const MakeProblemSetUI = () => {
                         key={subject.subjectId}
                         control={
                           <Checkbox
-                            checked={selectedSubjects.includes(subject.name)}
+                            checked={selectedSubjects.includes(subject)}
                             onChange={handleSubjectChange}
                             value={subject.name}
                             sx={{
@@ -602,6 +617,7 @@ const MakeProblemSetUI = () => {
                 backgroundColor: "white",
               },
             }}
+            onClick={gotoExamMode}
           >
             <Typography
               sx={{

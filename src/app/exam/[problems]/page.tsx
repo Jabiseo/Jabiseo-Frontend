@@ -1,43 +1,38 @@
 "use client";
 
-import ProblemUI from "../components/problemUI";
-import { useEffect, useRef, useState } from "react";
+import Appbar from "@/src/components/Appbar";
+import { globalTheme } from "@/src/components/globalStyle";
+import useProblems from "@/src/hooks/useProblems";
 import {
   Box,
   Button,
   CircularProgress,
   Container,
+  Drawer,
   Grid,
   Modal,
-  Tab,
-  Tabs,
   ThemeProvider,
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import Appbar from "@/src/components/Appbar";
-import { useRouter } from "next/navigation";
-import StudyTime from "../components/studyTime";
-import useProblems from "@/src/hooks/useProblems";
-import { globalTheme } from "@/src/components/globalStyle";
-import StudyHeader from "../components/studyHeader";
-import SolutionUI from "../components/solutionUI";
 import { useTheme } from "@mui/material/styles";
-import { IoMdClose } from "react-icons/io";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import ExamHeader from "../components/examHeader";
+import Omr from "../components/omrUI";
+import ProblemUI from "../components/problemUI";
+import SmallOmrUI from "../components/smallOmrUI";
+import StudyTime from "../components/studyTime";
 
-const StudyPage = () => {
+const ExamPage = () => {
   const { getProblems, loading, error } = useProblems();
   const [problem, setProblem] = useState<ProblemViewType | null>(null);
   const [problems, setProblems] = useState<ProblemViewType[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
-  const [tabValue, setTabValue] = useState(0);
   const [submitModalopen, setSubmitModalOpen] = useState(false);
   const [omrModalopen, setOmrModalOpen] = useState(false);
   const router = useRouter();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(prev => prev ^ 1);
-  };
   useEffect(() => {
     if (!getProblems) return;
     setProblems(getProblems);
@@ -47,7 +42,6 @@ const StudyPage = () => {
   useEffect(() => {
     if (problem && problem.problemId == problems[problemNumber - 1].problemId) return;
     setProblem(problems[problemNumber - 1]);
-    setTabValue(0);
   }, [problemNumber, problems]);
 
   const nextProblem = () => {
@@ -58,12 +52,12 @@ const StudyPage = () => {
     setProblemNumber(problemNumber - 1);
   };
 
-  const chooseAnswer = (number: number) => {
+  const chooseAnswer = (number: number, chooseProblemNumber = problemNumber) => {
     setProblem(prev => {
       if (!prev) return null;
       return { ...prev, chooseNumber: number };
     });
-    problems[problemNumber - 1].chooseNumber = number;
+    problems[chooseProblemNumber - 1].chooseNumber = number;
   };
 
   const sendResult = () => {
@@ -79,36 +73,6 @@ const StudyPage = () => {
     setOmrModalOpen(!omrModalopen);
   };
 
-  const handleViewSolution = () => {
-    setProblem(prev => {
-      if (!prev) return null;
-      return { ...prev, viewSolution: !prev.viewSolution };
-    });
-    setProblems(prev => {
-      return prev.map(problem => {
-        if (problem.problemId === problems[problemNumber - 1].problemId) {
-          return { ...problem, viewSolution: !problem.viewSolution };
-        }
-        return problem;
-      });
-    });
-  };
-
-  const handleViewTheory = () => {
-    setProblem(prev => {
-      if (!prev) return null;
-      return { ...prev, viewTheory: !prev.viewTheory };
-    });
-    setProblems(prev => {
-      return prev.map(problem => {
-        if (problem.problemId === problems[problemNumber - 1].problemId) {
-          return { ...problem, viewTheory: !problem.viewTheory };
-        }
-        return problem;
-      });
-    });
-  };
-
   const studyBoxRef = useRef<HTMLDivElement | null>(null);
   const [studyBoxWidth, setStudyBoxWidth] = useState(0);
 
@@ -120,6 +84,7 @@ const StudyPage = () => {
 
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMd = useMediaQuery(theme.breakpoints.down("md"));
 
   if (loading) {
     return (
@@ -130,6 +95,16 @@ const StudyPage = () => {
           </Box>
         </Container>
       </ThemeProvider>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <Typography>Error</Typography>
+        </Box>
+      </Container>
     );
   }
   return (
@@ -153,7 +128,7 @@ const StudyPage = () => {
               sm: "64px",
             }}
           ></Box>
-          <StudyHeader />
+          <ExamHeader />
           <Box
             sx={{
               width: "100%",
@@ -272,7 +247,8 @@ const StudyPage = () => {
             ref={studyBoxRef}
           >
             <Grid container>
-              <Grid item xs={12} md={6}>
+              <Grid item sm={0} md={2}></Grid>
+              <Grid item sm={12} md={8}>
                 {problem ? (
                   <>
                     <ProblemUI props={problem} chooseAnswer={chooseAnswer} />
@@ -281,54 +257,27 @@ const StudyPage = () => {
                   <div>Loading problem...</div>
                 )}
               </Grid>
-              <Grid item xs={12} md={6}>
-                <Tabs
-                  value={tabValue}
-                  onChange={handleChange}
-                  centered
-                  variant="fullWidth"
-                  sx={{
-                    "& .MuiTabs-indicator": {
-                      backgroundColor: "var(--c-sub3)",
-                    },
-                  }}
-                >
-                  <Tab
-                    label={
-                      <Typography variant="h4" fontSize="16px">
-                        해설
-                      </Typography>
-                    }
-                    sx={{ flex: 1 }}
+              <Grid
+                item
+                sm={0}
+                md={2}
+                maxHeight="70vh"
+                sx={{
+                  overflowY: "auto",
+                }}
+              >
+                {!isMd && (
+                  <Omr
+                    problems={problems}
+                    handleOmrModal={handleOmrModal}
+                    setProblemNumber={setProblemNumber}
+                    chooseAnswer={chooseAnswer}
                   />
-                  <Tab
-                    label={
-                      <Typography variant="h4" fontSize="16px">
-                        이론
-                      </Typography>
-                    }
-                    sx={{ flex: 1 }}
-                  />
-                </Tabs>
-                {problem &&
-                  (tabValue === 0 ? (
-                    <SolutionUI
-                      solution={problem.solution}
-                      isView={problem.viewSolution}
-                      handleView={handleViewSolution}
-                      tabValue={tabValue}
-                    />
-                  ) : (
-                    <SolutionUI
-                      solution={problem!.theory}
-                      isView={problem!.viewTheory}
-                      handleView={handleViewTheory}
-                      tabValue={tabValue}
-                    />
-                  ))}
+                )}
               </Grid>
             </Grid>
           </Box>
+          <Box height={"108px"}></Box>
           <Box
             sx={{
               position: "fixed",
@@ -376,7 +325,7 @@ const StudyPage = () => {
                   }}
                   color={"white"}
                 >
-                  문제 목록
+                  OMR 보기
                 </Typography>
               </Button>
               <Box
@@ -482,93 +431,23 @@ const StudyPage = () => {
             </Box>
           </Box>
         </Modal>
-        <Modal open={omrModalopen} onClose={handleOmrModal}>
+        <Drawer open={omrModalopen} onClose={handleOmrModal} anchor="bottom">
           <Box
             sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              maxWidth: "835px",
-              width: {
-                xs: "90%",
-                sm: "70%",
-              },
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-              borderRadius: "20px",
+              height: "50vh",
             }}
           >
-            <IoMdClose onClick={handleOmrModal} size={24} />
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                padding: 2,
-              }}
-            >
-              <Typography
-                variant="h1"
-                fontSize={{
-                  xs: "14px",
-                  sm: "20px",
-                }}
-                mb={4}
-              >
-                번호를 누르시면 해당 문제로 이동합니다.
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  flexDirection: "row",
-                  gap: "16px",
-                  flexWrap: "wrap",
-                }}
-              >
-                {problems.map((problem, index) => (
-                  <Button
-                    key={problem.problemId}
-                    onClick={() => {
-                      setProblemNumber(index + 1);
-                      handleOmrModal();
-                    }}
-                    sx={{
-                      backgroundColor:
-                        problem.chooseNumber === 0
-                          ? "white"
-                          : problem.chooseNumber === problem.answerNumber
-                          ? "var(--c-light-green)"
-                          : "var(--c-light-red)",
-                      border: "1.5px solid var(--c-gray5)",
-                      borderRadius: "40px",
-                      "&:hover": {
-                        backgroundColor: "var(--c-gray2)",
-                      },
-                    }}
-                  >
-                    <Typography
-                      variant="h3"
-                      fontSize={{
-                        xs: "14px",
-                        sm: "16px",
-                      }}
-                    >
-                      {index + 1 < 10 ? `00${index + 1}` : index + 1 < 99 ? `0${index + 1}` : "100"}
-                    </Typography>
-                  </Button>
-                ))}
-              </Box>
-            </Box>
+            <SmallOmrUI
+              problems={problems}
+              handleOmrModal={handleOmrModal}
+              setProblemNumber={setProblemNumber}
+              chooseAnswer={chooseAnswer}
+            />
           </Box>
-        </Modal>
+        </Drawer>
       </ThemeProvider>
     </>
   );
 };
 
-export default StudyPage;
+export default ExamPage;
