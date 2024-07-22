@@ -44,6 +44,7 @@ const ProblemItem: React.FC<{
       <Container
         maxWidth={false}
         sx={{
+          minHeight: "430px",
           paddingTop: 2,
           display: "flex",
           justifyContent: "center",

@@ -51,10 +51,16 @@ const StudyPage = () => {
   }, [problemNumber, problems]);
 
   const nextProblem = () => {
+    if (problemNumber === problems.length) {
+      return;
+    }
     setProblemNumber(problemNumber + 1);
   };
 
   const prevProblem = () => {
+    if (problemNumber === 1) {
+      return;
+    }
     setProblemNumber(problemNumber - 1);
   };
 
@@ -409,18 +415,26 @@ const StudyPage = () => {
                     이전
                   </Typography>
                 </Button>
-                <Typography
-                  variant="subtitle1"
-                  fontSize={{
-                    xs: "14px",
-                    sm: "18px",
+                <Box
+                  minWidth="70px"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
                   }}
                 >
-                  {problemNumber}/{problems?.length}
-                </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    fontSize={{
+                      xs: "14px",
+                      sm: "18px",
+                    }}
+                  >
+                    {problemNumber}/{problems?.length}
+                  </Typography>
+                </Box>
                 <Button
                   sx={{
-                    visibility: problemNumber === 100 ? "hidden" : "visible",
+                    visibility: problemNumber === problems.length ? "hidden" : "visible",
                     borderRadius: "40px",
                     border: "1.5px solid var(--c-gray2)",
                     padding: {
@@ -489,7 +503,7 @@ const StudyPage = () => {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              maxWidth: "835px",
+              maxWidth: "900px",
               width: {
                 xs: "90%",
                 sm: "70%",
@@ -523,45 +537,57 @@ const StudyPage = () => {
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "flex-start",
+                  justifyContent: "center",
                   alignItems: "center",
-                  flexDirection: "row",
-                  gap: "16px",
-                  flexWrap: "wrap",
                 }}
               >
-                {problems.map((problem, index) => (
-                  <Button
-                    key={problem.problemId}
-                    onClick={() => {
-                      setProblemNumber(index + 1);
-                      handleOmrModal();
-                    }}
-                    sx={{
-                      backgroundColor:
-                        problem.chooseNumber === 0
-                          ? "white"
-                          : problem.chooseNumber === problem.answerNumber
-                          ? "var(--c-light-green)"
-                          : "var(--c-light-red)",
-                      border: "1.5px solid var(--c-gray5)",
-                      borderRadius: "40px",
-                      "&:hover": {
-                        backgroundColor: "var(--c-gray2)",
-                      },
-                    }}
-                  >
-                    <Typography
-                      variant="h3"
-                      fontSize={{
-                        xs: "14px",
-                        sm: "16px",
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "row",
+                    gap: "16px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {problems.map((problem, index) => (
+                    <Button
+                      key={problem.problemId}
+                      onClick={() => {
+                        setProblemNumber(index + 1);
+                        handleOmrModal();
+                      }}
+                      sx={{
+                        backgroundColor:
+                          problem.chooseNumber === 0
+                            ? "white"
+                            : problem.chooseNumber === problem.answerNumber
+                            ? "var(--c-light-green)"
+                            : "var(--c-light-red)",
+                        border: "1.5px solid var(--c-gray5)",
+                        borderRadius: "40px",
+                        "&:hover": {
+                          backgroundColor: "var(--c-gray2)",
+                        },
                       }}
                     >
-                      {index + 1 < 10 ? `00${index + 1}` : index + 1 < 99 ? `0${index + 1}` : "100"}
-                    </Typography>
-                  </Button>
-                ))}
+                      <Typography
+                        variant="h3"
+                        fontSize={{
+                          xs: "14px",
+                          sm: "16px",
+                        }}
+                      >
+                        {index + 1 < 10
+                          ? `00${index + 1}`
+                          : index + 1 < 99
+                          ? `0${index + 1}`
+                          : "100"}
+                      </Typography>
+                    </Button>
+                  ))}
+                </Box>
               </Box>
             </Box>
           </Box>

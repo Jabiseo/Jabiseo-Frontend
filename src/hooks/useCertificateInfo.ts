@@ -17,7 +17,7 @@ const useCertificateInfo = () => {
           false
         );
         const data = await response.json();
-        data.exams.splice(0, 0, { examId: "0", description: "무작위 모의고사" });
+        data.exams.splice(0, 0, { examId: "0", description: "전체 회차" });
         setCertificateInfo(data);
       } catch (err: any) {
         setError(err.message);

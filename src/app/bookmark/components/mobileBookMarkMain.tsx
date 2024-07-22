@@ -1,20 +1,23 @@
 "use client";
 import useCertificateInfo from "@/src/hooks/useCertificateInfo";
-import { Box, Button, Grid, SelectChangeEvent, Typography } from "@mui/material";
+import { Box, Button, Collapse, SelectChangeEvent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import BookMarkModal from "./bookmarkModal";
 import ExamChoice from "./examChoice";
 import BookmarkProblemList from "./problemList";
 import SubjectChoice from "./subjectChoice";
-
-const BookMarkMain = () => {
+import BookMarkSlider from "./bookMarkSlider";
+const MobileBookMarkMain = () => {
   const { certificateInfo, loading, error } = useCertificateInfo();
   const [selectedExam, setSelectedExam] = useState<string>("전체 회차");
   const [problems, setProblems] = useState<BookMarkProblem[]>([]);
   const [selectedProblems, setSelectedProblems] = useState<string[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
   const [isModalOpen, setisModalOpen] = useState(false);
-
+  const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const handleSliderOpen = () => {
+    setIsSliderOpen(prev => !prev);
+  };
   const handleModalOpen = () => {
     setisModalOpen(prev => !prev);
   };
@@ -139,94 +142,89 @@ const BookMarkMain = () => {
       sx={{
         display: "flex",
         justifyContent: "center",
-        paddingBottom: "160px",
+        paddingBottom: "130px",
         minHeight: "100vh",
       }}
     >
-      <Box sx={{ mt: 12 }} maxWidth="1140px" height="100%" width="90%">
-        <Grid container spacing={3} minHeight="80vh" width="100%">
-          <Grid item xs={4}>
-            <SubjectChoice
-              subjects={certificateInfo!.subjects}
-              handleSubjectChoice={handleSubjectChoice}
-              selectedSubjects={selectedSubjects}
-            />
-            <ExamChoice
-              exams={certificateInfo!.exams}
-              handleExamChoice={handleExamChoice}
-              selectedExam={selectedExam!}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={8}
+      <Box sx={{ mt: 12 }} height="100%" width="90%">
+        <BookMarkSlider
+          handleSliderOpen={handleSliderOpen}
+          selectedSubjects={selectedSubjects}
+          selectedExam={selectedExam}
+        />
+        <Collapse in={isSliderOpen}>
+          <SubjectChoice
+            subjects={certificateInfo!.subjects}
+            handleSubjectChoice={handleSubjectChoice}
+            selectedSubjects={selectedSubjects}
+          />
+          <ExamChoice
+            exams={certificateInfo!.exams}
+            handleExamChoice={handleExamChoice}
+            selectedExam={selectedExam!}
+          />
+        </Collapse>
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="h4" gutterBottom fontSize="28px">
+            북마크
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            {problems.length} 문제
+          </Typography>
+          <Box
             sx={{
-              borderLeft: "1px solid var(--c-gray2)",
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="h4" gutterBottom fontSize="28px">
-                북마크
-              </Typography>
-              <Typography variant="h6" gutterBottom>
-                {problems.length} 문제
-              </Typography>
-              <Box
+            <Box>
+              <Button
+                onClick={selectAllProblems}
                 sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
+                  mr: 1,
+                  border: "1.5px solid var(--c-gray2)",
+                  borderRadius: "40px",
+                  padding: "4px 18px",
                 }}
               >
-                <Box>
-                  <Button
-                    onClick={selectAllProblems}
-                    sx={{
-                      mr: 1,
-                      border: "1.5px solid var(--c-gray2)",
-                      borderRadius: "40px",
-                      padding: "4px 18px",
-                    }}
-                  >
-                    <Typography variant="body2" fontSize="16px" color="var(--c-gray5)">
-                      전체 선택
-                    </Typography>
-                  </Button>
-                  <Button
-                    onClick={deselectAllProblems}
-                    sx={{
-                      border: "1.5px solid var(--c-gray2)",
-                      borderRadius: "40px",
-                      padding: "4px 18px",
-                    }}
-                  >
-                    <Typography variant="body2" fontSize="16px" color="var(--c-gray3)">
-                      전체 해제
-                    </Typography>
-                  </Button>
-                </Box>
-                <Button
-                  onClick={handleModalOpen}
-                  sx={{
-                    border: "1.5px solid var(--c-main)",
-                    borderRadius: "40px",
-                    padding: "4px 28px",
-                    backgroundColor: "var(--c-main)",
-                  }}
-                >
-                  <Typography variant="body2" fontSize="16px" color="white">
-                    문제풀기
-                  </Typography>
-                </Button>
-              </Box>
+                <Typography variant="body2" fontSize="16px" color="var(--c-gray5)">
+                  전체 선택
+                </Typography>
+              </Button>
+              <Button
+                onClick={deselectAllProblems}
+                sx={{
+                  border: "1.5px solid var(--c-gray2)",
+                  borderRadius: "40px",
+                  padding: "4px 18px",
+                }}
+              >
+                <Typography variant="body2" fontSize="16px" color="var(--c-gray3)">
+                  전체 해제
+                </Typography>
+              </Button>
             </Box>
-            <BookmarkProblemList
-              problems={problems}
-              selectedProblems={selectedProblems}
-              selectProblem={selectProblem}
-              deleteBookmark={deleteBookmark}
-            />
-          </Grid>
-        </Grid>
+            <Button
+              onClick={handleModalOpen}
+              sx={{
+                border: "1.5px solid var(--c-main)",
+                borderRadius: "40px",
+                padding: "4px 28px",
+                backgroundColor: "var(--c-main)",
+              }}
+            >
+              <Typography variant="body2" fontSize="16px" color="white">
+                문제풀기
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
+        <BookmarkProblemList
+          problems={problems}
+          selectedProblems={selectedProblems}
+          selectProblem={selectProblem}
+          deleteBookmark={deleteBookmark}
+        />
       </Box>
       <BookMarkModal
         isModalOpen={isModalOpen}
@@ -238,4 +236,4 @@ const BookMarkMain = () => {
   );
 };
 
-export default BookMarkMain;
+export default MobileBookMarkMain;

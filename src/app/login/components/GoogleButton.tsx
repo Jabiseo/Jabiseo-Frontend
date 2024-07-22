@@ -10,7 +10,11 @@ const GoogleButton = () => {
    * @todo idToken 서버로 전송 및 토큰 받아오기
    */
   const submitIdToken = async (idToken: string) => {
-    const res = await mainfetch("/auth/login", { method: "POST", body: { idToken } }, false)
+    const res = await mainfetch(
+      "/auth/login",
+      { method: "POST", body: { idToken, oauthServer: "GOOGLE" } },
+      false
+    )
       .then(res => res.json())
       .catch();
 

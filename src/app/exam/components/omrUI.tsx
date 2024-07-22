@@ -19,6 +19,7 @@ const Omr: React.FC<OmrProps> = ({
   return (
     <ThemeProvider theme={globalTheme}>
       <Box
+        minHeight="100vh"
         sx={{
           display: "flex",
           justifyContent: "center",

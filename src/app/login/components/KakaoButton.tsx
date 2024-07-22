@@ -19,7 +19,11 @@ const KakaoButton: React.FC = () => {
   };
 
   const submitIdToken = async (idToken: string) => {
-    const res = await mainfetch("/auth/login", { method: "POST", body: { idToken } }, false)
+    const res = await mainfetch(
+      "/auth/login",
+      { method: "POST", body: { idToken, oauthServer: "KAKAO" } },
+      false
+    )
       .then(res => res.json())
       .catch();
 
