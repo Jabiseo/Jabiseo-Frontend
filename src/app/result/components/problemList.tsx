@@ -3,7 +3,7 @@
 import { use, useCallback, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import ProblemItem from "./problemItem";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import ProblemResultDetail from "./problemResultDetail";
 import Link from "next/link";
 
@@ -46,7 +46,7 @@ const ProblemList = () => {
   }, [isDetail]);
   return (
     <>
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         {!isDetail ? (
           <>
             <Box mb={2}>
@@ -64,14 +64,10 @@ const ProblemList = () => {
                 </Button>
               </Link>
             </Box>
+
             {problems.map((problem, index) => (
-              <ProblemItem
-                key={index}
-                props={problem}
-                problemNumber={index + 1}
-                gotoProblem={gotoProblem}
-              />
-            ))}{" "}
+              <ProblemItem props={problem} problemNumber={index + 1} gotoProblem={gotoProblem} />
+            ))}
           </>
         ) : (
           <ProblemResultDetail

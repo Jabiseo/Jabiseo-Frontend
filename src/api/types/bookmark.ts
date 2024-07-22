@@ -1,5 +1,5 @@
 interface BookMarkProblem {
-  problemId: number;
+  problemId: string;
   examInfo: ExamInfo;
   subject: Subject;
   isBookmark: boolean;

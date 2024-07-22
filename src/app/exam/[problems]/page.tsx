@@ -45,10 +45,16 @@ const ExamPage = () => {
   }, [problemNumber, problems]);
 
   const nextProblem = () => {
+    if (problemNumber === problems.length) {
+      return;
+    }
     setProblemNumber(problemNumber + 1);
   };
 
   const prevProblem = () => {
+    if (problemNumber === 1) {
+      return;
+    }
     setProblemNumber(problemNumber - 1);
   };
 
@@ -358,18 +364,26 @@ const ExamPage = () => {
                     이전
                   </Typography>
                 </Button>
-                <Typography
-                  variant="subtitle1"
-                  fontSize={{
-                    xs: "14px",
-                    sm: "18px",
+                <Box
+                  minWidth="70px"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
                   }}
                 >
-                  {problemNumber}/{problems?.length}
-                </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    fontSize={{
+                      xs: "14px",
+                      sm: "18px",
+                    }}
+                  >
+                    {problemNumber}/{problems?.length}
+                  </Typography>
+                </Box>
                 <Button
                   sx={{
-                    visibility: problemNumber === 100 ? "hidden" : "visible",
+                    visibility: problemNumber === problems.length ? "hidden" : "visible",
                     borderRadius: "40px",
                     border: "1.5px solid var(--c-gray2)",
                     padding: {

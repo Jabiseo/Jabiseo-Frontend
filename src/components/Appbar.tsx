@@ -41,7 +41,7 @@ const Appbar = () => {
   }, []);
   return (
     <ThemeProvider theme={globalTheme}>
-      <AppBar
+      <Box
         position="fixed"
         sx={{
           backgroundImage: "url('/headerImage.png')",
@@ -52,56 +52,62 @@ const Appbar = () => {
             sm: 6,
           },
           boxShadow: "none",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000,
         }}
       >
-        <Toolbar>
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="h6" component="div" sx={{ display: "flex", alignItems: "center" }}>
-              <Button href="/">
-                <img
-                  src="https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
-                  alt="Sitemark"
-                  style={logoStyle}
-                />
-                <Typography variant="h1" sx={{ color: "white", ml: 2 }} fontSize={"24px"}>
-                  자비서
-                </Typography>
-              </Button>
-              <Button sx={{ color: "black", display: { xs: "none", sm: "flex" } }} href="/learning">
-                <Typography variant="subtitle1" sx={{ color: "white", ml: 2 }} fontSize={"16px"}>
-                  문제풀이
-                </Typography>
-              </Button>
-              <Button sx={{ color: "black", display: { xs: "none", sm: "flex" } }} href="/bookmark">
-                <Typography variant="subtitle1" sx={{ color: "white", ml: 2 }} fontSize={"16px"}>
-                  북마크
-                </Typography>
-              </Button>
-            </Typography>
-          </Box>
-          {!isLogin ? (
-            <Button
-              variant="contained"
-              sx={{
-                marginLeft: 2,
-                backgroundColor: "white",
-                display: { xs: "none", sm: "flex" },
-                borderRadius: "10px",
-                border: "1px solid var(--c-main)",
-                boxShadow: "none",
-                "&:hover": {
-                  backgroundColor: "white",
-                  boxShadow: "none",
-                },
-              }}
-              href="/login"
-            >
-              <Typography variant="h4" fontSize={"16px"} color="var(--c-main)">
-                로그인
-              </Typography>
-            </Button>
-          ) : (
-            <>
+        <Box
+          maxWidth="1140px"
+          sx={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <Toolbar
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              "&.MuiToolbar-root": {
+                padding: 0,
+              },
+            }}
+          >
+            <Box>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Button href="/">
+                  <img
+                    src="https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
+                    alt="Sitemark"
+                    style={logoStyle}
+                  />
+                  <Typography variant="h1" sx={{ color: "white", ml: 2 }} fontSize={"24px"}>
+                    자비서
+                  </Typography>
+                </Button>
+                <Button
+                  sx={{ color: "black", display: { xs: "none", sm: "flex" } }}
+                  href="/learning"
+                >
+                  <Typography variant="subtitle1" sx={{ color: "white", ml: 2 }} fontSize={"16px"}>
+                    문제풀이
+                  </Typography>
+                </Button>
+                <Button
+                  sx={{ color: "black", display: { xs: "none", sm: "flex" } }}
+                  href="/bookmark"
+                >
+                  <Typography variant="subtitle1" sx={{ color: "white", ml: 2 }} fontSize={"16px"}>
+                    북마크
+                  </Typography>
+                </Button>
+              </Box>
+            </Box>
+            {!isLogin ? (
               <Button
                 variant="contained"
                 sx={{
@@ -119,24 +125,18 @@ const Appbar = () => {
                 href="/login"
               >
                 <Typography variant="h4" fontSize={"16px"} color="var(--c-main)">
-                  로그아웃
+                  로그인
                 </Typography>
               </Button>
-              <IconButton sx={{ marginLeft: 2, display: { xs: "none", sm: "flex" } }}>
-                <Avatar alt="User" src="user-avatar.jpg" />
-              </IconButton>
-            </>
-          )}
-
-          <Box sx={{ display: { xs: "", sm: "none" } }}>
-            {
-              // Mobile View
-              isLogin ? (
+            ) : (
+              <>
                 <Button
+                  variant="contained"
                   sx={{
-                    marginRight: 1,
+                    marginLeft: 2,
                     backgroundColor: "white",
-                    borderRadius: "30px",
+                    display: { xs: "none", sm: "flex" },
+                    borderRadius: "10px",
                     border: "1px solid var(--c-main)",
                     boxShadow: "none",
                     "&:hover": {
@@ -146,179 +146,208 @@ const Appbar = () => {
                   }}
                   href="/login"
                 >
-                  <Typography variant="h4" fontSize={"14px"} color="var(--c-main)">
+                  <Typography variant="h4" fontSize={"16px"} color="var(--c-main)">
                     로그아웃
                   </Typography>
                 </Button>
-              ) : (
-                <Button
-                  sx={{
-                    marginRight: 1,
-                    backgroundColor: "white",
-                    borderRadius: "30px",
-                    border: "1px solid var(--c-main)",
-                    boxShadow: "none",
-                    "&:hover": {
-                      backgroundColor: "white",
-                      boxShadow: "none",
-                    },
-                  }}
-                  href="/login"
-                >
-                  <Typography variant="h4" fontSize={"14px"} color="var(--c-main)">
-                    로그인
-                  </Typography>
-                </Button>
-              )
-            }
-            <Button
-              variant="text"
-              color="primary"
-              aria-label="menu"
-              onClick={toggleDrawer(true)}
-              sx={{ minWidth: "30px", p: "4px" }}
-            >
-              <MenuIcon />
-            </Button>
+                <IconButton sx={{ marginLeft: 2, display: { xs: "none", sm: "flex" } }}>
+                  <Avatar alt="User" src="user-avatar.jpg" />
+                </IconButton>
+              </>
+            )}
 
-            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
-              <Box
-                sx={{
-                  minWidth: "100dvw",
-                  p: 3,
-                  backgroundColor: "var(--c-gray1)",
-                  flexGrow: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
+            <Box sx={{ display: { xs: "", sm: "none" } }}>
+              {
+                // Mobile View
+                isLogin ? (
+                  <Button
+                    sx={{
+                      marginRight: 1,
+                      backgroundColor: "white",
+                      borderRadius: "30px",
+                      border: "1px solid var(--c-main)",
+                      boxShadow: "none",
+                      "&:hover": {
+                        backgroundColor: "white",
+                        boxShadow: "none",
+                      },
+                    }}
+                    href="/login"
+                  >
+                    <Typography variant="h4" fontSize={"14px"} color="var(--c-main)">
+                      로그아웃
+                    </Typography>
+                  </Button>
+                ) : (
+                  <Button
+                    sx={{
+                      marginRight: 1,
+                      backgroundColor: "white",
+                      borderRadius: "30px",
+                      border: "1px solid var(--c-main)",
+                      boxShadow: "none",
+                      "&:hover": {
+                        backgroundColor: "white",
+                        boxShadow: "none",
+                      },
+                    }}
+                    href="/login"
+                  >
+                    <Typography variant="h4" fontSize={"14px"} color="var(--c-main)">
+                      로그인
+                    </Typography>
+                  </Button>
+                )
+              }
+              <Button
+                variant="text"
+                color="primary"
+                aria-label="menu"
+                onClick={toggleDrawer(true)}
+                sx={{ minWidth: "30px", p: "4px" }}
               >
+                <MenuIcon />
+              </Button>
+
+              <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
                 <Box
                   sx={{
+                    minWidth: "100dvw",
+                    p: 3,
+                    backgroundColor: "var(--c-gray1)",
+                    flexGrow: 1,
                     display: "flex",
-                    justifyContent: "space-between",
-                    px: 2,
-                    mb: 4,
+                    flexDirection: "column",
                   }}
                 >
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center",
+                      justifyContent: "space-between",
+                      px: 2,
+                      mb: 4,
                     }}
                   >
-                    <img
-                      src="https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
-                      alt="Sitemark"
-                      style={logoStyle}
-                    />
-                    <Typography variant="h1" sx={{ ml: 2 }} fontSize={"24px"}>
-                      자비서
-                    </Typography>
-                  </Box>
-                  <IoMdClose size={28} onClick={toggleDrawer(false)} />
-                </Box>
-
-                <Box>
-                  {isLogin ? (
                     <Box
                       sx={{
                         display: "flex",
                         alignItems: "center",
                       }}
                     >
-                      <IconButton>
-                        <Avatar alt="User" src="user-avatar.jpg" />
-                      </IconButton>
-                      <Typography variant="h4" fontSize={"16px"} color="var(--c-gray5)">
-                        닉네임입니다
+                      <img
+                        src="https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
+                        alt="Sitemark"
+                        style={logoStyle}
+                      />
+                      <Typography variant="h1" sx={{ ml: 2 }} fontSize={"24px"}>
+                        자비서
                       </Typography>
                     </Box>
-                  ) : (
-                    <Button
-                      variant="text"
-                      component="a"
-                      href="/login"
-                      target="_blank"
-                      sx={{
-                        width: "100%",
-                        backgroundColor: "var(--c-sub5)",
-                        p: 2,
-                        display: "flex",
-                        justifyContent: "space-between",
-                        borderRadius: "8px",
-                        "&:hover": {
-                          backgroundColor: "var(--c-sub5)",
-                        },
-                      }}
-                    >
+                    <IoMdClose size={28} onClick={toggleDrawer(false)} />
+                  </Box>
+
+                  <Box>
+                    {isLogin ? (
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
                         }}
                       >
-                        <IoPersonCircleSharp size={24} color="#CCCCCC" />
-                        <Typography variant="subtitle1" fontSize={"14px"} color="white" ml={1}>
-                          로그인을 해주세요
+                        <IconButton>
+                          <Avatar alt="User" src="user-avatar.jpg" />
+                        </IconButton>
+                        <Typography variant="h4" fontSize={"16px"} color="var(--c-gray5)">
+                          닉네임입니다
                         </Typography>
                       </Box>
-                      <SlArrowRight size={16} color="white" />
-                    </Button>
-                  )}
-                </Box>
-                <Typography
-                  variant="body2"
-                  fontSize={"14px"}
-                  color={"var(--c-gray4)"}
-                  sx={{ mt: 4, mb: 2 }}
-                >
-                  카테고리
-                </Typography>
-                <Divider />
+                    ) : (
+                      <Button
+                        variant="text"
+                        component="a"
+                        href="/login"
+                        target="_blank"
+                        sx={{
+                          width: "100%",
+                          backgroundColor: "var(--c-sub5)",
+                          p: 2,
+                          display: "flex",
+                          justifyContent: "space-between",
+                          borderRadius: "8px",
+                          "&:hover": {
+                            backgroundColor: "var(--c-sub5)",
+                          },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IoPersonCircleSharp size={24} color="#CCCCCC" />
+                          <Typography variant="subtitle1" fontSize={"14px"} color="white" ml={1}>
+                            로그인을 해주세요
+                          </Typography>
+                        </Box>
+                        <SlArrowRight size={16} color="white" />
+                      </Button>
+                    )}
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    fontSize={"14px"}
+                    color={"var(--c-gray4)"}
+                    sx={{ mt: 4, mb: 2 }}
+                  >
+                    카테고리
+                  </Typography>
+                  <Divider />
 
-                <Box
-                  sx={{
-                    py: 3,
-                    textDecoration: "none",
-                  }}
-                  component={"a"}
-                  href="/learning"
-                >
-                  <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
-                    문제풀이
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    py: 3,
-                    textDecoration: "none",
-                  }}
-                  component={"a"}
-                  href="/bookmark"
-                >
-                  <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
-                    북마크
-                  </Typography>
-                </Box>
-                {!isLogin || (
                   <Box
                     sx={{
                       py: 3,
                       textDecoration: "none",
                     }}
                     component={"a"}
-                    href="/mypage"
+                    href="/learning"
                   >
                     <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
-                      마이페이지
+                      문제풀이
                     </Typography>
                   </Box>
-                )}
-              </Box>
-            </Drawer>
-          </Box>
-        </Toolbar>
-      </AppBar>
+                  <Box
+                    sx={{
+                      py: 3,
+                      textDecoration: "none",
+                    }}
+                    component={"a"}
+                    href="/bookmark"
+                  >
+                    <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
+                      북마크
+                    </Typography>
+                  </Box>
+                  {!isLogin || (
+                    <Box
+                      sx={{
+                        py: 3,
+                        textDecoration: "none",
+                      }}
+                      component={"a"}
+                      href="/mypage"
+                    >
+                      <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
+                        마이페이지
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+              </Drawer>
+            </Box>
+          </Toolbar>
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 };

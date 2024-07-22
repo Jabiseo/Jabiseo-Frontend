@@ -28,7 +28,7 @@ const Footer = () => {
               alignItems: "flex-start",
               flexDirection: "column",
               gap: "8px",
-              maxWidth: "800px",
+              maxWidth: "1140px",
               width: "100%",
             }}
           >

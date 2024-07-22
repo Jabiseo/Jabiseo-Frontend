@@ -121,6 +121,7 @@ const ProblemUI: React.FC<{
             <Box
               sx={{
                 overflowWrap: "break-word",
+                // paddingX: 2,
               }}
             >
               <Markdown
@@ -194,7 +195,7 @@ const ProblemUI: React.FC<{
                 >
                   <Box
                     mx={2}
-                    sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                    sx={{ display: "flex", justifyContent: "center", alignItems: "flex-start" }}
                   >
                     {circles[idx].call(null, { size: 20 })}
                   </Box>
