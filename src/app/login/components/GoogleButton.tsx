@@ -19,11 +19,12 @@ const GoogleButton = () => {
       .catch();
 
     if (res.status === 200) {
-      localStorage.setItem("accessToken", res.accessToken);
-      localStorage.setItem("refreshToken", res.refreshToken);
+      const data = await res.json();
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
       window.location.href = "/";
     } else {
-      // todo : 회원 탈퇴
+      alert("로그인에 실패했습니다.");
     }
   };
   return (
