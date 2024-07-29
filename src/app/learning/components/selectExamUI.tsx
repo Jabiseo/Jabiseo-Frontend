@@ -2,8 +2,8 @@ import { Box, FormControlLabel, List, ListItem, Radio, Typography } from "@mui/m
 
 interface SelectExamUIProps {
   exams: ExamInfo[];
-  selectedExamId: string;
-  setSelectedExamId: (examId: string) => void;
+  selectedExamId: number;
+  setSelectedExamId: (examId: number) => void;
   handleExamChange: (e: any) => void;
   leftBoxHeight: number;
 }
