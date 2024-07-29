@@ -1,4 +1,8 @@
 "use client";
+import { mainfetch } from "@/src/api/apis/mainFetch";
+import { NoHoverButton } from "@/src/components/elements/styledElements";
+import { globalTheme } from "@/src/components/globalStyle";
+import useBookmarks from "@/src/hooks/useBookmarks";
 import useCertificateInfo from "@/src/hooks/useCertificateInfo";
 import { Box, Button, Grid, SelectChangeEvent, ThemeProvider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -6,17 +10,23 @@ import BookMarkModal from "./bookmarkModal";
 import ExamChoice from "./examChoice";
 import BookmarkProblemList from "./problemList";
 import SubjectChoice from "./subjectChoice";
-import { globalTheme } from "@/src/components/globalStyle";
-import { NoHoverButton } from "@/src/components/elements/styledElements";
 
 const BookMarkMain = () => {
   const { certificateInfo, loading, error } = useCertificateInfo();
   const [selectedExam, setSelectedExam] = useState<string>("전체 회차");
   const [problems, setProblems] = useState<BookMarkProblem[]>([]);
-  const [selectedProblems, setSelectedProblems] = useState<string[]>([]);
+  const [selectedProblems, setSelectedProblems] = useState<number[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
   const [isModalOpen, setisModalOpen] = useState(false);
-
+  const [selectedExamId, setSelectedExamId] = useState<number>(0);
+  const [selectedSubjectsId, setSelectedSubjectsId] = useState<number[]>([]);
+  const [page, setPage] = useState<number>(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { bookmarkedProblems, totalPage } = useBookmarks({
+    selectedExamId,
+    selectedSubjectsId,
+    page,
+  });
   const handleModalOpen = () => {
     setisModalOpen(prev => !prev);
   };
@@ -27,74 +37,49 @@ const BookMarkMain = () => {
   const gotoExamMode = () => {
     // 시험 모드로 이동하는 함수
   };
+
   useEffect(() => {
-    const t: BookMarkProblem[] = [
-      {
-        problemId: "1",
-        examInfo: {
-          examId: "1",
-          description: "2022년 1,2회",
-        },
-        subject: {
-          subjectId: "1",
-          sequence: 2,
-          name: "소프트웨어 설계",
-        },
-        isBookmark: true,
-        description: "UML 다이어그램 중 순차 다이어그램에 대한 설명으로 틀린 것은?",
-      },
-      {
-        problemId: "2",
-        examInfo: {
-          examId: "1",
-          description: "2022년 1,2회",
-        },
-        subject: {
-          subjectId: "1",
-          sequence: 2,
-          name: "소프트웨어 설계",
-        },
-        isBookmark: true,
-        description: "UML 다이어그램 중 순차 다이어그램에 대한 설명으로 틀린 것은?",
-      },
-      {
-        problemId: "3",
-        examInfo: {
-          examId: "1",
-          description: "2022년 1,2회",
-        },
-        subject: {
-          subjectId: "1",
-          sequence: 2,
-          name: "소프트웨어 설계",
-        },
-        isBookmark: true,
-        description: "UML 다이어그램 중 순차 다이어그램에 대한 설명으로 틀린 것은?",
-      },
-    ];
-    setProblems(t);
-  }, []);
-  const selectProblem = (problemId: string) => {
+    setProblems(bookmarkedProblems);
+  }, [bookmarkedProblems]);
+  const selectProblem = (problemId: number) => {
     if (selectedProblems.includes(problemId)) {
       setSelectedProblems(selectedProblems.filter(id => id !== problemId));
     } else {
       setSelectedProblems([...selectedProblems, problemId]);
     }
   };
-  /**
-   *
-   * @param problemId
-   * 북마크 삭제 api 추가 예정
-   */
-  const handleBookmark = (problemId: string) => {
-    // 북마크 삭제 api 추가 예정
-    const handledProblems = problems.map(problem => {
-      if (problem.problemId === problemId) {
-        return { ...problem, isBookmark: !problem.isBookmark };
-      }
-      return problem;
-    });
-    setProblems(handledProblems);
+
+  const handleBookmark = async (problemId: number) => {
+    if (isProcessing) return;
+
+    setIsProcessing(true);
+
+    try {
+      const targetProblem = problems.find(problem => problem.problemId === problemId);
+      if (!targetProblem) throw new Error("Problem not found");
+      const method = targetProblem.isBookmark ? "DELETE" : "POST";
+      const endpoint = "/bookmarks";
+
+      await mainfetch(
+        endpoint,
+        {
+          method,
+          body: {
+            problemId,
+          },
+        },
+        true
+      );
+
+      const handledProblems = problems.map(problem =>
+        problem.problemId === problemId ? { ...problem, isBookmark: !problem.isBookmark } : problem
+      );
+
+      setProblems(handledProblems);
+    } catch (error) {
+    } finally {
+      setIsProcessing(false); // 처리 완료
+    }
   };
 
   const selectAllProblems = () => {
@@ -108,6 +93,10 @@ const BookMarkMain = () => {
 
   const handleExamChoice = (event: SelectChangeEvent) => {
     setSelectedExam(event.target.value as string);
+    const examId = certificateInfo!.exams.find(
+      exam => exam.description === event.target.value
+    )!.examId;
+    setSelectedExamId(examId);
   };
 
   useEffect(() => {
@@ -115,28 +104,36 @@ const BookMarkMain = () => {
     const subjects = certificateInfo.subjects;
     setSelectedSubjects(subjects);
     setSelectedExam(certificateInfo.exams[0].description);
+    setSelectedSubjectsId(subjects.map(subject => subject.subjectId));
   }, [certificateInfo]);
 
   const handleSubjectChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSelectedSubjects(prevSelectedSubjects => {
-      // subject.name이 value와 일치하는지 확인하는 함수
-      const isSelected = prevSelectedSubjects.some(subject => subject.name === value);
+    const getNewSelectedSubjects = () => {
+      const isSelected = selectedSubjects.some(subject => subject.name === value);
 
       // 만약 isSelected가 true이면 해당 항목을 제거한 배열을 반환
       if (isSelected) {
-        return prevSelectedSubjects.filter(subject => subject.name !== value);
+        return selectedSubjects.filter(subject => subject.name !== value);
       } else {
         // isSelected가 false이면 해당 항목을 추가한 배열을 반환
         const selectedSubject = certificateInfo?.subjects.find(subject => subject.name === value);
         if (selectedSubject) {
-          return [...prevSelectedSubjects, selectedSubject];
+          return [...selectedSubjects, selectedSubject];
         } else {
           // 만약 해당하는 subject.name을 찾지 못했을 경우 기존 배열을 반환
-          return prevSelectedSubjects;
+          return selectedSubjects;
         }
       }
-    });
+    };
+    const newSelectedSubjects = getNewSelectedSubjects();
+    setSelectedSubjects(newSelectedSubjects);
+    // const newSelectedSubjectsId = [];
+    setSelectedSubjectsId(newSelectedSubjects.map(subject => subject.subjectId));
+  };
+
+  const handleChangePage = (page: number) => {
+    setPage(page);
   };
 
   if (loading) {
@@ -269,6 +266,8 @@ const BookMarkMain = () => {
                 </Box>
               </Box>
               <BookmarkProblemList
+                totalPage={totalPage}
+                handleChangePage={handleChangePage}
                 problems={problems}
                 selectedProblems={selectedProblems}
                 selectProblem={selectProblem}

@@ -1,9 +1,7 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 
-const ExamHeader = () => {
-  const certificate = JSON.parse(localStorage.getItem("certificate")!);
-
+const ExamHeader = ({ certificateName }: { certificateName: string }) => {
   return (
     <>
       <Box
@@ -40,7 +38,7 @@ const ExamHeader = () => {
           }}
           color="white"
         >
-          {certificate.name}
+          {certificateName}
         </Typography>
       </Box>
     </>

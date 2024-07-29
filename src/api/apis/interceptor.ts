@@ -1,5 +1,5 @@
 export const refreshTokenInterceptor = async () => {
-  const url = "/auth/reissue";
+  const url = process.env.NEXT_PUBLIC_SERVER_URL + "/auth/reissue";
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
   // todo : accessToken 또는 refreshToken 없을 경우 로그인 페이지로 이동
@@ -18,6 +18,7 @@ export const refreshTokenInterceptor = async () => {
   if (!token) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    window.location.href = "/login";
     return new Error("토큰 재발급 실패");
   }
   localStorage.setItem("accessToken", token);

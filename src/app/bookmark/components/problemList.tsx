@@ -2,7 +2,7 @@ import BookMarkLineIcon from "@/public/icons/bookmark-line.svg";
 import BookMarkFillIcon from "@/public/icons/bookmark-fill.svg";
 import { globalTheme } from "@/src/components/globalStyle";
 import { CheckBox } from "@mui/icons-material";
-import { Box, Card, CardContent, ThemeProvider, Typography } from "@mui/material";
+import { Box, Card, CardContent, Pagination, ThemeProvider, Typography } from "@mui/material";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -10,9 +10,11 @@ import remarkMath from "remark-math";
 
 interface BookmarkProblemListProps {
   problems: BookMarkProblem[];
-  selectedProblems: string[];
-  selectProblem: (problemId: string) => void;
-  handleBookmark: (problemId: string) => void;
+  selectedProblems: number[];
+  selectProblem: (problemId: number) => void;
+  handleBookmark: (problemId: number) => void;
+  totalPage: number;
+  handleChangePage: (page: number) => void;
 }
 
 const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
@@ -20,99 +22,137 @@ const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
   selectedProblems,
   selectProblem,
   handleBookmark,
+  totalPage,
+  handleChangePage,
 }: BookmarkProblemListProps) => {
   return (
     <ThemeProvider theme={globalTheme}>
-      <Box width="100%" mt="12px">
-        {problems.map(problem => (
-          <Box key={problem.problemId} marginY="16px">
-            <Card
-              sx={{
-                "&:hover": {
-                  cursor: "pointer",
-                },
-                boxShadow: "none",
-              }}
-            >
-              <CardContent
+      <Box
+        width="100%"
+        mt="12px"
+        minHeight="400px"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          width: "100%",
+          height: "100%",
+          paddingBottom: "100px",
+        }}
+      >
+        <Box>
+          {problems.map(problem => (
+            <Box key={problem.problemId} marginY="16px">
+              <Card
                 sx={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  justifyContent: "space-between",
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                  boxShadow: "none",
                 }}
               >
-                <Box
+                <CardContent
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
                   }}
-                  onClick={() => selectProblem(problem.problemId)}
                 >
-                  <CheckBox
+                  <Box
                     sx={{
-                      color: selectedProblems.includes(problem.problemId)
-                        ? "var(--c-sub3)"
-                        : "var(--c-gray2)",
-                      marginRight: "10px",
-                      marginTop: "5px",
+                      display: "flex",
+                      flexDirection: "row",
                     }}
-                  />
-                  <Box>
-                    <Typography
-                      variant="subtitle1"
-                      fontSize={{
-                        xs: "14px",
-                        sm: "20px",
+                    onClick={() => selectProblem(problem.problemId)}
+                  >
+                    <CheckBox
+                      sx={{
+                        color: selectedProblems.includes(problem.problemId)
+                          ? "var(--c-sub3)"
+                          : "var(--c-gray2)",
+                        marginRight: "10px",
+                        marginTop: "5px",
                       }}
-                      color="var(--c-gray4)"
-                      mb={1}
-                    >
-                      {problem.examInfo.description} ({problem.subject.name})
-                    </Typography>
-                    <Markdown
-                      remarkPlugins={[remarkMath]}
-                      rehypePlugins={[rehypeKatex, rehypeRaw]}
-                      components={{
-                        p: ({ node, ...content }) => (
-                          <Box
-                            sx={{
-                              width: "100%",
-                            }}
-                          >
-                            <Typography
-                              variant="body2"
-                              fontSize={{
-                                xs: "14px",
-                                sm: "20px",
+                    />
+                    <Box>
+                      <Typography
+                        variant="subtitle1"
+                        fontSize={{
+                          xs: "14px",
+                          sm: "20px",
+                        }}
+                        color="var(--c-gray4)"
+                        mb={1}
+                      >
+                        {problem.examInfo.description} ({problem.subjectInfo.name})
+                      </Typography>
+                      <Markdown
+                        remarkPlugins={[remarkMath]}
+                        rehypePlugins={[rehypeKatex, rehypeRaw]}
+                        components={{
+                          p: ({ node, ...content }) => (
+                            <Box
+                              sx={{
+                                width: "100%",
                               }}
                             >
-                              {content.children}
-                            </Typography>
-                          </Box>
-                        ),
-                        img: ({ node, ...content }) => <></>,
-                      }}
-                    >
-                      {problem.description}
-                    </Markdown>
+                              <Typography
+                                variant="body2"
+                                fontSize={{
+                                  xs: "14px",
+                                  sm: "20px",
+                                }}
+                              >
+                                {content.children}
+                              </Typography>
+                            </Box>
+                          ),
+                          img: ({ node, ...content }) => <></>,
+                        }}
+                      >
+                        {problem.description}
+                      </Markdown>
+                    </Box>
                   </Box>
-                </Box>
 
-                <Box
-                  onClick={() => {
-                    handleBookmark(problem.problemId);
-                  }}
-                >
-                  {problem.isBookmark ? (
-                    <BookMarkFillIcon width={32} height={24} />
-                  ) : (
-                    <BookMarkLineIcon width={32} height={24} />
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Box>
-        ))}
+                  <Box
+                    onClick={() => {
+                      handleBookmark(problem.problemId);
+                    }}
+                  >
+                    {problem.isBookmark ? (
+                      <BookMarkFillIcon width={32} height={24} />
+                    ) : (
+                      <BookMarkLineIcon width={32} height={24} />
+                    )}
+                  </Box>
+                </CardContent>
+              </Card>
+            </Box>
+          ))}
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Pagination
+            count={totalPage}
+            showFirstButton
+            showLastButton
+            sx={{
+              "& .MuiPaginationItem-root.Mui-selected": {
+                backgroundColor: "var(--c-sub1)",
+              },
+            }}
+            onChange={(event, page) => {
+              handleChangePage(page - 1);
+            }}
+          />
+        </Box>
       </Box>
     </ThemeProvider>
   );

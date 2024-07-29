@@ -1,12 +1,7 @@
 "use client";
 import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
 
-const StudyHeader = () => {
-  const [certificate, setCertificate] = useState({ name: "" });
-  useEffect(() => {
-    setCertificate(JSON.parse(localStorage.getItem("certificate")!));
-  }, []);
+const StudyHeader = ({ certificateName }: { certificateName: string }) => {
   return (
     <>
       <Box
@@ -43,7 +38,7 @@ const StudyHeader = () => {
           }}
           color="white"
         >
-          {certificate?.name}
+          {certificateName}
         </Typography>
       </Box>
     </>

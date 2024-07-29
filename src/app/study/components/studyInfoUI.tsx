@@ -50,7 +50,7 @@ const StudyInfoUI: React.FC<StudyInfoUIProps> = ({
               }}
             >
               <Typography variant="h4" fontSize="12px">
-                {problem?.subject.sequence}과목 {problem?.subject.name}
+                {problem?.subjectInfo.sequence}과목 {problem?.subjectInfo.name}
               </Typography>
               <StudyTime handleViewTime={handleViewTime} />
             </Box>
@@ -75,7 +75,7 @@ const StudyInfoUI: React.FC<StudyInfoUIProps> = ({
         ) : (
           <>
             <Typography variant="h4" fontSize="20px">
-              {problem?.subject.sequence}과목 {problem?.subject.name}
+              {problem?.subjectInfo.sequence}과목 {problem?.subjectInfo.name}
             </Typography>
             <Box
               sx={{

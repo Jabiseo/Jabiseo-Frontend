@@ -1,10 +1,10 @@
 interface ExamInfo {
-  examId: string;
+  examId: number;
   description: string;
 }
 
 interface Subject {
-  subjectId: string;
+  subjectId: number;
   sequence: number;
   name: string;
 }
@@ -14,9 +14,9 @@ interface Chocice {
 }
 
 interface Problem {
-  problemId: string;
+  problemId: number;
   examInfo: ExamInfo;
-  subject: Subject;
+  subjectInfo: Subject;
   isBookmark: boolean;
   description: string;
   choices: Chocice[];
