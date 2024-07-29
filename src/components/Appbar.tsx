@@ -6,6 +6,7 @@ import useAppbarState from "../hooks/useAppbarState";
 import AppbarDrawer from "./appbarDrawer";
 import AppbarToolbarUI from "./appbarToolbarUI";
 import { globalTheme } from "./globalStyle";
+import { mainfetch } from "../api/apis/mainFetch";
 const Appbar = () => {
   const { isLogin, certificate, focusTap } = useAppbarState();
   const [open, setOpen] = useState(false);
@@ -25,9 +26,16 @@ const Appbar = () => {
     setOpen(newOpen);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    await mainfetch(
+      "/auth/logout",
+      {
+        method: "POST",
+      },
+      true
+    );
     window.location.href = "/";
   };
 

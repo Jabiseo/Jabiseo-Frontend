@@ -29,6 +29,7 @@ export const mainfetch = async <T>(
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
     if (!accessToken || !refreshToken) {
+      window.location.href = "/login";
       throw new Error("Access token or refresh token is missing");
     }
     headers.Authorization = `Bearer ${accessToken}`;

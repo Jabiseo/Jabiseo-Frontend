@@ -35,7 +35,7 @@ const StatusBox = () => {
   const { certificates } = useCertificates();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedCertificate, setSelectedCertificate] = useState<CertificateType>({
-    certificateId: "",
+    certificateId: 0,
     name: "먼저 자격증을 골라주세요!",
   });
   const theme = useTheme();

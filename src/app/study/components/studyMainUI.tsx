@@ -23,9 +23,15 @@ import SolutionUI from "../components/solutionUI";
 import StudyFooterUI from "./studyFooterUI";
 import StudyInfoUI from "./studyInfoUI";
 import SubmitResultUI from "./submitResultUI";
+import { mainfetch } from "@/src/api/apis/mainFetch";
 
-const StudyMainUI = () => {
-  const { getProblems, loading, error } = useProblems();
+interface StudyMainUIProps {
+  getProblems: ProblemViewType[];
+  loading: boolean;
+  error: string | null;
+}
+
+const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }) => {
   const [problem, setProblem] = useState<ProblemViewType | null>(null);
   const [problems, setProblems] = useState<ProblemViewType[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
@@ -34,6 +40,7 @@ const StudyMainUI = () => {
   const [omrModalopen, setOmrModalOpen] = useState(false);
   const [solvedProblemsNumber, setSolvedProblemsNumber] = useState<string>("");
   const [viewTime, setViewTime] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -131,6 +138,47 @@ const StudyMainUI = () => {
     });
   };
 
+  const handleBookmark = useCallback(
+    async (problemId: number) => {
+      if (isProcessing) return;
+      if (localStorage.getItem("accessToken") === null) {
+        return;
+      }
+
+      setIsProcessing(true);
+
+      try {
+        const targetProblem = problems.find(problem => problem.problemId === problemId);
+        if (!targetProblem) throw new Error("Problem not found");
+        const method = targetProblem.isBookmark ? "DELETE" : "POST";
+        const endpoint = "/bookmarks";
+
+        await mainfetch(
+          endpoint,
+          {
+            method,
+            body: {
+              problemId,
+            },
+          },
+          true
+        );
+
+        setProblems(prevProblems =>
+          prevProblems.map(problem =>
+            problem.problemId === problemId
+              ? { ...problem, isBookmark: !problem.isBookmark }
+              : problem
+          )
+        );
+      } catch (error) {
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [isProcessing, problems, mainfetch]
+  );
+
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down(960));
 
@@ -180,7 +228,12 @@ const StudyMainUI = () => {
               <Grid item xs={12} md={6}>
                 {problem ? (
                   <>
-                    <ProblemUI problem={problem} chooseAnswer={chooseAnswer} isMd={isMd} />
+                    <ProblemUI
+                      problem={problem}
+                      chooseAnswer={chooseAnswer}
+                      isMd={isMd}
+                      handleBookmark={handleBookmark}
+                    />
                   </>
                 ) : (
                   <div>Loading problem...</div>

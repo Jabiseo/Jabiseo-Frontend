@@ -28,7 +28,7 @@ const MakeProblemSetUI = () => {
   const [questionsCount, setQuestionsCount] = useState(20);
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
   const [selectedExam, setSelectedExam] = useState("");
-  const [selectedExamId, setSelectedExamId] = useState<string>("0");
+  const [selectedExamId, setSelectedExamId] = useState<number>(0);
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const handleExamChange = (event: SelectChangeEvent<string>) => {
     setSelectedExam(event.target.value as string);
@@ -78,7 +78,7 @@ const MakeProblemSetUI = () => {
     const certificateId = certificateInfo?.certificateId;
     const examId = selectedExamId;
     let path;
-    if (examId === "0") {
+    if (examId === 0) {
       path = `/study/certificate-id=${certificateId}&subject-id=${selectedSubjects
         .map(subject => subject.subjectId)
         .join(",")}&count=${questionsCount}`;
@@ -94,7 +94,7 @@ const MakeProblemSetUI = () => {
     const certificateId = certificateInfo?.certificateId;
     const examId = selectedExamId;
     let path;
-    if (examId === "0") {
+    if (examId === 0) {
       path = `/exam/certificate-id=${certificateId}&subject-id=${selectedSubjects
         .map(subject => subject.subjectId)
         .join(",")}&count=${questionsCount}`;

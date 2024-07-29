@@ -22,13 +22,14 @@ import SmallOmrUI from "../components/smallOmrUI";
 import ExamFooterUI from "./examFooterUI";
 import ExamInfoUI from "./examInfoUI";
 import SubmitResultUI from "./SubmitResultUI";
+import { mainfetch } from "@/src/api/apis/mainFetch";
 
 interface ExamMainUIProps {
   getProblems: ProblemViewType[];
+  loading: boolean;
+  error: string | null;
 }
-
-const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems }) => {
-  // const { getProblems, loading, error } = useProblems();
+const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) => {
   const [problem, setProblem] = useState<ProblemViewType | null>(null);
   const [problems, setProblems] = useState<ProblemViewType[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
@@ -36,6 +37,7 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems }) => {
   const [omrModalopen, setOmrModalOpen] = useState(false);
   const [viewTime, setViewTime] = useState<string>("");
   const [solvedProblemsNumber, setSolvedProblemsNumber] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -108,30 +110,72 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems }) => {
     }
   }, [problems]);
 
+  const handleBookmark = useCallback(
+    async (problemId: number) => {
+      if (isProcessing) return;
+      if (localStorage.getItem("accessToken") === null) {
+        return;
+      }
+
+      setIsProcessing(true);
+
+      try {
+        const targetProblem = problems.find(problem => problem.problemId === problemId);
+        if (!targetProblem) throw new Error("Problem not found");
+        const method = targetProblem.isBookmark ? "DELETE" : "POST";
+        const endpoint = "/bookmarks";
+
+        await mainfetch(
+          endpoint,
+          {
+            method,
+            body: {
+              problemId,
+            },
+          },
+          true
+        );
+
+        setProblems(prevProblems =>
+          prevProblems.map(problem =>
+            problem.problemId === problemId
+              ? { ...problem, isBookmark: !problem.isBookmark }
+              : problem
+          )
+        );
+      } catch (error) {
+        // 에러 처리 로직 추가 (예: console.error 또는 사용자에게 알림)
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [isProcessing, problems, mainfetch]
+  );
+
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down(960));
 
-  // if (loading) {
-  //   return (
-  //     <ThemeProvider theme={globalTheme}>
-  //       <Container>
-  //         <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-  //           <CircularProgress />
-  //         </Box>
-  //       </Container>
-  //     </ThemeProvider>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <ThemeProvider theme={globalTheme}>
+        <Container>
+          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+            <CircularProgress />
+          </Box>
+        </Container>
+      </ThemeProvider>
+    );
+  }
 
-  // if (error) {
-  //   return (
-  //     <Container>
-  //       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-  //         <Typography>Error</Typography>
-  //       </Box>
-  //     </Container>
-  //   );
-  // }
+  if (error) {
+    return (
+      <Container>
+        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <Typography>Error</Typography>
+        </Box>
+      </Container>
+    );
+  }
   return (
     <>
       <ThemeProvider theme={globalTheme}>
@@ -169,7 +213,12 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems }) => {
               <Grid item sm={12} md={8}>
                 {problem ? (
                   <>
-                    <ProblemUI problem={problem} chooseAnswer={chooseAnswer} isMd={isMd} />
+                    <ProblemUI
+                      problem={problem}
+                      chooseAnswer={chooseAnswer}
+                      isMd={isMd}
+                      handleBookmark={handleBookmark}
+                    />
                   </>
                 ) : (
                   <div>Loading problem...</div>

@@ -14,7 +14,8 @@ const ProblemUI: React.FC<{
   problem: ProblemViewType;
   chooseAnswer: (number: number) => void;
   isMd: boolean;
-}> = memo(({ problem, chooseAnswer, isMd }) => {
+  handleBookmark: (problemId: number) => void;
+}> = memo(({ problem, chooseAnswer, isMd, handleBookmark }) => {
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
   const changeColor = () => {
     if (problem.chooseNumber === -1) {
@@ -28,16 +29,10 @@ const ProblemUI: React.FC<{
     }
   };
   /**
-   * @todo 북마크 기능
-   */
-  const bookmarking = () => {
-    problem.isBookmark = !problem.isBookmark;
-  };
-  /**
    * @todo 신고하기 기능
    */
   const alerting = () => {
-    alert("신고하기 기능은 준비중입니다.");
+    alert("신고되었습니다.");
   };
   useEffect(() => {
     changeColor();
@@ -62,7 +57,9 @@ const ProblemUI: React.FC<{
               },
               marginRight: 1,
             }}
-            onClick={bookmarking}
+            onClick={() => {
+              handleBookmark(problem.problemId);
+            }}
           >
             {problem.isBookmark ? (
               <BookMarkFillIcon width={isMd ? 24 : 32} height={isMd ? 24 : 32} />
