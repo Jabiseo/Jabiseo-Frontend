@@ -3,15 +3,22 @@
 import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const StudyTime = () => {
-  const [time, setTime] = useState(0);
+interface StudyTimeProps {
+  handleViewTime: (viewTime: string) => void;
+}
+
+const StudyTime = ({ handleViewTime }: StudyTimeProps) => {
+  const [startTime, setStartTime] = useState(Date.now());
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [viewTime, setViewTime] = useState("00분 00초");
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(time => time + 1);
+      const currentTime = Date.now();
+      setElapsedTime(Math.floor((currentTime - startTime) / 1000));
     }, 1000);
     return () => clearInterval(interval);
-  }, [time]);
+  }, [startTime]);
 
   const secondsToMMSS = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -22,15 +29,18 @@ const StudyTime = () => {
   };
 
   useEffect(() => {
-    setViewTime(secondsToMMSS(time));
-  }, [time]);
+    const time = secondsToMMSS(elapsedTime);
+    setViewTime(time);
+    handleViewTime(time);
+  }, [elapsedTime]);
+
   return (
     <>
       <Typography
         variant="h4"
         fontSize={{
-          xs: "14px",
-          sm: "20px",
+          xs: "12px",
+          md: "20px",
         }}
       >
         경과시간: {viewTime}

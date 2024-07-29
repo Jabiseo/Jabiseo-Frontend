@@ -1,11 +1,13 @@
 "use client";
 import useCertificateInfo from "@/src/hooks/useCertificateInfo";
-import { Box, Button, Grid, SelectChangeEvent, Typography } from "@mui/material";
+import { Box, Button, Grid, SelectChangeEvent, ThemeProvider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import BookMarkModal from "./bookmarkModal";
 import ExamChoice from "./examChoice";
 import BookmarkProblemList from "./problemList";
 import SubjectChoice from "./subjectChoice";
+import { globalTheme } from "@/src/components/globalStyle";
+import { NoHoverButton } from "@/src/components/elements/styledElements";
 
 const BookMarkMain = () => {
   const { certificateInfo, loading, error } = useCertificateInfo();
@@ -84,8 +86,15 @@ const BookMarkMain = () => {
    * @param problemId
    * 북마크 삭제 api 추가 예정
    */
-  const deleteBookmark = (problemId: string) => {
-    setProblems(problems.filter(problem => problem.problemId !== problemId));
+  const handleBookmark = (problemId: string) => {
+    // 북마크 삭제 api 추가 예정
+    const handledProblems = problems.map(problem => {
+      if (problem.problemId === problemId) {
+        return { ...problem, isBookmark: !problem.isBookmark };
+      }
+      return problem;
+    });
+    setProblems(handledProblems);
   };
 
   const selectAllProblems = () => {
@@ -135,106 +144,147 @@ const BookMarkMain = () => {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        paddingBottom: "160px",
-        minHeight: "100vh",
-      }}
-    >
-      <Box sx={{ mt: 12 }} maxWidth="1140px" height="100%" width="90%">
-        <Grid container spacing={3} minHeight="80vh" width="100%">
-          <Grid item xs={4}>
-            <SubjectChoice
-              subjects={certificateInfo!.subjects}
-              handleSubjectChoice={handleSubjectChoice}
-              selectedSubjects={selectedSubjects}
-            />
-            <ExamChoice
-              exams={certificateInfo!.exams}
-              handleExamChoice={handleExamChoice}
-              selectedExam={selectedExam!}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={8}
-            sx={{
-              borderLeft: "1px solid var(--c-gray2)",
-            }}
-          >
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="h4" gutterBottom fontSize="28px">
-                북마크
-              </Typography>
-              <Typography variant="h6" gutterBottom>
-                {problems.length} 문제
-              </Typography>
+    <ThemeProvider theme={globalTheme}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          paddingBottom: "160px",
+          minHeight: "100vh",
+        }}
+      >
+        <Box sx={{ mt: 12 }} maxWidth="1140px" height="100%" width="90%">
+          <Grid container spacing={3} minHeight="80vh" width="100%">
+            <Grid item xs={4}>
+              <SubjectChoice
+                subjects={certificateInfo!.subjects}
+                handleSubjectChoice={handleSubjectChoice}
+                selectedSubjects={selectedSubjects}
+              />
+              <ExamChoice
+                exams={certificateInfo!.exams}
+                handleExamChoice={handleExamChoice}
+                selectedExam={selectedExam!}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={8}
+              sx={{
+                borderLeft: "1px solid var(--c-gray2)",
+              }}
+            >
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="h4" fontSize="28px" mb="51px">
+                  북마크
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box>
+                    <NoHoverButton
+                      onClick={selectAllProblems}
+                      sx={{
+                        mr: 1,
+                        border: "1.5px solid var(--c-gray2)",
+                        borderRadius: "40px",
+                        padding: "4px 18px",
+                      }}
+                    >
+                      <Typography variant="body2" fontSize="16px" color="var(--c-gray5)">
+                        전체 선택
+                      </Typography>
+                    </NoHoverButton>
+                    <NoHoverButton
+                      onClick={deselectAllProblems}
+                      sx={{
+                        border: "1.5px solid var(--c-gray2)",
+                        borderRadius: "40px",
+                        padding: "4px 18px",
+                      }}
+                    >
+                      <Typography variant="body2" fontSize="16px" color="var(--c-gray3)">
+                        전체 해제
+                      </Typography>
+                    </NoHoverButton>
+                  </Box>
+                  <Button
+                    onClick={handleModalOpen}
+                    sx={{
+                      border: "1.5px solid var(--c-main)",
+                      borderRadius: "40px",
+                      padding: "4px 28px",
+                      backgroundColor: "var(--c-main)",
+                      "&:hover": {
+                        backgroundColor: "var(--c-main)",
+                      },
+                    }}
+                  >
+                    <Typography variant="body2" fontSize="16px" color="white">
+                      문제풀기
+                    </Typography>
+                  </Button>
+                </Box>
+              </Box>
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                <Box>
-                  <Button
-                    onClick={selectAllProblems}
-                    sx={{
-                      mr: 1,
-                      border: "1.5px solid var(--c-gray2)",
-                      borderRadius: "40px",
-                      padding: "4px 18px",
-                    }}
-                  >
-                    <Typography variant="body2" fontSize="16px" color="var(--c-gray5)">
-                      전체 선택
-                    </Typography>
-                  </Button>
-                  <Button
-                    onClick={deselectAllProblems}
-                    sx={{
-                      border: "1.5px solid var(--c-gray2)",
-                      borderRadius: "40px",
-                      padding: "4px 18px",
-                    }}
-                  >
-                    <Typography variant="body2" fontSize="16px" color="var(--c-gray3)">
-                      전체 해제
-                    </Typography>
-                  </Button>
-                </Box>
-                <Button
-                  onClick={handleModalOpen}
+                <Box
                   sx={{
-                    border: "1.5px solid var(--c-main)",
-                    borderRadius: "40px",
-                    padding: "4px 28px",
-                    backgroundColor: "var(--c-main)",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
-                  <Typography variant="body2" fontSize="16px" color="white">
-                    문제풀기
+                  <Typography fontSize="18px" variant="subtitle1">
+                    총&nbsp;
                   </Typography>
-                </Button>
+                  <Typography fontSize="18px" variant="subtitle1" color="var(--c-main)">
+                    {problems.length}
+                  </Typography>
+                  <Typography fontSize="18px" variant="subtitle1">
+                    개의 북마크
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography fontSize="18px" variant="subtitle1" color="var(--c-main)">
+                    {selectedProblems.length}
+                  </Typography>
+                  <Typography fontSize="18px" variant="subtitle1">
+                    개 선택
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
-            <BookmarkProblemList
-              problems={problems}
-              selectedProblems={selectedProblems}
-              selectProblem={selectProblem}
-              deleteBookmark={deleteBookmark}
-            />
+              <BookmarkProblemList
+                problems={problems}
+                selectedProblems={selectedProblems}
+                selectProblem={selectProblem}
+                handleBookmark={handleBookmark}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
+        <BookMarkModal
+          isModalOpen={isModalOpen}
+          handleModal={handleModalOpen}
+          gotoStudyMode={gotoStudyMode}
+          gotoExamMode={gotoExamMode}
+        />
       </Box>
-      <BookMarkModal
-        isModalOpen={isModalOpen}
-        handleModal={handleModalOpen}
-        gotoStudyMode={gotoStudyMode}
-        gotoExamMode={gotoExamMode}
-      />
-    </Box>
+    </ThemeProvider>
   );
 };
 

@@ -1,8 +1,9 @@
 import { Avatar, Box, Button, Divider, Drawer, IconButton, Typography } from "@mui/material";
 import Image from "next/image";
-import CloseIcon from "@/public/icons/mingcute_close-line.svg";
+import CloseIcon from "@/public/icons/close-line.svg";
 import PersonLineIcon from "@/public/icons/person-line.svg";
 import ArrowRightIcon from "@/public/icons/arrow-right.svg";
+import { NoHoverButton } from "./elements/styledElements";
 
 interface AppbarDrawerProps {
   open: boolean;
@@ -21,9 +22,8 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
     <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
       <Box
         sx={{
-          minWidth: "100dvw",
-          minHeight: "100vh",
-          p: 2,
+          minWidth: "90dvw",
+          p: 3,
           backgroundColor: "var(--c-gray1)",
           flexGrow: 1,
           display: "flex",
@@ -53,9 +53,7 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
               자비서
             </Typography>
           </Box>
-          <Image
-            src={CloseIcon}
-            alt="close"
+          <CloseIcon
             width={24}
             height={24}
             onClick={toggleDrawer(false)}
@@ -79,11 +77,8 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
               </Typography>
             </Box>
           ) : (
-            <Button
-              variant="text"
-              component="a"
+            <NoHoverButton
               href="/login"
-              target="_blank"
               sx={{
                 width: "100%",
                 backgroundColor: "var(--c-sub5)",
@@ -102,13 +97,13 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
                   alignItems: "center",
                 }}
               >
-                <Image src={PersonLineIcon} sizes="22" alt="user" />
+                <PersonLineIcon />
                 <Typography variant="subtitle1" fontSize={"14px"} color="white" ml={1}>
                   로그인을 해주세요
                 </Typography>
               </Box>
-              <Image src={ArrowRightIcon} sizes="16" alt="arrowright" />
-            </Button>
+              <ArrowRightIcon />
+            </NoHoverButton>
           )}
         </Box>
         <Typography
@@ -145,6 +140,18 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
             북마크
           </Typography>
         </Box>
+        <Box
+          sx={{
+            py: 3,
+            textDecoration: "none",
+          }}
+          component={"a"}
+          href="/assistant"
+        >
+          <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
+            학습 비서
+          </Typography>
+        </Box>
         {!isLogin || (
           <>
             <Box
@@ -158,9 +165,6 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
               <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
                 마이페이지
               </Typography>
-              {/* 
-              박스 맨 아래에 존재 할 박스
-            */}
             </Box>
             <Box
               sx={{

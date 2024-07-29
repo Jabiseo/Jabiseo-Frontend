@@ -1,16 +1,15 @@
 "use client";
 
+import ArrowDownIcon from "@/public/icons/arrow-down.svg";
 import { mainfetch } from "@/src/api/apis/mainFetch";
 import { globalTheme } from "@/src/components/globalStyle";
 import useCertificates from "@/src/hooks/useCertificates";
 import { ThemeProvider } from "@emotion/react";
-import { Box, Menu, MenuItem, Typography, styled } from "@mui/material";
-import { Certificate } from "crypto";
+import { Box, Menu, MenuItem, Typography, styled, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const CustomMenu = styled(Menu)(({ theme }) => ({
+const CustomMenu = styled(Menu)(() => ({
   "& .MuiPaper-root": {
-    boxShadow: "0 0 5px 0 rgba(0, 0, 0, .2)",
     width: "100vw",
     left: 0,
     right: 0,
@@ -19,13 +18,15 @@ const CustomMenu = styled(Menu)(({ theme }) => ({
   },
 }));
 
-const CustomMenuItem = styled(MenuItem)(({ theme }) => ({
+const CustomMenuItem = styled(MenuItem)(() => ({
   justifyContent: "center",
-  "&:hover": {
-    backgroundColor: "rgba(0, 0, 0, 0.08)",
-  },
+  width: "100%",
 
-  "&.Mui-selected .MuiTypography-root": {
+  "&.Mui-selected:focus": {
+    color: "var(--c-main)",
+    backgroundColor: "white",
+  },
+  "&.Mui-selected": {
     color: "var(--c-main)",
   },
 }));
@@ -37,6 +38,8 @@ const StatusBox = () => {
     certificateId: "",
     name: "먼저 자격증을 골라주세요!",
   });
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.down(960));
 
   useEffect(() => {
     const myCertificate = localStorage.getItem("certificate");
@@ -73,40 +76,59 @@ const StatusBox = () => {
       <ThemeProvider theme={globalTheme}>
         <Box
           sx={{
-            padding: "0",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            border: "1px solid var(--c-gray2)",
+            filter: "drop-shadow(0px 2px 16px #6A98A120)",
+            padding: "26px 60px",
             backgroundColor: "white",
             marginBottom: "40px",
+            width: "100%",
           }}
+          onClick={handleClick}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              border: "1px solid var(--c-gray2)",
-              padding: "10px 0",
-              boxShadow: "0 0 3px 0 rgba(0, 0, 0, 0.1)",
+          <Typography
+            variant="h4"
+            fontSize={{
+              xs: "14px",
+              md: "28px",
             }}
-            onClick={handleClick}
+            marginRight="8px"
           >
-            <Typography variant="body1">{selectedCertificate.name}</Typography>
-          </Box>
-          <CustomMenu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={() => handleClose(null)}
-          >
-            {certificates.map(certificate => (
-              <CustomMenuItem
-                key={certificate.certificateId}
-                selected={certificate.certificateId === selectedCertificate.certificateId}
-                onClick={() => handleClose(certificate)}
-              >
-                <Typography variant="body2">{certificate.name}</Typography>
-              </CustomMenuItem>
-            ))}
-          </CustomMenu>
+            {selectedCertificate.name}
+          </Typography>
+          {!isMd ? (
+            <ArrowDownIcon width={28} heigth={28} />
+          ) : (
+            <ArrowDownIcon width={17} heigth={17} />
+          )}
         </Box>
+        <CustomMenu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => handleClose(null)}>
+          {certificates.map(certificate => (
+            <CustomMenuItem
+              key={certificate.certificateId}
+              selected={certificate.certificateId === selectedCertificate.certificateId}
+              onClick={() => handleClose(certificate)}
+            >
+              <Typography
+                variant="h4"
+                fontSize={{
+                  xs: "12px",
+                  md: "24px",
+                }}
+                sx={{
+                  color:
+                    certificate.name == selectedCertificate.name
+                      ? "var(--c-main)"
+                      : "var(--c-gray5)",
+                }}
+              >
+                {certificate.name}
+              </Typography>
+            </CustomMenuItem>
+          ))}
+        </CustomMenu>
       </ThemeProvider>
     </>
   );

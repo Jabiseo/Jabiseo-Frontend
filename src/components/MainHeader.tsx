@@ -1,6 +1,6 @@
-import { ThemeProvider } from "@emotion/react";
+"use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, ThemeProvider } from "@mui/material";
 import { globalTheme } from "./globalStyle";
 
 const MainHeader = () => {
