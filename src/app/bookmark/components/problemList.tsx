@@ -1,31 +1,31 @@
+import BookMarkLineIcon from "@/public/icons/bookmark-line.svg";
+import BookMarkFillIcon from "@/public/icons/bookmark-fill.svg";
 import { globalTheme } from "@/src/components/globalStyle";
 import { CheckBox } from "@mui/icons-material";
-import { Box, Card, CardContent, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Box, Card, CardContent, ThemeProvider, Typography } from "@mui/material";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
-import BookMarkIcon from "@/public/icons/clarity_bookmark-line.svg";
-import Image from "next/image";
 
 interface BookmarkProblemListProps {
   problems: BookMarkProblem[];
   selectedProblems: string[];
   selectProblem: (problemId: string) => void;
-  deleteBookmark: (problemId: string) => void;
+  handleBookmark: (problemId: string) => void;
 }
 
 const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
   problems,
   selectedProblems,
   selectProblem,
-  deleteBookmark,
+  handleBookmark,
 }: BookmarkProblemListProps) => {
   return (
     <ThemeProvider theme={globalTheme}>
-      <Grid container spacing={2} width="100%" mt={4}>
+      <Box width="100%" mt="12px">
         {problems.map(problem => (
-          <Grid item xs={12} key={problem.problemId}>
+          <Box key={problem.problemId} marginY="16px">
             <Card
               sx={{
                 "&:hover": {
@@ -58,7 +58,15 @@ const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
                     }}
                   />
                   <Box>
-                    <Typography variant="subtitle1" fontSize="20px" color="var(--c-gray4)" mb={1}>
+                    <Typography
+                      variant="subtitle1"
+                      fontSize={{
+                        xs: "14px",
+                        sm: "20px",
+                      }}
+                      color="var(--c-gray4)"
+                      mb={1}
+                    >
                       {problem.examInfo.description} ({problem.subject.name})
                     </Typography>
                     <Markdown
@@ -92,16 +100,20 @@ const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
 
                 <Box
                   onClick={() => {
-                    deleteBookmark(problem.problemId);
+                    handleBookmark(problem.problemId);
                   }}
                 >
-                  <Image src={BookMarkIcon} alt="bookmark" width={32} height={24} />
+                  {problem.isBookmark ? (
+                    <BookMarkFillIcon width={32} height={24} />
+                  ) : (
+                    <BookMarkLineIcon width={32} height={24} />
+                  )}
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
     </ThemeProvider>
   );
 };

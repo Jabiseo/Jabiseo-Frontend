@@ -1,5 +1,6 @@
 "use client";
-import Appbar from "@/src/components/Appbar";
+import { MiddleBoxColumn } from "@/src/components/elements/styledElements";
+import ScrollAppbar from "@/src/components/scrollAppbar";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import LearningFooter from "../../components/Footer";
@@ -10,7 +11,7 @@ import StatusBox from "./components/statusBox";
 
 const makeProblemSetBase = () => {
   const [isCertificate, setisCertificate] = useState(false);
-
+  const [isScroll, setisScroll] = useState(0);
   useEffect(() => {
     const certificate = localStorage.getItem("certificate");
     if (certificate) {
@@ -22,21 +23,33 @@ const makeProblemSetBase = () => {
     setisCertificate(true);
   };
   const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMd = useMediaQuery(theme.breakpoints.down(960));
+
+  const handleScroll = () => {
+    setisScroll(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll); //clean up
+    };
+  }, []);
+
   return (
-    <>
-      <Appbar />
+    <MiddleBoxColumn>
+      <ScrollAppbar isScroll={isScroll} />
       <LearningHeader />
       {isCertificate == true ? (
-        <>
+        <MiddleBoxColumn>
           <StatusBox />
           <MakeProblemSetUI />
-        </>
+        </MiddleBoxColumn>
       ) : (
         <SelectCertificate handleIsCertificate={handleIsCertificate} />
       )}
-      {!isSm && <LearningFooter />}
-    </>
+      {!isMd && <LearningFooter />}
+    </MiddleBoxColumn>
   );
 };
 

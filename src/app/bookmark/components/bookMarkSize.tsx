@@ -7,7 +7,7 @@ import MobileBookMarkMain from "./mobileBookMarkMain";
 
 const BookMarkSize = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down(960));
   return (
     <>
       <Appbar />

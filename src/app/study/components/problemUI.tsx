@@ -1,21 +1,20 @@
 "use client";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import BookMarkFillIcon from "@/public/icons/bookmark-fill.svg";
+import BookMarkLineIcon from "@/public/icons/bookmark-line.svg";
+import SirenLineIcon from "@/public/icons/siren-line.svg";
+import { Box, Container, Typography } from "@mui/material";
 import { memo, useEffect, useState } from "react";
-import { Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle } from "react-icons/bs";
-import { FaRegBookmark } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa6";
-import { PiSirenFill } from "react-icons/pi";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
+import ProblemChoiceUI from "./problemChoiceUI";
 
 const ProblemUI: React.FC<{
-  props: ProblemViewType;
+  problem: ProblemViewType;
   chooseAnswer: (number: number) => void;
-}> = memo(({ props, chooseAnswer }) => {
-  const problem = props;
-  const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
+  isMd: boolean;
+}> = memo(({ problem, chooseAnswer, isMd }) => {
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
   const changeColor = () => {
     if (problem.chooseNumber === -1) {
@@ -70,11 +69,15 @@ const ProblemUI: React.FC<{
               "&:hover": {
                 cursor: "pointer",
               },
-              marginRight: 2,
+              marginRight: 1,
             }}
             onClick={bookmarking}
           >
-            {problem.isBookmark ? <FaRegBookmark size={25} /> : <FaBookmark size={25} />}
+            {problem.isBookmark ? (
+              <BookMarkFillIcon width={isMd ? 24 : 32} height={isMd ? 24 : 32} />
+            ) : (
+              <BookMarkLineIcon width={isMd ? 24 : 32} height={isMd ? 24 : 32} />
+            )}
           </Box>
           <Box
             sx={{
@@ -84,7 +87,7 @@ const ProblemUI: React.FC<{
             }}
             onClick={alerting}
           >
-            <PiSirenFill size={30} />
+            <SirenLineIcon width={isMd ? 24 : 32} height={isMd ? 24 : 32} />
           </Box>
         </Box>
         <Box sx={{ marginBottom: 2 }}>
@@ -173,61 +176,15 @@ const ProblemUI: React.FC<{
               </Markdown>
             </Box>
           </Box>
-          <Grid container marginTop={2}>
-            {problem.choices.map((choice, idx) => (
-              <Grid item xs={12} key={idx}>
-                <Box
-                  onClick={() => {
-                    chooseAnswer(idx + 1);
-                  }}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    borderRadius: 2,
-                    "&:hover": {
-                      bgcolor: problem.chooseNumber === -1 ? "var(--c-grey)" : "",
-                    },
-                    backgroundColor: colors[idx],
-                    fontSize: "1rem",
-                    paddingY: 2,
-                  }}
-                >
-                  <Box
-                    mx={2}
-                    sx={{ display: "flex", justifyContent: "center", alignItems: "flex-start" }}
-                  >
-                    {circles[idx].call(null, { size: 20 })}
-                  </Box>
-                  <Markdown
-                    remarkPlugins={[remarkMath]}
-                    rehypePlugins={[rehypeKatex, rehypeRaw]}
-                    components={{
-                      p: ({ node, ...content }) => (
-                        <Box
-                          sx={{
-                            width: "100%",
-                          }}
-                        >
-                          <Typography
-                            variant="body2"
-                            fontSize={{
-                              xs: "14px",
-                              sm: "18px",
-                            }}
-                          >
-                            {content.children}
-                          </Typography>
-                        </Box>
-                      ),
-                    }}
-                  >
-                    {choice.choice}
-                  </Markdown>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+          {problem.choices.map((choice, idx) => (
+            <ProblemChoiceUI
+              key={idx}
+              choiceNumber={idx}
+              chooseAnswer={chooseAnswer}
+              color={colors[idx]}
+              problem={problem}
+            />
+          ))}
         </Box>
       </Container>
     </>

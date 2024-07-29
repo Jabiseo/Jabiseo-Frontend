@@ -13,6 +13,26 @@ const nextConfig = {
       },
     ],
   },
+  // svgr 설정
+  experimental: {
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
+  },
+  // svgr 설정
+  webpack: config => {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ["@svgr/webpack"],
+    });
+    return config;
+  },
   async rewrites() {
     return [
       {

@@ -1,11 +1,7 @@
-// import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import CssBaseline from "@mui/material/CssBaseline";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { Metadata } from "next";
-import { Noto_Sans } from "next/font/google";
 import GoogleAnalytics from "../components/google.analytics";
 import "./globals.css";
-
-const font = Noto_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AI 비서 자비서",
@@ -20,11 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body>
         {process.env.NEXT_PUBLIC_GA_ID ? <GoogleAnalytics /> : <div>GA환경변수값필요</div>}
-        <CssBaseline />
-        {/* <AppRouterCacheProvider>{children}</AppRouterCacheProvider> */}
-        {children}
+        {/* <CssBaseline /> */}
+        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
       </body>
     </html>
   );

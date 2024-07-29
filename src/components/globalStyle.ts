@@ -1,6 +1,15 @@
 import { createTheme } from "@mui/material";
 
 export const globalTheme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1140,
+      xl: 1920,
+    },
+  },
   typography: {
     h1: {
       fontFamily: "Pretendard-Bold",

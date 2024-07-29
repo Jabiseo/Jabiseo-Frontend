@@ -8,18 +8,18 @@ const LearningHeader = () => {
       <ThemeProvider theme={globalTheme}>
         <Box
           sx={{
-            mt: {
-              xs: "56px",
-              sm: "64px",
-            },
             padding: "0",
             backgroundImage: "url('/headerImage.png')",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
-            minHeight: "180px",
+            minHeight: {
+              xs: "170px",
+              sm: "250px",
+            },
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            width: "100%",
           }}
         >
           <Box
@@ -29,13 +29,14 @@ const LearningHeader = () => {
               alignItems: "center",
               flexDirection: "column",
               gap: "8px",
+              marginTop: "40px",
             }}
           >
             <Typography
               variant="h1"
               sx={{ color: "white" }}
               fontSize={{
-                xs: "28px",
+                xs: "16px",
                 sm: "32px",
               }}
             >
@@ -45,7 +46,7 @@ const LearningHeader = () => {
               variant="h1"
               sx={{ color: "white" }}
               fontSize={{
-                xs: "28px",
+                xs: "16px",
                 sm: "32px",
               }}
             >

@@ -1,7 +1,7 @@
+import CloseIcon from "@/public/icons/close-line.svg";
+import { NoHoverButton } from "@/src/components/elements/styledElements";
 import { globalTheme } from "@/src/components/globalStyle";
 import { Box, Button, Modal, ThemeProvider, Typography } from "@mui/material";
-import Image from "next/image";
-import CloseIcon from "@/public/icons/mingcute_close-line.svg";
 interface BookMarkModalProps {
   isModalOpen: boolean;
   handleModal: () => void;
@@ -46,7 +46,7 @@ const BookMarkModal: React.FC<BookMarkModalProps> = ({
             }}
             onClick={handleModal}
           >
-            <Image src={CloseIcon} width={28} height={28} alt="X" />
+            <CloseIcon width={28} height={28} />
           </Box>
           <Box
             sx={{
@@ -62,31 +62,39 @@ const BookMarkModal: React.FC<BookMarkModalProps> = ({
               모드를 선택해주세요
             </Typography>
             <Box sx={{ display: "flex", justifyContent: "flex-end", my: 2 }}>
-              <Button
+              <NoHoverButton
                 onClick={gotoStudyMode}
                 sx={{
                   mr: 3,
                   border: "1.5px solid var(--c-gray2)",
                   borderRadius: "40px",
                   padding: "12px 28px",
+                  "&:hover": {
+                    border: "1.5px solid var(--c-sub3)",
+                    filter: "drop-shadow(0px 1px 12px rgba(0, 0, 0, 0.16))",
+                  },
                 }}
               >
                 <Typography variant="h1" fontSize={20} color="var(--c-sub4)">
                   공부 모드
                 </Typography>
-              </Button>
-              <Button
+              </NoHoverButton>
+              <NoHoverButton
                 onClick={gotoExamMode}
                 sx={{
                   border: "1.5px solid var(--c-gray2)",
                   borderRadius: "40px",
                   padding: "12px 28px",
+                  "&:hover": {
+                    border: "1.5px solid var(--c-sub3)",
+                    filter: "drop-shadow(0px 1px 12px rgba(0, 0, 0, 0.16))",
+                  },
                 }}
               >
                 <Typography variant="h1" fontSize={20} color="var(--c-sub4)">
                   시험 모드
                 </Typography>
-              </Button>
+              </NoHoverButton>
             </Box>
           </Box>
         </Box>

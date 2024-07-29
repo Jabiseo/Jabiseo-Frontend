@@ -1,29 +1,23 @@
+import CircleNumber1 from "@/public/icons/circle-number1.svg";
+import CircleNumber2 from "@/public/icons/circle-number2.svg";
+import CircleNumber3 from "@/public/icons/circle-number3.svg";
+import CircleNumber4 from "@/public/icons/circle-number4.svg";
 import { globalTheme } from "@/src/components/globalStyle";
-import { Box, Grid, ThemeProvider, Typography } from "@mui/material";
-import { Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle } from "react-icons/bs";
-
+import { Box, ThemeProvider, Typography } from "@mui/material";
 interface OmrProps {
-  handleOmrModal: () => void;
   setProblemNumber: (number: number) => void;
   problems: ProblemViewType[];
   chooseAnswer: (number: number, chooseProblemNumber: number) => void;
 }
 
-const Omr: React.FC<OmrProps> = ({
-  handleOmrModal,
-  setProblemNumber,
-  problems,
-  chooseAnswer,
-}: OmrProps) => {
-  const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
+const Omr: React.FC<OmrProps> = ({ setProblemNumber, problems, chooseAnswer }: OmrProps) => {
   return (
     <ThemeProvider theme={globalTheme}>
       <Box
         minHeight="100vh"
+        width="100%"
         sx={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
           flexDirection: "column",
         }}
       >
@@ -41,69 +35,99 @@ const Omr: React.FC<OmrProps> = ({
             OMR 표기란
           </Typography>
         </Box>
-        {problems.map((problem, index) => (
-          <Grid
-            container
-            key={problem.problemId}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Box
             sx={{
-              display: "flex",
-              flexGrow: 1,
-              flexDirection: "row",
+              width: "20%",
+              minHeight: "823px",
+              height: "100%",
+              backgroundColor: "var(--c-gray2)",
             }}
           >
-            <Grid
-              item
-              xs={2}
-              sx={{
-                backgroundColor: "var(--c-gray2)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                py: 1,
-              }}
-            >
-              <Typography
-                variant="h3"
-                fontSize={{
-                  xs: "14px",
-                  sm: "16px",
-                }}
+            {problems.map((problem, index) => (
+              <Box
                 sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-                onClick={() => {
-                  setProblemNumber(index + 1);
+                  backgroundColor: "var(--c-gray2)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "32px",
                 }}
               >
-                {problem.problemNumber}
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={10}
-              sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}
-            >
-              {problem.choices.map((choice, idx) => (
-                <Box
+                <Typography
+                  variant="h3"
+                  fontSize={{
+                    xs: "14px",
+                    sm: "16px",
+                  }}
                   sx={{
-                    backgroundColor: problem.chooseNumber - 1 === idx ? "var(--c-gray2)" : "",
-                    borderRadius: 9999,
-                    width: "20px",
-                    height: "20px",
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
                   }}
                   onClick={() => {
                     setProblemNumber(index + 1);
-                    chooseAnswer(idx + 1, index + 1);
                   }}
                 >
-                  {circles[idx].call(null, { size: 20 })}
-                </Box>
-              ))}
-            </Grid>
-          </Grid>
-        ))}
+                  {problem.problemNumber}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+          <Box
+            sx={{
+              width: "80%",
+              minHeight: "823px",
+              height: "100%",
+            }}
+          >
+            {problems.map((problem, index) => (
+              <Box sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+                {problem.choices.map((choice, idx) => (
+                  <Box
+                    sx={{
+                      height: "32px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onClick={() => {
+                      setProblemNumber(index + 1);
+                      chooseAnswer(idx + 1, index + 1);
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        backgroundColor: problem.chooseNumber - 1 === idx ? "var(--c-gray2)" : "",
+                        borderRadius: 9999,
+                        width: "28px",
+                        height: "28px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {idx === 0 ? (
+                        <CircleNumber1 width={28} height={28} />
+                      ) : idx === 1 ? (
+                        <CircleNumber2 width={28} height={28} />
+                      ) : idx === 2 ? (
+                        <CircleNumber3 width={28} height={28} />
+                      ) : idx === 3 ? (
+                        <CircleNumber4 width={28} height={28} />
+                      ) : null}
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            ))}
+          </Box>
+        </Box>
       </Box>
     </ThemeProvider>
   );
