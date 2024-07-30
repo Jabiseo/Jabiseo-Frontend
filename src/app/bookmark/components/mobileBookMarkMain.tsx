@@ -1,24 +1,19 @@
 "use client";
+import { mainfetch } from "@/src/api/apis/mainFetch";
+import { NoHoverButton } from "@/src/components/elements/styledElements";
+import { globalTheme } from "@/src/components/globalStyle";
+import useBookmarks from "@/src/hooks/useBookmarks";
 import useCertificateInfo from "@/src/hooks/useCertificateInfo";
-import {
-  Box,
-  Button,
-  Collapse,
-  Pagination,
-  SelectChangeEvent,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Collapse, SelectChangeEvent, ThemeProvider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import BookMarkModal from "./bookmarkModal";
+import BookMarkSlider from "./bookMarkSlider";
 import ExamChoice from "./examChoice";
 import BookmarkProblemList from "./problemList";
 import SubjectChoice from "./subjectChoice";
-import BookMarkSlider from "./bookMarkSlider";
-import { globalTheme } from "@/src/components/globalStyle";
-import { NoHoverButton } from "@/src/components/elements/styledElements";
-import useBookmarks from "@/src/hooks/useBookmarks";
-import { mainfetch } from "@/src/api/apis/mainFetch";
+
+const MAX_SELECTED_PROBLEMS = 100;
+
 const MobileBookMarkMain = () => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const handleSliderOpen = () => {
@@ -43,11 +38,55 @@ const MobileBookMarkMain = () => {
     setisModalOpen(prev => !prev);
   };
 
-  const gotoStudyMode = () => {
-    // 공부 모드로 이동하는 함수
+  const gotoStudyMode = async () => {
+    if (selectedProblems.length === 0) {
+      return;
+    }
+    const getProblmes = async () => {
+      const problems = await mainfetch(
+        "/problems/set/query",
+        {
+          method: "POST",
+          body: {
+            problemIds: selectedProblems,
+          },
+        },
+        true
+      );
+      if (!problems.ok) {
+        new Error("문제를 불러오는데 실패했습니다.");
+      }
+      const data = await problems.json();
+      localStorage.setItem("bookmarkProblems", JSON.stringify(data));
+    };
+    await getProblmes();
+    const path = `/study/bookmark`;
+    window.location.href = path;
   };
-  const gotoExamMode = () => {
-    // 시험 모드로 이동하는 함수
+  const gotoExamMode = async () => {
+    if (selectedProblems.length === 0) {
+      return;
+    }
+    const getProblmes = async () => {
+      const problems = await mainfetch(
+        "/problems/set/query",
+        {
+          method: "POST",
+          body: {
+            problemIds: selectedProblems,
+          },
+        },
+        true
+      );
+      if (!problems.ok) {
+        new Error("문제를 불러오는데 실패했습니다.");
+      }
+      const data = await problems.json();
+      localStorage.setItem("bookmarkProblems", JSON.stringify(data));
+    };
+    await getProblmes();
+    const path = `/exam/bookmark`;
+    window.location.href = path;
   };
 
   useEffect(() => {
@@ -56,7 +95,7 @@ const MobileBookMarkMain = () => {
   const selectProblem = (problemId: number) => {
     if (selectedProblems.includes(problemId)) {
       setSelectedProblems(selectedProblems.filter(id => id !== problemId));
-    } else {
+    } else if (selectedProblems.length < MAX_SELECTED_PROBLEMS) {
       setSelectedProblems([...selectedProblems, problemId]);
     }
   };
@@ -96,7 +135,7 @@ const MobileBookMarkMain = () => {
 
   const selectAllProblems = () => {
     const allProblems = problems.map(problem => problem.problemId);
-    setSelectedProblems(allProblems);
+    setSelectedProblems(allProblems.slice(0, MAX_SELECTED_PROBLEMS));
   };
 
   const deselectAllProblems = () => {
@@ -194,8 +233,6 @@ const MobileBookMarkMain = () => {
                   onClick={selectAllProblems}
                   sx={{
                     mr: 1,
-                    borderRadius: "40px",
-                    padding: "4px 12px",
                   }}
                 >
                   <Typography
@@ -209,13 +246,7 @@ const MobileBookMarkMain = () => {
                     전체 선택
                   </Typography>
                 </NoHoverButton>
-                <NoHoverButton
-                  onClick={deselectAllProblems}
-                  sx={{
-                    borderRadius: "40px",
-                    padding: "4px 12px",
-                  }}
-                >
+                <NoHoverButton onClick={deselectAllProblems} sx={{}}>
                   <Typography
                     variant="body2"
                     fontSize={{

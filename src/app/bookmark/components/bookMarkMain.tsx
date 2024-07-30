@@ -1,6 +1,6 @@
 "use client";
 import { mainfetch } from "@/src/api/apis/mainFetch";
-import { NoHoverButton } from "@/src/components/elements/styledElements";
+import { MiddleBoxColumn, NoHoverButton } from "@/src/components/elements/styledElements";
 import { globalTheme } from "@/src/components/globalStyle";
 import useBookmarks from "@/src/hooks/useBookmarks";
 import useCertificateInfo from "@/src/hooks/useCertificateInfo";
@@ -11,8 +11,9 @@ import ExamChoice from "./examChoice";
 import BookmarkProblemList from "./problemList";
 import SubjectChoice from "./subjectChoice";
 
+const MAX_SELECTED_PROBLEMS = 100;
+
 const BookMarkMain = () => {
-  const { certificateInfo, loading, error } = useCertificateInfo();
   const [selectedExam, setSelectedExam] = useState<string>("전체 회차");
   const [problems, setProblems] = useState<BookMarkProblem[]>([]);
   const [selectedProblems, setSelectedProblems] = useState<number[]>([]);
@@ -22,7 +23,7 @@ const BookMarkMain = () => {
   const [selectedSubjectsId, setSelectedSubjectsId] = useState<number[]>([]);
   const [page, setPage] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { bookmarkedProblems, totalPage } = useBookmarks({
+  const { bookmarkedProblems, totalPage, isCertified, certificateInfo, loading } = useBookmarks({
     selectedExamId,
     selectedSubjectsId,
     page,
@@ -31,20 +32,64 @@ const BookMarkMain = () => {
     setisModalOpen(prev => !prev);
   };
 
-  const gotoStudyMode = () => {
-    // 공부 모드로 이동하는 함수
+  const gotoStudyMode = async () => {
+    if (selectedProblems.length === 0) {
+      return;
+    }
+    const getProblmes = async () => {
+      const problems = await mainfetch(
+        "/problems/set/query",
+        {
+          method: "POST",
+          body: {
+            problemIds: selectedProblems,
+          },
+        },
+        true
+      );
+      if (!problems.ok) {
+        new Error("문제를 불러오는데 실패했습니다.");
+      }
+      const data = await problems.json();
+      localStorage.setItem("bookmarkProblems", JSON.stringify(data));
+    };
+    await getProblmes();
+    const path = `/study/bookmark`;
+    window.location.href = path;
   };
-  const gotoExamMode = () => {
-    // 시험 모드로 이동하는 함수
+  const gotoExamMode = async () => {
+    if (selectedProblems.length === 0) {
+      return;
+    }
+    const getProblmes = async () => {
+      const problems = await mainfetch(
+        "/problems/set/query",
+        {
+          method: "POST",
+          body: {
+            problemIds: selectedProblems,
+          },
+        },
+        true
+      );
+      if (!problems.ok) {
+        new Error("문제를 불러오는데 실패했습니다.");
+      }
+      const data = await problems.json();
+      localStorage.setItem("bookmarkProblems", JSON.stringify(data));
+    };
+    await getProblmes();
+    const path = `/exam/bookmark`;
+    window.location.href = path;
   };
-
   useEffect(() => {
     setProblems(bookmarkedProblems);
   }, [bookmarkedProblems]);
+
   const selectProblem = (problemId: number) => {
     if (selectedProblems.includes(problemId)) {
       setSelectedProblems(selectedProblems.filter(id => id !== problemId));
-    } else {
+    } else if (selectedProblems.length < MAX_SELECTED_PROBLEMS) {
       setSelectedProblems([...selectedProblems, problemId]);
     }
   };
@@ -84,7 +129,7 @@ const BookMarkMain = () => {
 
   const selectAllProblems = () => {
     const allProblems = problems.map(problem => problem.problemId);
-    setSelectedProblems(allProblems);
+    setSelectedProblems(allProblems.slice(0, MAX_SELECTED_PROBLEMS));
   };
 
   const deselectAllProblems = () => {
@@ -140,6 +185,37 @@ const BookMarkMain = () => {
     return <div>로딩중...</div>;
   }
 
+  if (!isCertified) {
+    window.location.href = "/mypage";
+    return (
+      <ThemeProvider theme={globalTheme}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <Typography
+            variant="h1"
+            fontSize="28px"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            먼저 자격증을 선택해주세요
+          </Typography>
+        </Box>
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider theme={globalTheme}>
       <Box
@@ -171,8 +247,8 @@ const BookMarkMain = () => {
                 borderLeft: "1px solid var(--c-gray2)",
               }}
             >
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="h4" fontSize="28px" mb="51px">
+              <Box sx={{ mb: "40px" }}>
+                <Typography variant="h4" fontSize="28px" mb="40px">
                   북마크
                 </Typography>
                 <Box

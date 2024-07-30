@@ -14,9 +14,7 @@ const GoogleButton = () => {
       "/auth/login",
       { method: "POST", body: { idToken, oauthServer: "GOOGLE" } },
       false
-    )
-      .then(res => res.json())
-      .catch();
+    );
 
     if (res.status === 200) {
       const data = await res.json();

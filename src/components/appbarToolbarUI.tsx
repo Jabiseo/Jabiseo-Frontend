@@ -1,9 +1,8 @@
-import { Avatar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
-import Image from "next/image";
 import NotiIcon from "@/public/icons/noti.svg";
 import SearchIcon from "@/public/icons/search.svg";
+import { Avatar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { NoHoverButton } from "./elements/styledElements";
 interface AppbarToolbarUIProps {
   isLogin: boolean;
   handleLogout: () => void;
@@ -43,7 +42,7 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
     >
       <Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <NoHoverButton
+          <NoHoverTouchButton
             href="/"
             onClick={() => {
               localStorage.setItem("focusTap", "");
@@ -74,8 +73,8 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
                 {certificate}
               </Typography>
             )}
-          </NoHoverButton>
-          <NoHoverButton
+          </NoHoverTouchButton>
+          <NoHoverTouchButton
             sx={{ color: "black", display: { xs: "none", md: "flex" } }}
             href="/learning"
             onClick={() => {
@@ -87,20 +86,19 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
               sx={{
                 color:
                   focusTap === "문제풀이" ? (scrollState ? "var(--c-main)" : "white") : fontColor,
-                ml: 2,
                 filter:
                   focusTap === "문제풀이"
                     ? scrollState
                       ? "none"
-                      : "drop-shadow(0px 1px 12px #16396F80)"
+                      : "drop-shadow(0px 1px 4px #16396F)"
                     : "none",
               }}
               fontSize={"16px"}
             >
               문제풀이
             </Typography>
-          </NoHoverButton>
-          <NoHoverButton
+          </NoHoverTouchButton>
+          <NoHoverTouchButton
             sx={{ color: "black", display: { xs: "none", md: "flex" } }}
             href="/bookmark"
             onClick={() => {
@@ -112,20 +110,19 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
               sx={{
                 color:
                   focusTap === "북마크" ? (scrollState ? "var(--c-main)" : "white") : fontColor,
-                ml: 2,
                 filter:
                   focusTap === "북마크"
                     ? scrollState
                       ? "none"
-                      : "drop-shadow(0px 1px 12px #16396F80)"
+                      : "drop-shadow(0px 1px 4px #16396F)"
                     : "none",
               }}
               fontSize={"16px"}
             >
               북마크
             </Typography>
-          </NoHoverButton>
-          <NoHoverButton
+          </NoHoverTouchButton>
+          <NoHoverTouchButton
             sx={{ color: "black", display: { xs: "none", md: "flex" } }}
             href="/assistant"
             onClick={() => {
@@ -137,19 +134,18 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
               sx={{
                 color:
                   focusTap === "학습비서" ? (scrollState ? "var(--c-main)" : "white") : fontColor,
-                ml: 2,
                 filter:
                   focusTap === "학습비서"
                     ? scrollState
                       ? "none"
-                      : "drop-shadow(0px 1px 12px #16396F80)"
+                      : "drop-shadow(0px 1px 4px #16396F)"
                     : "none",
               }}
               fontSize={"16px"}
             >
               학습비서
             </Typography>
-          </NoHoverButton>
+          </NoHoverTouchButton>
         </Box>
       </Box>
       <Box
@@ -160,7 +156,7 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
       >
         {!isLogin ? (
           <>
-            <NoHoverButton
+            <NoHoverTouchButton
               sx={{
                 marginLeft: 2,
                 backgroundColor: "white",
@@ -178,20 +174,26 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
               <Typography variant="h4" fontSize={"16px"} color="var(--c-main)">
                 로그인
               </Typography>
-            </NoHoverButton>
+            </NoHoverTouchButton>
 
-            <NoHoverButton href="/search" sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}>
+            <NoHoverTouchButton
+              href="/search"
+              sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}
+            >
               <SearchIcon width={24} height={24} color={fontColor} />
-            </NoHoverButton>
+            </NoHoverTouchButton>
           </>
         ) : (
           <>
-            <NoHoverButton href="/noti" sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}>
+            <NoHoverTouchButton href="/noti" sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}>
               <NotiIcon width={24} height={24} color={fontColor} />
-            </NoHoverButton>
-            <NoHoverButton href="/search" sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}>
+            </NoHoverTouchButton>
+            <NoHoverTouchButton
+              href="/search"
+              sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}
+            >
               <SearchIcon width={24} height={24} color={fontColor} />
-            </NoHoverButton>
+            </NoHoverTouchButton>
             <IconButton href="/mypage" sx={{ display: { xs: "none", md: "flex" } }}>
               <Avatar alt="User" src="user-avatar.jpg" />
             </IconButton>
@@ -203,3 +205,27 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
 };
 
 export default AppbarToolbarUI;
+
+const NoHoverTouchButton: React.FC<NoHoverTouchButtonProps> = ({ sx, children, onClick, href }) => {
+  return (
+    <Button
+      disableTouchRipple
+      sx={{
+        "&:hover": {
+          backgroundColor: "inherit",
+        },
+        ...sx,
+      }}
+      onClick={onClick}
+      href={href}
+    >
+      {children}
+    </Button>
+  );
+};
+interface NoHoverTouchButtonProps {
+  sx?: object;
+  children: React.ReactNode;
+  onClick?: () => any;
+  href?: string;
+}

@@ -3,16 +3,18 @@ import StudyTime from "./studyTime";
 
 interface StudyInfoUIProps {
   problem: ProblemViewType | null;
-  isMd: boolean;
+  isSm: boolean;
   handleSubmitModal: () => void;
   handleViewTime: (viewTime: string) => void;
+  handleTime: (time: number) => void;
 }
 
 const StudyInfoUI: React.FC<StudyInfoUIProps> = ({
   problem,
-  isMd,
+  isSm,
   handleSubmitModal,
   handleViewTime,
+  handleTime,
 }) => {
   return (
     <Box
@@ -23,10 +25,7 @@ const StudyInfoUI: React.FC<StudyInfoUIProps> = ({
         display: "flex",
         justifyContent: "center",
         height: "70px",
-        paddingX: {
-          xs: "25px",
-          md: "0px",
-        },
+        paddingX: "25px",
         boxSizing: "border-box",
       }}
     >
@@ -36,10 +35,10 @@ const StudyInfoUI: React.FC<StudyInfoUIProps> = ({
           alignItems: "center",
           display: "flex",
           justifyContent: "space-between",
-          maxWidth: "1140px",
+          maxWidth: "1165px",
         }}
       >
-        {isMd ? (
+        {isSm ? (
           <>
             <Box
               sx={{
@@ -52,7 +51,7 @@ const StudyInfoUI: React.FC<StudyInfoUIProps> = ({
               <Typography variant="h4" fontSize="12px">
                 {problem?.subjectInfo.sequence}과목 {problem?.subjectInfo.name}
               </Typography>
-              <StudyTime handleViewTime={handleViewTime} />
+              <StudyTime handleViewTime={handleViewTime} handleTime={handleTime} />
             </Box>
 
             <Button
@@ -84,7 +83,7 @@ const StudyInfoUI: React.FC<StudyInfoUIProps> = ({
                 flexDirection: "row",
               }}
             >
-              <StudyTime handleViewTime={handleViewTime} />
+              <StudyTime handleViewTime={handleViewTime} handleTime={handleTime} />
               <Button
                 onClick={handleSubmitModal}
                 sx={{

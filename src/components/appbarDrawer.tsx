@@ -1,8 +1,8 @@
-import { Avatar, Box, Button, Divider, Drawer, IconButton, Typography } from "@mui/material";
-import Image from "next/image";
+import ArrowRightIcon from "@/public/icons/arrow-right.svg";
 import CloseIcon from "@/public/icons/close-line.svg";
 import PersonLineIcon from "@/public/icons/person-line.svg";
-import ArrowRightIcon from "@/public/icons/arrow-right.svg";
+import { Avatar, Box, Divider, Drawer, IconButton, Typography } from "@mui/material";
+import Image from "next/image";
 import { NoHoverButton } from "./elements/styledElements";
 
 interface AppbarDrawerProps {
@@ -97,12 +97,12 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
                   alignItems: "center",
                 }}
               >
-                <PersonLineIcon />
+                <PersonLineIcon width={22} height={22} />
                 <Typography variant="subtitle1" fontSize={"14px"} color="white" ml={1}>
                   로그인을 해주세요
                 </Typography>
               </Box>
-              <ArrowRightIcon />
+              <ArrowRightIcon width={22} height={22} />
             </NoHoverButton>
           )}
         </Box>

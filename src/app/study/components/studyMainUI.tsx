@@ -40,6 +40,11 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }
   const [omrModalopen, setOmrModalOpen] = useState(false);
   const [solvedProblemsNumber, setSolvedProblemsNumber] = useState<string>("");
   const [viewTime, setViewTime] = useState<string>("");
+  const [time, setTime] = useState<number>(0);
+  // 제출하기 UI상 보일 시간
+  const [submitTime, setSubmitTime] = useState<string>("");
+  // 결과 제출 시 실제 제출 시간
+  const [submitNumberTime, setSubmitNumberTime] = useState<number>();
   const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
 
@@ -98,6 +103,8 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }
 
   const handleSubmitModal = () => {
     setSubmitModalOpen(!submitModalopen);
+    setSubmitTime(viewTime);
+    setSubmitNumberTime(time);
   };
 
   const handleOmrModal = () => {
@@ -106,6 +113,10 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }
 
   const handleViewTime = (viewTime: string) => {
     setViewTime(viewTime);
+  };
+
+  const handleTime = (time: number) => {
+    setTime(time);
   };
 
   const handleViewSolution = () => {
@@ -180,7 +191,7 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }
   );
 
   const theme = useTheme();
-  const isMd = useMediaQuery(theme.breakpoints.down(960));
+  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   if (loading) {
     return (
@@ -198,23 +209,18 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }
       <ThemeProvider theme={globalTheme}>
         <StudyInfoUI
           problem={problem}
-          isMd={isMd}
+          isSm={isSm}
           handleSubmitModal={handleSubmitModal}
           handleViewTime={handleViewTime}
+          handleTime={handleTime}
         />
         <Box
           sx={{
-            minHeight: {
-              xs: "130vh",
-              md: "110vh",
-            },
-            maxWidth: "1140px",
+            maxWidth: "1165px",
             width: "100%",
-            paddingX: {
-              xs: "25px",
-              md: "0px",
-            },
+            paddingX: "25px",
             boxSizing: "border-box",
+            marginBottom: "110px",
           }}
         >
           <Box
@@ -231,7 +237,7 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }
                     <ProblemUI
                       problem={problem}
                       chooseAnswer={chooseAnswer}
-                      isMd={isMd}
+                      isSm={isSm}
                       handleBookmark={handleBookmark}
                     />
                   </>
@@ -300,7 +306,7 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }
             sendResult={sendResult}
             handleSubmitModal={handleSubmitModal}
             solvedProblemsNumber={solvedProblemsNumber}
-            viewTime={viewTime}
+            viewTime={submitTime}
           />
         </Modal>
         <Modal open={omrModalopen} onClose={handleOmrModal}>

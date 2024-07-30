@@ -6,7 +6,7 @@ interface ExamFooterUIProps {
   problems: any;
   prevProblem: () => void;
   nextProblem: () => void;
-  isMd: boolean;
+  isSm: boolean;
 }
 const ExamFooterUI: React.FC<ExamFooterUIProps> = ({
   handleOmrModal,
@@ -14,7 +14,7 @@ const ExamFooterUI: React.FC<ExamFooterUIProps> = ({
   problems,
   prevProblem,
   nextProblem,
-  isMd,
+  isSm,
 }) => {
   return (
     <Box
@@ -35,18 +35,16 @@ const ExamFooterUI: React.FC<ExamFooterUIProps> = ({
         sx={{
           width: "100%",
           display: "flex",
-          justifyContent: isMd ? "space-between" : "center",
+          justifyContent: isSm ? "space-between" : "center",
           alignItems: "center",
           flexDirection: "row",
-          paddingX: {
-            xs: "25px",
-            md: "25px",
-          },
+          paddingX: "25px",
         }}
       >
-        {isMd && (
+        {isSm && (
           <Button
             sx={{
+              border: "1px solid var(--c-gray2)",
               borderRadius: "40px",
               backgroundColor: "white",
               padding: {

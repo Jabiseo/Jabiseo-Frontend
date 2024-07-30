@@ -1,7 +1,7 @@
 "use client";
 
+import { mainfetch } from "@/src/api/apis/mainFetch";
 import { globalTheme } from "@/src/components/globalStyle";
-import useProblems from "@/src/hooks/useProblems";
 import {
   Box,
   CircularProgress,
@@ -15,14 +15,13 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Omr from "../components/omrUI";
 import ProblemUI from "../components/problemUI";
 import SmallOmrUI from "../components/smallOmrUI";
 import ExamFooterUI from "./examFooterUI";
 import ExamInfoUI from "./examInfoUI";
 import SubmitResultUI from "./SubmitResultUI";
-import { mainfetch } from "@/src/api/apis/mainFetch";
 
 interface ExamMainUIProps {
   getProblems: ProblemViewType[];
@@ -36,6 +35,11 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
   const [submitModalopen, setSubmitModalOpen] = useState(false);
   const [omrModalopen, setOmrModalOpen] = useState(false);
   const [viewTime, setViewTime] = useState<string>("");
+  const [time, setTime] = useState<number>(0);
+  // 제출하기 UI상 보일 시간
+  const [submitTime, setSubmitTime] = useState<string>("");
+  // 결과 제출 시 실제 제출 시간
+  const [submitNumberTime, setSubmitNumberTime] = useState<number>();
   const [solvedProblemsNumber, setSolvedProblemsNumber] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
@@ -67,19 +71,21 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
   };
 
   const chooseAnswer = useCallback(
-    (number: number) => {
+    (number: number, chooseProblemNumber: number = problemNumber) => {
       setProblem(prev => {
         if (!prev) return null;
         return { ...prev, chooseNumber: number };
       });
-      problems[problemNumber - 1].chooseNumber = number;
+      const newProblems = problems;
+      newProblems[chooseProblemNumber - 1].chooseNumber = number;
       let solveProblem = 0;
-      problems.forEach(problem => {
+      newProblems.forEach(problem => {
         if (problem.chooseNumber != -1) {
           solveProblem++;
         }
       });
       setSolvedProblemsNumber(solveProblem + "/" + problems.length);
+      setProblems(newProblems);
     },
     [problems, problem]
   );
@@ -91,6 +97,8 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
 
   const handleSubmitModal = () => {
     setSubmitModalOpen(!submitModalopen);
+    setSubmitTime(viewTime);
+    setSubmitNumberTime(time);
   };
 
   const handleOmrModal = () => {
@@ -101,14 +109,9 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
     setViewTime(viewTime);
   };
 
-  const studyBoxRef = useRef<HTMLDivElement | null>(null);
-  const [studyBoxWidth, setStudyBoxWidth] = useState(0);
-
-  useEffect(() => {
-    if (studyBoxRef.current) {
-      setStudyBoxWidth(studyBoxRef.current.offsetWidth);
-    }
-  }, [problems]);
+  const handleTime = (time: number) => {
+    setTime(time);
+  };
 
   const handleBookmark = useCallback(
     async (problemId: number) => {
@@ -144,7 +147,6 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
           )
         );
       } catch (error) {
-        // 에러 처리 로직 추가 (예: console.error 또는 사용자에게 알림)
       } finally {
         setIsProcessing(false);
       }
@@ -154,6 +156,7 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
 
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down(960));
+  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   if (loading) {
     return (
@@ -181,9 +184,10 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
       <ThemeProvider theme={globalTheme}>
         <ExamInfoUI
           problem={problem}
-          isMd={isMd}
+          isSm={isSm}
           handleSubmitModal={handleSubmitModal}
           handleViewTime={handleViewTime}
+          handleTime={handleTime}
         />
         <Box
           sx={{
@@ -191,58 +195,68 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
               xs: "100vh",
               md: "100vh",
             },
-            maxWidth: "1140px",
+            maxWidth: "1165px",
             width: "100%",
-            paddingX: {
-              xs: "25px",
-              md: "0px",
-            },
+            paddingX: "25px",
             boxSizing: "border-box",
           }}
         >
           <Box
             sx={{
               margin: "0 auto",
-              maxWidth: "1140px",
+              maxWidth: "1165px",
               minWidth: "320px",
               height: "100%",
             }}
           >
-            <Grid container>
-              <Grid item sm={0} md={2}></Grid>
-              <Grid item sm={12} md={8}>
-                {problem ? (
-                  <>
-                    <ProblemUI
-                      problem={problem}
+            {!isMd ? (
+              <Grid container>
+                <Grid item sm={0} md={2}></Grid>
+                <Grid item sm={12} md={8}>
+                  {problem ? (
+                    <>
+                      <ProblemUI
+                        problem={problem}
+                        chooseAnswer={chooseAnswer}
+                        isSm={isSm}
+                        handleBookmark={handleBookmark}
+                      />
+                    </>
+                  ) : (
+                    <div>Loading problem...</div>
+                  )}
+                </Grid>
+                <Grid
+                  item
+                  sm={0}
+                  md={2}
+                  maxHeight="86vh"
+                  sx={{
+                    overflowY: "auto",
+                    scrollbarWidth: "none",
+                  }}
+                >
+                  {!isSm && (
+                    <Omr
+                      problems={problems}
+                      setProblemNumber={setProblemNumber}
                       chooseAnswer={chooseAnswer}
-                      isMd={isMd}
-                      handleBookmark={handleBookmark}
                     />
-                  </>
-                ) : (
-                  <div>Loading problem...</div>
-                )}
+                  )}
+                </Grid>
               </Grid>
-              <Grid
-                item
-                sm={0}
-                md={2}
-                maxHeight="86vh"
-                sx={{
-                  overflowY: "auto",
-                  scrollbarWidth: "none",
-                }}
-              >
-                {!isMd && (
-                  <Omr
-                    problems={problems}
-                    setProblemNumber={setProblemNumber}
-                    chooseAnswer={chooseAnswer}
-                  />
-                )}
-              </Grid>
-            </Grid>
+            ) : problem ? (
+              <>
+                <ProblemUI
+                  problem={problem}
+                  chooseAnswer={chooseAnswer}
+                  isSm={isSm}
+                  handleBookmark={handleBookmark}
+                />
+              </>
+            ) : (
+              <div>Loading problem...</div>
+            )}
           </Box>
 
           <ExamFooterUI
@@ -251,7 +265,7 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
             problems={problems}
             prevProblem={prevProblem}
             nextProblem={nextProblem}
-            isMd={isMd}
+            isSm={isSm}
           />
         </Box>
         <Modal open={submitModalopen} onClose={handleSubmitModal}>
@@ -259,7 +273,7 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
             sendResult={sendResult}
             handleSubmitModal={handleSubmitModal}
             solvedProblemsNumber={solvedProblemsNumber}
-            viewTime={viewTime}
+            viewTime={submitTime}
           />
         </Modal>
         <Drawer open={omrModalopen} onClose={handleOmrModal} anchor="bottom">
