@@ -98,7 +98,7 @@ const SolutionUI: React.FC<SolutionUIProps> = props => {
                 },
                 boxShadow: "0 0 0 1px var(--c-gray2)",
                 borderRadius: "40px",
-                p: 2,
+                padding: "10px 32px",
               }}
             >
               <RxEyeOpen size={28} color="var(--c-gray5)" />
@@ -134,7 +134,7 @@ const SolutionUI: React.FC<SolutionUIProps> = props => {
                 },
                 boxShadow: "0 0 0 1px var(--c-gray2)",
                 borderRadius: "40px",
-                p: 2,
+                padding: "10px 32px",
               }}
             >
               <RxEyeOpen size={28} color="var(--c-gray5)" />

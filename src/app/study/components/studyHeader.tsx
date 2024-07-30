@@ -1,9 +1,10 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { globalTheme } from "@/src/components/globalStyle";
+import { Box, ThemeProvider, Typography } from "@mui/material";
 
 const StudyHeader = ({ certificateName }: { certificateName: string }) => {
   return (
-    <>
+    <ThemeProvider theme={globalTheme}>
       <Box
         sx={{
           marginTop: "64px",
@@ -41,7 +42,7 @@ const StudyHeader = ({ certificateName }: { certificateName: string }) => {
           {certificateName}
         </Typography>
       </Box>
-    </>
+    </ThemeProvider>
   );
 };
 export default StudyHeader;

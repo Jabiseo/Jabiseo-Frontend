@@ -54,6 +54,7 @@ const StudyFooterUI: React.FC<StudyFooterUIProps> = ({
               boxShadow: "0px 1px 12px rgba(0, 0, 0, 0.25)",
               backgroundColor: "white",
             },
+            border: "1.5px solid var(--c-gray2)",
           }}
           onClick={handleOmrModal}
         >

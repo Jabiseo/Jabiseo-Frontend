@@ -48,10 +48,5 @@ export const mainfetch = async <T>(
     response = await fetch(url, { ...fetchOptions, headers });
   }
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Error: ${response.status} - ${errorText}`);
-  }
-
   return response;
 };

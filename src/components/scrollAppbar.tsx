@@ -58,8 +58,9 @@ const ScrollAppbar = ({ isScroll }: { isScroll?: number }) => {
         position="fixed"
         sx={{
           paddingX: {
-            xs: 2,
-            md: 6,
+            sm: "25px",
+            md: "25px",
+            lg: "0px",
           },
           boxShadow: isScroll && isScroll > 0 ? "rgba(0, 0, 0, 0.2) 0px 0px 14px" : "none",
           width: "100%",
@@ -70,6 +71,7 @@ const ScrollAppbar = ({ isScroll }: { isScroll?: number }) => {
           minHeight: "64px",
           backgroundColor: backgroundColor,
           transition: "all 0.3s",
+          boxSizing: "border-box",
         }}
       >
         <Box

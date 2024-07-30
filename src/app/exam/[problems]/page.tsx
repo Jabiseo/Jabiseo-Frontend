@@ -9,7 +9,7 @@ const ExamHeader = dynamic(() => import("@/src/app/exam/components/examHeader"),
   loading: () => <p>Header Loading</p>,
 });
 
-const ExamPage = async () => {
+const ExamPage = () => {
   const { getProblems, certificateInfo, loading, error } = useProblems();
   if (loading) {
     return <div>로딩중...</div>;

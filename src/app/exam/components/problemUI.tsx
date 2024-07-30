@@ -9,13 +9,14 @@ import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
 import ProblemChoiceUI from "../../study/components/problemChoiceUI";
+import ProblemMarkdown from "./problemMarkdown";
 
 const ProblemUI: React.FC<{
   problem: ProblemViewType;
   chooseAnswer: (number: number) => void;
-  isMd: boolean;
+  isSm: boolean;
   handleBookmark: (problemId: number) => void;
-}> = memo(({ problem, chooseAnswer, isMd, handleBookmark }) => {
+}> = memo(({ problem, chooseAnswer, isSm, handleBookmark }) => {
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
   const changeColor = () => {
     if (problem.chooseNumber === -1) {
@@ -62,9 +63,9 @@ const ProblemUI: React.FC<{
             }}
           >
             {problem.isBookmark ? (
-              <BookMarkFillIcon width={isMd ? 24 : 32} height={isMd ? 24 : 32} />
+              <BookMarkFillIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
             ) : (
-              <BookMarkLineIcon width={isMd ? 24 : 32} height={isMd ? 24 : 32} />
+              <BookMarkLineIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
             )}
           </Box>
           <Box
@@ -75,11 +76,15 @@ const ProblemUI: React.FC<{
             }}
             onClick={alerting}
           >
-            <SirenLineIcon width={isMd ? 24 : 32} height={isMd ? 24 : 32} />
+            <SirenLineIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
           </Box>
         </Box>
         <Box sx={{ marginBottom: 2 }}>
-          <Box>
+          <Box
+            sx={{
+              marginBottom: "12px",
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
@@ -115,53 +120,7 @@ const ProblemUI: React.FC<{
                 // paddingX: 2,
               }}
             >
-              <Markdown
-                remarkPlugins={[remarkMath]}
-                rehypePlugins={[rehypeKatex, rehypeRaw]}
-                components={{
-                  p: ({ node, ...content }) => (
-                    <Box
-                      sx={{
-                        width: "100%",
-                      }}
-                    >
-                      <Typography
-                        variant="h3"
-                        fontSize={{
-                          xs: "14px",
-                          sm: "18px",
-                        }}
-                      >
-                        {content.children}
-                      </Typography>
-                    </Box>
-                  ),
-                  // span: ({ node, ...content }) =>
-                  //   node?.properties.className == "katex-html" ? (
-                  //     <></>
-                  //   ) : (
-                  //     <span>{content.children}</span>
-                  //   ),
-                  img: ({ node, ...content }) => (
-                    <Box
-                      sx={{
-                        height: "100%",
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <img
-                        src={content.src}
-                        alt={content.alt}
-                        style={{ objectFit: "cover", width: "100%", maxWidth: "300px" }}
-                      />
-                    </Box>
-                  ),
-                }}
-              >
-                {problem.description}
-              </Markdown>
+              <ProblemMarkdown description={problem.description} />
             </Box>
           </Box>
           {problem.choices.map((choice, idx) => (

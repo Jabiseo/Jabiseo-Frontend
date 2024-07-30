@@ -21,7 +21,15 @@ const SelectCertificateUI: React.FC<CertificateProps> = ({ handleIsCertificate }
   return (
     <>
       <ThemeProvider theme={globalTheme}>
-        <MiddleBoxColumn marginBottom="260px" maxWidth="1140px">
+        <MiddleBoxColumn
+          sx={{
+            marginBottom: "260px",
+            maxWidth: "1165px",
+            width: "100%",
+            paddingX: "25px",
+            boxSizing: "border-box",
+          }}
+        >
           <MiddleBoxColumn
             mt={{
               xs: "50px",

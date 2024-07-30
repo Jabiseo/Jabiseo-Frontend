@@ -32,7 +32,7 @@ const ProblemChoiceUI: React.FC<ProblemChoiceUIProps> = React.memo(
           },
           backgroundColor: color,
           fontSize: "1rem",
-          paddingY: 2,
+          paddingY: "12px",
         }}
       >
         {choiceNumber === 0 ? (

@@ -13,22 +13,21 @@ const Footer = () => {
             xs: "40px",
             lg: "60px",
           },
-          px: 2,
           minHeight: "260px",
-          maxWidth: "1140px",
           width: "100%",
+          borderTop: "1px solid var(--c-gray2)",
         }}
       >
-        <Typography
-          component="div"
+        <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "flex-start",
             flexDirection: "column",
-            gap: "8px",
-            maxWidth: "1140px",
             width: "100%",
+            maxWidth: "1165px",
+            paddingX: "25px",
+            boxSizing: "border-box",
           }}
         >
           <Box
@@ -67,7 +66,7 @@ const Footer = () => {
               주소: 서울특별시 강남구 테헤란로 311 아남타워빌딩 7층 | 우편번호 06584
             </Typography>
           </Box>
-        </Typography>
+        </Box>
       </MiddleBoxColumn>
     </ThemeProvider>
   );

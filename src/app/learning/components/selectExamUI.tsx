@@ -18,6 +18,8 @@ const SelectExamUI: React.FC<SelectExamUIProps> = ({
   return (
     <Box
       sx={{
+        display: "flex",
+        flexDirection: "column",
         maxWidth: "520px",
         width: "100%",
         my: "14px",
@@ -39,7 +41,8 @@ const SelectExamUI: React.FC<SelectExamUIProps> = ({
           borderRadius: "14px",
           border: "1px solid var(--c-gray2)",
           padding: "6px",
-          height: { sm: `${leftBoxHeight}px` },
+          height: { md: `${leftBoxHeight}px` },
+          boxSizing: "border-box",
           overflowY: "auto",
         }}
       >

@@ -1,3 +1,4 @@
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const useAppbarState = () => {
@@ -8,7 +9,23 @@ const useAppbarState = () => {
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-    const focusTap = localStorage.getItem("focusTap");
+    const path = window.location.pathname;
+    let focusTap;
+    if (path.includes("bookmark")) {
+      focusTap = "북마크";
+    } else if (path.includes("search")) {
+      focusTap = "검색";
+    } else if (path.includes("mypage")) {
+      focusTap = "마이페이지";
+    } else if (path.includes("login")) {
+      focusTap = "로그인";
+    } else if (path.includes("learning") || path.includes("study") || path.includes("exam")) {
+      focusTap = "문제풀이";
+    } else if (path.includes("assistant")) {
+      focusTap = "학습비서";
+    } else {
+      focusTap = "메인페이지";
+    }
 
     if (focusTap) {
       setFocusTap(focusTap);

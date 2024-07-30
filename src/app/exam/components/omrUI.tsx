@@ -97,8 +97,8 @@ const Omr: React.FC<OmrProps> = ({ setProblemNumber, problems, chooseAnswer }: O
                       alignItems: "center",
                     }}
                     onClick={() => {
-                      setProblemNumber(index + 1);
                       chooseAnswer(idx + 1, index + 1);
+                      setProblemNumber(index + 1);
                     }}
                   >
                     <Box

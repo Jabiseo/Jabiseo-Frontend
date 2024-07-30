@@ -48,10 +48,7 @@ const Appbar = () => {
       <AppBar
         position="fixed"
         sx={{
-          paddingX: {
-            xs: 2,
-            md: 6,
-          },
+          paddingX: "25px",
           boxShadow: "none",
           width: "100%",
           display: "flex",
@@ -60,14 +57,15 @@ const Appbar = () => {
           zIndex: 1000,
           minHeight: "64px",
           backgroundColor: backgroundColor,
+          boxSizing: "border-box",
         }}
       >
         <Box
-          maxWidth="1140px"
           sx={{
             display: "flex",
             width: "100%",
             justifyContent: "space-between",
+            maxWidth: "1165px",
           }}
         >
           <Toolbar

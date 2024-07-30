@@ -27,7 +27,7 @@ const MakeProblemSetUI = () => {
   const { certificateInfo, loading, error } = useCertificateInfo();
   const [questionsCount, setQuestionsCount] = useState(20);
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
-  const [selectedExam, setSelectedExam] = useState("");
+  const [selectedExam, setSelectedExam] = useState("전체 회차");
   const [selectedExamId, setSelectedExamId] = useState<number>(0);
   const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const handleExamChange = (event: SelectChangeEvent<string>) => {
@@ -138,12 +138,9 @@ const MakeProblemSetUI = () => {
   return (
     <ThemeProvider theme={globalTheme}>
       <MiddleBoxColumn
-        maxWidth="1140px"
+        maxWidth="1165px"
         sx={{
-          paddingX: {
-            xs: "25px",
-            md: "0px",
-          },
+          paddingX: "25px",
           boxSizing: "border-box",
         }}
       >
@@ -247,7 +244,7 @@ const MakeProblemSetUI = () => {
                 sm: "48px",
               },
               backgroundColor: "white",
-              border: "2px solid white",
+              border: "2px solid var(--c-gray2)",
               "&:hover": {
                 border: "2px solid var(--c-sub3)",
                 backgroundColor: "white",
@@ -278,7 +275,7 @@ const MakeProblemSetUI = () => {
                 sm: "48px",
               },
               backgroundColor: "white",
-              border: "2px solid white",
+              border: "2px solid var(--c-gray2)",
               "&:hover": {
                 border: "2px solid var(--c-sub3)",
                 backgroundColor: "white",
