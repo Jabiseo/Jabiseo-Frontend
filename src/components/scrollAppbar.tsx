@@ -57,11 +57,7 @@ const ScrollAppbar = ({ isScroll }: { isScroll?: number }) => {
       <AppBar
         position="fixed"
         sx={{
-          paddingX: {
-            sm: "25px",
-            md: "25px",
-            lg: "0px",
-          },
+          paddingX: "25px",
           boxShadow: isScroll && isScroll > 0 ? "rgba(0, 0, 0, 0.2) 0px 0px 14px" : "none",
           width: "100%",
           display: "flex",

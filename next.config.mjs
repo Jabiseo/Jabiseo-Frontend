@@ -11,6 +11,18 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "github.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "dkvmrny1lb9jp.cloudfront.net",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   // svgr 설정

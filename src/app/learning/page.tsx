@@ -1,7 +1,6 @@
 "use client";
 import { MiddleBoxColumn } from "@/src/components/elements/styledElements";
 import ScrollAppbar from "@/src/components/scrollAppbar";
-import { useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import LearningFooter from "../../components/Footer";
 import MakeProblemSetUI from "./components/MakeProblemSet";
@@ -22,8 +21,6 @@ const makeProblemSetBase = () => {
   const handleIsCertificate = () => {
     setisCertificate(true);
   };
-  const theme = useTheme();
-  const isMd = useMediaQuery(theme.breakpoints.down(960));
 
   const handleScroll = () => {
     setisScroll(window.scrollY);
@@ -48,7 +45,7 @@ const makeProblemSetBase = () => {
       ) : (
         <SelectCertificate handleIsCertificate={handleIsCertificate} />
       )}
-      {!isMd && <LearningFooter />}
+      <LearningFooter />
     </MiddleBoxColumn>
   );
 };
