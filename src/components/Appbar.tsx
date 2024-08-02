@@ -27,8 +27,6 @@ const Appbar = () => {
   };
 
   const handleLogout = async () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
     await mainfetch(
       "/auth/logout",
       {
@@ -36,6 +34,8 @@ const Appbar = () => {
       },
       true
     );
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     window.location.href = "/";
   };
 

@@ -18,12 +18,15 @@ interface Options<T> {
 export const mainfetch = async <T>(
   path: string,
   options: Options<T>,
-  needLogin: boolean
+  needLogin: boolean,
+  contentType?: string
 ): Promise<Response> => {
   const url = process.env.NEXT_PUBLIC_SERVER_URL + path;
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-  };
+  const headers: HeadersInit = contentType
+    ? {}
+    : {
+        "Content-Type": "application/json",
+      };
 
   if (needLogin) {
     const accessToken = localStorage.getItem("accessToken");
@@ -38,9 +41,10 @@ export const mainfetch = async <T>(
   const fetchOptions: RequestInit = {
     method: options.method,
     headers,
-    body: options.body ? JSON.stringify(options.body) : null,
+    body: options.body
+      ? ((contentType ? options.body : JSON.stringify(options.body)) as BodyInit)
+      : null,
   };
-
   let response = await fetch(url, fetchOptions);
   if (response.status === 401 && needLogin) {
     const newAccessToken = await refreshTokenInterceptor();

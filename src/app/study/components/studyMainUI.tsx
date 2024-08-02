@@ -1,7 +1,7 @@
 "use client";
 
+import { mainfetch } from "@/src/api/apis/mainFetch";
 import { globalTheme } from "@/src/components/globalStyle";
-import useProblems from "@/src/hooks/useProblems";
 import {
   Box,
   CircularProgress,
@@ -23,7 +23,6 @@ import SolutionUI from "../components/solutionUI";
 import StudyFooterUI from "./studyFooterUI";
 import StudyInfoUI from "./studyInfoUI";
 import SubmitResultUI from "./submitResultUI";
-import { mainfetch } from "@/src/api/apis/mainFetch";
 
 interface StudyMainUIProps {
   getProblems: ProblemViewType[];
