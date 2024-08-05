@@ -1,6 +1,7 @@
 import NotiIcon from "@/public/icons/noti.svg";
 import SearchIcon from "@/public/icons/search.svg";
-import { Avatar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import PersionIcon from "@/public/icons/person-line-nofill.svg";
+import { Box, Button, Toolbar, Typography } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 interface AppbarToolbarUIProps {
@@ -185,6 +186,18 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
           </>
         ) : (
           <>
+            <NoHoverTouchButton
+              href="/mypage"
+              sx={{
+                padding: 0,
+                minHeight: 0,
+                minWidth: 0,
+                mx: 1,
+                display: { xs: "none", md: "flex" },
+              }}
+            >
+              <PersionIcon width={28} height={28} color={fontColor} />
+            </NoHoverTouchButton>
             <NoHoverTouchButton href="/noti" sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}>
               <NotiIcon width={24} height={24} color={fontColor} />
             </NoHoverTouchButton>
@@ -192,11 +205,8 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
               href="/search"
               sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}
             >
-              <SearchIcon width={24} height={24} color={fontColor} />
+              <SearchIcon width={28} height={28} color={fontColor} />
             </NoHoverTouchButton>
-            <IconButton href="/mypage" sx={{ display: { xs: "none", md: "flex" } }}>
-              <Avatar alt="User" src="user-avatar.jpg" />
-            </IconButton>
           </>
         )}
       </Box>

@@ -10,6 +10,7 @@ interface AppbarDrawerProps {
   toggleDrawer: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void;
   isLogin: boolean;
   handleLogout: () => void;
+  userInfo?: { nickname: string; profileImage: string };
 }
 
 const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
@@ -17,6 +18,7 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
   toggleDrawer,
   isLogin,
   handleLogout,
+  userInfo,
 }: AppbarDrawerProps) => {
   return (
     <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
@@ -69,11 +71,24 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
                 alignItems: "center",
               }}
             >
-              <IconButton>
-                <Avatar alt="User" src="user-avatar.jpg" />
+              <IconButton
+                sx={{
+                  borderRadius: "50%",
+                }}
+                href="/mypage"
+              >
+                <Image
+                  src={userInfo ? userInfo.profileImage : ""}
+                  alt="profile"
+                  width={40}
+                  height={40}
+                  style={{
+                    borderRadius: "50%",
+                  }}
+                />
               </IconButton>
               <Typography variant="h4" fontSize={"16px"} color="var(--c-gray5)">
-                닉네임입니다
+                {userInfo?.nickname}
               </Typography>
             </Box>
           ) : (
