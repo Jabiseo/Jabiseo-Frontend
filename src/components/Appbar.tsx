@@ -8,7 +8,7 @@ import AppbarToolbarUI from "./appbarToolbarUI";
 import { globalTheme } from "./globalStyle";
 import { mainfetch } from "../api/apis/mainFetch";
 const Appbar = () => {
-  const { isLogin, certificate, focusTap } = useAppbarState();
+  const { isLogin, certificate, focusTap, userInfo } = useAppbarState();
   const [open, setOpen] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("white");
   const [fontColor, setFontColor] = useState("black");
@@ -104,6 +104,7 @@ const Appbar = () => {
           toggleDrawer={toggleDrawer}
           isLogin={isLogin}
           handleLogout={handleLogout}
+          userInfo={userInfo}
         />
       </AppBar>
     </ThemeProvider>

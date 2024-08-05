@@ -1,19 +1,23 @@
 "use client";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import BookMarkFillIcon from "@/public/icons/bookmark-fill.svg";
+import BookMarkLineIcon from "@/public/icons/bookmark-line.svg";
+import SirenLineIcon from "@/public/icons/siren-line.svg";
+import NoteCloseIcon from "@/public/icons/note-close.svg";
+import NoteOpenIcon from "@/public/icons/note-open.svg";
+import { Box, Collapse, Container, Typography } from "@mui/material";
 import { memo, useEffect, useState } from "react";
-import { Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle } from "react-icons/bs";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
+import ProblemChoiceUI from "./problemChoiceUI";
 
 const ProblemItem: React.FC<{
   props: ProblemViewType;
-  problemNumber: number;
-  gotoProblem: (number: number) => void;
-}> = memo(({ props, problemNumber, gotoProblem }) => {
+  isSm: boolean;
+}> = memo(({ props, isSm }) => {
   const problem = props;
-  const circles = [Bs1Circle, Bs2Circle, Bs3Circle, Bs4Circle, Bs5Circle];
+  const [viewSolution, setViewSolution] = useState(false);
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
   const changeColor = () => {
     if (problem.chooseNumber === 0) {
@@ -38,14 +42,16 @@ const ProblemItem: React.FC<{
   useEffect(() => {
     changeColor();
   }, []);
-
+  const handleViewSolution = () => {
+    setViewSolution(!viewSolution);
+  };
   return (
     <>
       <Container
         maxWidth={false}
         sx={{
           minHeight: "430px",
-          paddingTop: 2,
+          padding: "32px 24px",
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
@@ -53,93 +59,178 @@ const ProblemItem: React.FC<{
             problem.chooseNumber === 0
               ? "1px solid #ccc"
               : problem.chooseNumber === problem.answerNumber
-              ? "1px solid var(--c-light-green)"
-              : "1px solid var(--c-light-red)",
-          borderRadius: 2,
-          mb: 2,
+              ? "1px solid var(--c-green)"
+              : "1px solid var(--c-red)",
+          borderRadius: "12px",
+          mb: "20px",
           "&:hover": {
             cursor: "pointer",
             border: "2px solid black",
           },
         }}
-        onClick={() => gotoProblem(problemNumber)}
       >
-        <Box sx={{ marginBottom: 2 }}>
-          <Box
-            sx={{
-              fontSize: "16px",
-              fontFamily: "Pretendard-Regular",
-            }}
-          >
-            <Typography variant="body1">1번</Typography>
+        <Box>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
             <Box
               sx={{
-                fontSize: { xs: "1.1rem", md: "1rem" },
-                overflowWrap: "break-word",
+                "&:hover": {
+                  cursor: "pointer",
+                },
+                marginRight: 1,
+              }}
+              onClick={handleViewSolution}
+            >
+              {viewSolution ? (
+                <NoteOpenIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
+              ) : (
+                <NoteCloseIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
+              )}
+            </Box>
+            <Box
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+                marginRight: 1,
+              }}
+              onClick={() => {}}
+            >
+              {problem.isBookmark ? (
+                <BookMarkFillIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
+              ) : (
+                <BookMarkLineIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
+              )}
+            </Box>
+            <Box
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+              onClick={() => {}}
+            >
+              <SirenLineIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
+            </Box>
+          </Box>
+          <Typography
+            variant="subtitle1"
+            fontSize={{
+              xs: "12px",
+              sm: "18px",
+            }}
+          >
+            {problem.problemNumber}. &nbsp;
+            <Typography
+              variant="subtitle1"
+              component="span"
+              color="var(--c-gray4)"
+              fontSize={{
+                xs: "12px",
+                sm: "18px",
               }}
             >
-              <Markdown
-                remarkPlugins={[remarkMath]}
-                rehypePlugins={[rehypeKatex, rehypeRaw]}
-                components={{
-                  p: ({ node, ...content }) => (
-                    <Box
-                      sx={{
-                        width: "100%",
+              ({problem.examInfo.description})
+            </Typography>
+          </Typography>
+          <Box
+            sx={{
+              overflowWrap: "break-word",
+            }}
+          >
+            <Markdown
+              remarkPlugins={[remarkMath]}
+              rehypePlugins={[rehypeKatex, rehypeRaw]}
+              components={{
+                p: ({ node, ...content }) => (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      overflowWrap: "break-word",
+                    }}
+                  >
+                    <Typography
+                      variant="body1"
+                      fontSize={{
+                        xs: "12px",
+                        sm: "18px",
                       }}
                     >
                       {content.children}
-                    </Box>
-                  ),
-                  img: ({ node, ...content }) => (
-                    <Box
-                      sx={{
-                        height: "100%",
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <img
-                        src={content.src}
-                        alt={content.alt}
-                        style={{ objectFit: "cover", width: "100%", maxWidth: "300px" }}
-                      />
-                    </Box>
-                  ),
-                }}
-              >
-                {problem.description}
-              </Markdown>
-            </Box>
-          </Box>
-          <Grid container>
-            {problem.choices.map((choice, idx) => (
-              <Grid item xs={12} key={idx}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    borderRadius: 2,
-                    backgroundColor: colors[idx],
-                    fontSize: { xs: "1rem", md: "1rem" },
-                  }}
-                >
-                  <Box
-                    mx={2}
-                    sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-                  >
-                    {circles[idx].call(null, { size: 20 })}
+                    </Typography>
                   </Box>
-                  <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex, rehypeRaw]}>
-                    {choice.choice}
-                  </Markdown>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+                ),
+                img: ({ node, ...content }) => (
+                  <Box
+                    sx={{
+                      height: "100%",
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <img
+                      src={content.src}
+                      alt={content.alt}
+                      style={{ objectFit: "cover", width: "100%", maxWidth: "300px" }}
+                    />
+                  </Box>
+                ),
+              }}
+            >
+              {problem.description}
+            </Markdown>
+          </Box>
         </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            marginTop: "16px",
+          }}
+        >
+          {problem.choices.map((choice, idx) => (
+            <Box
+              sx={{
+                flexBasis: "100%",
+              }}
+            >
+              <ProblemChoiceUI key={idx} choiceNumber={idx} problem={problem} color={colors[idx]} />
+            </Box>
+          ))}
+        </Box>
+        <Collapse in={viewSolution}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              marginTop: "16px",
+              backgroundColor: "var(--c-gray1)",
+              padding: "20px",
+              boxSizing: "border-box",
+              borderRadius: "12px",
+            }}
+          >
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: "12px", sm: "18px" },
+                marginBottom: "10px",
+              }}
+            >
+              해설
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                whiteSpace: "pre-wrap",
+                overflowWrap: "break-word",
+                fontSize: { xs: "12px", sm: "18px" },
+              }}
+            >
+              {problem.solution}
+            </Typography>
+          </Box>
+        </Collapse>
       </Container>
     </>
   );

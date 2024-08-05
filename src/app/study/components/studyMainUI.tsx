@@ -28,9 +28,15 @@ interface StudyMainUIProps {
   getProblems: ProblemViewType[];
   loading: boolean;
   error: string | null;
+  certificateInfo: CertificateType;
 }
 
-const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }) => {
+const StudyMainUI: React.FC<StudyMainUIProps> = ({
+  getProblems,
+  loading,
+  error,
+  certificateInfo,
+}) => {
   const [problem, setProblem] = useState<ProblemViewType | null>(null);
   const [problems, setProblems] = useState<ProblemViewType[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
@@ -96,7 +102,7 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({ getProblems, loading, error }
   );
 
   const sendResult = () => {
-    localStorage.setItem("problems", JSON.stringify(problems));
+    localStorage.setItem("problems", JSON.stringify({ problems: [...problems], certificateInfo }));
     router.push("/result");
   };
 

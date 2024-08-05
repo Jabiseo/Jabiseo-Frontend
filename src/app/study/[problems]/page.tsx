@@ -23,7 +23,12 @@ const studyPage = () => {
     >
       <Appbar />
       <StudyHeader certificateName={certificateInfo!.name} />
-      <StudyMainUI getProblems={getProblems!} loading={loading} error={error} />
+      <StudyMainUI
+        getProblems={getProblems!}
+        certificateInfo={certificateInfo!}
+        loading={loading}
+        error={error}
+      />
     </MiddleBoxColumn>
   );
 };
