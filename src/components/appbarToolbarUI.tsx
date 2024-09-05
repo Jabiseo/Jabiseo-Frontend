@@ -4,6 +4,7 @@ import PersionIcon from "@/public/icons/person-line-nofill.svg";
 import { Box, Button, Toolbar, Typography } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import favicon from "@/public/favicon.png";
 interface AppbarToolbarUIProps {
   isLogin: boolean;
   handleLogout: () => void;
@@ -49,12 +50,7 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
               localStorage.setItem("focusTap", "");
             }}
           >
-            <Image
-              src="https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
-              alt="Sitemark"
-              width={20}
-              height={20}
-            />
+            <Image src={favicon} alt="favicon" width={40} height={40} />
             <Typography variant="h1" sx={{ color: fontColor, ml: 2 }} fontSize={"24px"}>
               자비서
             </Typography>

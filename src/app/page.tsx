@@ -1,16 +1,24 @@
-// "use client";
-import { Container } from "@mui/material";
-import Appbar from "../components/Appbar";
+"use client";
+import { useEffect, useState } from "react";
 import MainHeader from "../components/MainHeader";
-// import { useEffect } from "react";
+import ScrollAppbar from "../components/scrollAppbar";
 
 export default function Home() {
-  // useEffect(() => {
-  //   localStorage.setItem("focusTap", "");
-  // }, []);
+  const [isScroll, setisScroll] = useState(0);
+
+  const handleScroll = () => {
+    setisScroll(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll); //clean up
+    };
+  }, []);
   return (
     <>
-      <Appbar />
+      <ScrollAppbar isScroll={isScroll} />
       <MainHeader />
     </>
   );

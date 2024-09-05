@@ -34,3 +34,10 @@ interface ProblemViewType extends Problem {
   viewTheory: boolean;
   problemNumber: number;
 }
+
+interface SubmitResultType {
+  learningTime: number;
+  certificateId: number;
+  learningMode: "STUDY" | "EXAM";
+  problems: { problemId: number; choice: number }[];
+}

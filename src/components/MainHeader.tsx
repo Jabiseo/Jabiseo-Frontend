@@ -9,12 +9,8 @@ const MainHeader = () => {
       <ThemeProvider theme={globalTheme}>
         <Box
           sx={{
-            mt: {
-              xs: "56px",
-              sm: "64px",
-            },
             padding: "0",
-            backgroundImage: "url('/headerImage.png')",
+            backgroundImage: "url('/headerImage.avif')",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             minHeight: {

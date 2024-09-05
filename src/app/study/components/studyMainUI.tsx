@@ -101,7 +101,30 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({
     [problems, problem]
   );
 
-  const sendResult = () => {
+  const sendResult = async () => {
+    const submitResult: SubmitResultType = {
+      learningTime: submitNumberTime!,
+      certificateId: certificateInfo.certificateId,
+      learningMode: "STUDY",
+      problems: problems
+        .filter(problem => problem.chooseNumber !== -1)
+        .map(problem => {
+          return {
+            problemId: problem.problemId,
+            choice: problem.chooseNumber,
+          };
+        }),
+    };
+    if (localStorage.getItem("accessToken") === null) return;
+    await mainfetch(
+      "/learning",
+      {
+        method: "POST",
+        body: submitResult,
+      },
+      true
+    );
+
     localStorage.setItem("problems", JSON.stringify({ problems: [...problems], certificateInfo }));
     router.push("/result");
   };
