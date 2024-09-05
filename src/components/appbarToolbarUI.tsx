@@ -4,7 +4,7 @@ import PersionIcon from "@/public/icons/person-line-nofill.svg";
 import { Box, Button, Toolbar, Typography } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import favicon from "@/public/favicon.png";
+import favicon from "@/public/favicon.ico";
 interface AppbarToolbarUIProps {
   isLogin: boolean;
   handleLogout: () => void;
