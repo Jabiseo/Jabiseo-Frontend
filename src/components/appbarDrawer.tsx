@@ -3,7 +3,7 @@ import CloseIcon from "@/public/icons/close-line.svg";
 import PersonLineIcon from "@/public/icons/person-line.svg";
 import { Box, Button, Divider, Drawer, IconButton, Typography } from "@mui/material";
 import Image from "next/image";
-import favicon from "@/public/favicon.png";
+import favicon from "@/public/favicon.ico";
 interface AppbarDrawerProps {
   open: boolean;
   toggleDrawer: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void;
