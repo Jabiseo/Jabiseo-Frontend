@@ -27,8 +27,14 @@ interface ExamMainUIProps {
   getProblems: ProblemViewType[];
   loading: boolean;
   error: string | null;
+  certificateInfo: CertificateType;
 }
-const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) => {
+const ExamMainUI: React.FC<ExamMainUIProps> = ({
+  getProblems,
+  loading,
+  error,
+  certificateInfo,
+}) => {
   const [problem, setProblem] = useState<ProblemViewType | null>(null);
   const [problems, setProblems] = useState<ProblemViewType[]>([]);
   const [problemNumber, setProblemNumber] = useState<number>(1);
@@ -90,8 +96,31 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({ getProblems, loading, error }) 
     [problems, problem]
   );
 
-  const sendResult = () => {
-    localStorage.setItem("problems", JSON.stringify(problems));
+  const sendResult = async () => {
+    const submitResult: SubmitResultType = {
+      learningTime: submitNumberTime!,
+      certificateId: certificateInfo.certificateId,
+      learningMode: "EXAM",
+      problems: problems
+        .filter(problem => problem.chooseNumber !== -1)
+        .map(problem => {
+          return {
+            problemId: problem.problemId,
+            choice: problem.chooseNumber,
+          };
+        }),
+    };
+    if (localStorage.getItem("accessToken") === null) return;
+    await mainfetch(
+      "/learning",
+      {
+        method: "POST",
+        body: submitResult,
+      },
+      true
+    );
+
+    localStorage.setItem("problems", JSON.stringify({ problems: [...problems], certificateInfo }));
     router.push("/result");
   };
 

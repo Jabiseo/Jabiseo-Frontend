@@ -1,26 +1,18 @@
 "use client";
 import HamburgerIcon from "@/public/icons/hamburger.svg";
 import { AppBar, Box, ThemeProvider, Toolbar } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { mainfetch } from "../api/apis/mainFetch";
 import useAppbarState from "../hooks/useAppbarState";
 import AppbarDrawer from "./appbarDrawer";
 import AppbarToolbarUI from "./appbarToolbarUI";
 import { globalTheme } from "./globalStyle";
-import { mainfetch } from "../api/apis/mainFetch";
-const Appbar = () => {
+const Appbar = ({ background }: { background?: boolean }) => {
   const { isLogin, certificate, focusTap, userInfo } = useAppbarState();
   const [open, setOpen] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("white");
   const [fontColor, setFontColor] = useState("black");
-
   const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // certificate가 로드되었을 때 로딩 상태를 false로 변경
-    if (certificate !== undefined) {
-      setIsLoading(false);
-    }
-  }, [certificate]);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -36,12 +28,9 @@ const Appbar = () => {
     );
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userInfo");
     window.location.href = "/";
   };
-
-  if (isLoading) {
-    return null; // 또는 로딩 인디케이터를 표시
-  }
 
   return (
     <ThemeProvider theme={globalTheme}>
@@ -57,6 +46,7 @@ const Appbar = () => {
           zIndex: 1000,
           minHeight: "64px",
           backgroundColor: backgroundColor,
+          backgroundImage: background ? "url('/appbarImage.png')" : "none",
           boxSizing: "border-box",
         }}
       >

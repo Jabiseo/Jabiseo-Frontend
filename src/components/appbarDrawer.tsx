@@ -1,10 +1,9 @@
 import ArrowRightIcon from "@/public/icons/arrow-right.svg";
 import CloseIcon from "@/public/icons/close-line.svg";
 import PersonLineIcon from "@/public/icons/person-line.svg";
-import { Avatar, Box, Divider, Drawer, IconButton, Typography } from "@mui/material";
+import { Box, Button, Divider, Drawer, IconButton, Typography } from "@mui/material";
 import Image from "next/image";
-import { NoHoverButton } from "./elements/styledElements";
-
+import favicon from "@/public/favicon.png";
 interface AppbarDrawerProps {
   open: boolean;
   toggleDrawer: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void;
@@ -45,12 +44,7 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
               alignItems: "center",
             }}
           >
-            <Image
-              src="https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
-              alt="Sitemark"
-              width={20}
-              height={20}
-            />
+            <Image src={favicon} alt="Sitemark" width={20} height={20} />
             <Typography variant="h1" sx={{ ml: 2 }} fontSize={"24px"}>
               자비서
             </Typography>
@@ -92,8 +86,9 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
               </Typography>
             </Box>
           ) : (
-            <NoHoverButton
+            <Button
               href="/login"
+              disableTouchRipple
               sx={{
                 width: "100%",
                 backgroundColor: "var(--c-sub5)",
@@ -117,8 +112,8 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
                   로그인을 해주세요
                 </Typography>
               </Box>
-              <ArrowRightIcon width={22} height={22} />
-            </NoHoverButton>
+              <ArrowRightIcon width={22} height={22} color={"white"} />
+            </Button>
           )}
         </Box>
         <Typography

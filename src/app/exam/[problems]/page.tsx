@@ -3,11 +3,7 @@ import Appbar from "@/src/components/Appbar";
 import { Box } from "@mui/material";
 import ExamMainUI from "../components/examMainUI";
 import useProblems from "@/src/hooks/useProblems";
-import dynamic from "next/dynamic";
-
-const ExamHeader = dynamic(() => import("@/src/app/exam/components/examHeader"), {
-  loading: () => <p>Header Loading</p>,
-});
+import ExamHeader from "../components/examHeader";
 
 const ExamPage = () => {
   const { getProblems, certificateInfo, loading, error } = useProblems();
@@ -27,7 +23,12 @@ const ExamPage = () => {
     >
       <Appbar />
       <ExamHeader certificateName={certificateInfo!.name} />
-      <ExamMainUI getProblems={getProblems!} loading={loading} error={error} />
+      <ExamMainUI
+        getProblems={getProblems!}
+        loading={loading}
+        error={error}
+        certificateInfo={certificateInfo!}
+      />
     </Box>
   );
 };

@@ -9,7 +9,7 @@ const LearningHeader = () => {
         <Box
           sx={{
             padding: "0",
-            backgroundImage: "url('/headerImage.png')",
+            backgroundImage: "url('/headerImage.avif')",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             minHeight: {

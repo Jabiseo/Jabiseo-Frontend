@@ -2,11 +2,12 @@
 import { MiddleBoxColumn } from "@/src/components/elements/styledElements";
 import ScrollAppbar from "@/src/components/scrollAppbar";
 import { useEffect, useState } from "react";
-import LearningFooter from "../../components/Footer";
+
 import MakeProblemSetUI from "./components/MakeProblemSet";
 import LearningHeader from "./components/learningHeader";
 import SelectCertificate from "./components/selectCertificate";
 import StatusBox from "./components/statusBox";
+import Footer from "@/src/components/Footer";
 
 const makeProblemSetBase = () => {
   const [isCertificate, setisCertificate] = useState(false);
@@ -45,7 +46,7 @@ const makeProblemSetBase = () => {
       ) : (
         <SelectCertificate handleIsCertificate={handleIsCertificate} />
       )}
-      <LearningFooter />
+      <Footer />
     </MiddleBoxColumn>
   );
 };
