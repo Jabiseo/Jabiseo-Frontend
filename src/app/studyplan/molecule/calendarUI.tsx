@@ -50,7 +50,7 @@ const CalendarUI = memo(
     useEffect(() => {
       const datesOfMonth = getDatesOfMonth(viewDate, activePlanData.createdAt, planDatas);
       setDates(datesOfMonth);
-    }, [viewDate]);
+    }, [viewDate, activePlanData.createdAt, planDatas]);
     const handleViewDate = (goto: number) => {
       // 만약 goto가 -1 이면 전달로 이동, 1이면 다음달로 이동
       const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + goto);
@@ -87,7 +87,11 @@ const CalendarUI = memo(
               cursor: "pointer",
             }}
           >
-            <ArrowLeftIcon width={22} height={22} color={"var(--c-gray3)"} />
+            <ArrowLeftIcon
+              width={isXs ? 16 : 22}
+              height={isXs ? 16 : 22}
+              color={"var(--c-gray3)"}
+            />
           </Box>
           <Typography variant="h1" fontSize={isXs ? "12px" : isSm ? "16px" : "24px"} marginX="24px">
             {viewDate.getFullYear()}년 {viewDate.getMonth() + 1}월
@@ -98,7 +102,11 @@ const CalendarUI = memo(
               cursor: "pointer",
             }}
           >
-            <ArrowRightIcon width={22} height={22} color={"var(--c-gray3)"} />
+            <ArrowRightIcon
+              width={isXs ? 16 : 22}
+              height={isXs ? 16 : 22}
+              color={"var(--c-gray3)"}
+            />
           </Box>
         </Box>
         <Box
@@ -167,6 +175,7 @@ const CalendarUI = memo(
                         fullDay={date.fullDay}
                         week={date.week}
                         achive={date.achive === 0}
+                        cursor={date.disabled || !date.nowMonth ? "" : "pointer"}
                       />
                     </Box>
                   );
@@ -228,7 +237,7 @@ const CalendarUI = memo(
                     isXs={isXs}
                     isSm={isSm}
                     handleViewWeek={week => {}}
-                    achive={week.achive === -1}
+                    achive={week.achive === 0}
                   />
                 </Box>
               );

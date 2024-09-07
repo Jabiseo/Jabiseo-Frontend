@@ -16,15 +16,15 @@ const renderTypeDescription = (activityType: Plan["activityType"], targetValue: 
     case "PROBLEM":
       return "문제 풀이 " + targetValue + "개 풀기 ";
     case "TIME":
-      return "공부 " + targetValue + "시간 하기";
+      return "공부 " + Math.floor(targetValue / 60) + "시간 하기";
   }
 };
 
 const PlanListItem: React.FC<PlanListItemProps> = ({ planItem, index }) => {
-  const progress = Math.min(
-    100,
-    Math.floor((planItem.completedValue! / planItem.targetValue) * 100)
-  );
+  const progress =
+    planItem.targetValue === 0
+      ? 0
+      : Math.min(100, Math.floor((planItem.completedValue! / planItem.targetValue) * 100));
   return (
     <Box
       sx={{

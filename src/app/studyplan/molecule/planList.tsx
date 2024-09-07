@@ -83,24 +83,28 @@ const PlanList: React.FC<PlanListProps> = ({ planItems, text, handlePlanType }) 
           </Typography>
         </Box>
       </Box>
-      <Box
-        sx={{
-          width: "100%",
-          backgroundColor: "white",
-          borderRadius: {
-            xs: "0px",
-            sm: "12px",
-          },
-          border: {
-            xs: "none",
-            sm: "1px solid var(--c-gray2)",
-          },
-        }}
-      >
-        {planItems.map((plan, index) => {
-          return <PlanListItem index={index + 1} planItem={plan} key={plan.planItemId} />;
-        })}
-      </Box>
+      {planItems.length === 0 ? (
+        <Typography>문제 풀이 기록이 없습니다.</Typography>
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            backgroundColor: "white",
+            borderRadius: {
+              xs: "0px",
+              sm: "12px",
+            },
+            border: {
+              xs: "none",
+              sm: "1px solid var(--c-gray2)",
+            },
+          }}
+        >
+          {planItems.map((plan, index) => {
+            return <PlanListItem index={index + 1} planItem={plan} key={index} />;
+          })}
+        </Box>
+      )}
     </Box>
   );
 };
