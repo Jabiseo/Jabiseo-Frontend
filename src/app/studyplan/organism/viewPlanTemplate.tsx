@@ -1,17 +1,10 @@
-import {
-  ActivePlanType,
-  CalendarType,
-  Plan,
-  templan,
-  ViewPlanType,
-} from "@/src/api/types/studyplan";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { mainfetch } from "@/src/api/apis/mainFetch";
+import { ActivePlanType, CalendarType, Plan } from "@/src/api/types/studyplan";
+import { Box, Typography } from "@mui/material";
+import { differenceInDays, format } from "date-fns";
+import { useCallback, useEffect, useState } from "react";
 import CalendarUI from "../molecule/calendarUI";
 import PlanList from "../molecule/planList";
-import { useEffect, useState } from "react";
-import { mainfetch } from "@/src/api/apis/mainFetch";
-import { differenceInDays, format, formatDistance, subDays } from "date-fns";
-import getDatesOfMonth from "../api/calculateDate";
 
 function formatDayDate(dateString: string) {
   // 날짜 문자열을 '-' 기준으로 분리
@@ -28,63 +21,94 @@ const ViewPlanTemplate = ({
   handlePlanType: (type: "MAKE" | "EDIT" | "VIEW") => void;
   activePlanData: ActivePlanType;
 }) => {
-  const tem = templan;
   // 보고있는 연도와 달을 저장하는 state
   const [viewMonth, setViewMonth] = useState(new Date());
   // 보고있는 날짜를 저장하는 state
-  const [viewDay, setViewDay] = useState(format(new Date(), "yyyy-MM-dd"));
-  const [viewWeek, setViewWeek] = useState(1);
-  const [planDatas, setPlanDatas] = useState<CalendarType>(templan);
+  const [viewDay, setViewDay] = useState<string>(format(new Date(), "yyyy-MM-dd"));
+  const [viewWeek, setViewWeek] = useState<number>(1);
+  const [planDatas, setPlanDatas] = useState<CalendarType | undefined>();
   const [dailyProgress, setDailyProgress] = useState<Plan[]>();
   const [weeklyProgress, setWeeklyProgress] = useState<Plan[]>();
 
   useEffect(() => {
-    const getDailyProgress = tem.dailyProgress.find(item => item.day === viewDay);
-    setDailyProgress(getDailyProgress!.planItems);
-  }, [viewDay]);
+    if (!planDatas) return;
+    const getDailyProgress = planDatas.dailyProgress.find(item => item.day === viewDay);
+    if (getDailyProgress) {
+      getDailyProgress.planItems.map(plan => {
+        if (plan.activityType === "TIME") {
+          plan.completedValue = Math.floor(plan.completedValue! / 60);
+          plan.targetValue = Math.floor(plan.targetValue! / 60);
+        }
+      });
+    }
+    setDailyProgress(getDailyProgress ? getDailyProgress.planItems : []);
+  }, [viewDay, planDatas]);
 
   useEffect(() => {
-    const getWeeklyProgress = tem.weeklyProgress.find(item => item.week === viewWeek);
-    setWeeklyProgress(getWeeklyProgress!.planItems);
-  }, [viewWeek]);
+    if (!planDatas) return;
+    const getWeeklyProgress = planDatas.weeklyProgress.find(item => item.week === viewWeek);
+    if (getWeeklyProgress) {
+      getWeeklyProgress.planItems.map(plan => {
+        if (plan.activityType === "TIME") {
+          plan.completedValue = Math.floor(plan.completedValue! / 60);
+          plan.targetValue = Math.floor(plan.targetValue! / 60);
+        }
+      });
+    }
+    setWeeklyProgress(getWeeklyProgress ? getWeeklyProgress.planItems : []);
+  }, [viewWeek, planDatas]);
 
-  const handleViewDay = (day: string) => {
+  const handleViewDay = useCallback((day: string) => {
     setViewDay(day);
-  };
+  }, []);
 
-  const handleViewMonth = (date: Date) => {
+  const handleViewMonth = useCallback((date: Date) => {
     setViewMonth(date);
-  };
+  }, []);
 
-  const handleViewWeek = (week: number) => {
+  const handleViewWeek = useCallback((week: number) => {
     setViewWeek(week);
+  }, []);
+
+  const handleDeletePlan = async () => {
+    const res = await mainfetch(
+      `/plans/${activePlanData.planId}`,
+      {
+        method: "DELETE",
+      },
+      true
+    );
+    if (!res.ok) {
+      alert("플랜 삭제 실패");
+      return;
+    }
+
+    window.location.reload();
   };
 
-  // useEffect(() => {
-  //   const getPlansForMonth = async () => {
-  //     const res = await mainfetch(
-  //       `/plans/${activePlanData.planId}/calender?
-  //       year=${viewMonth.getFullYear()}&month=${viewMonth.getMonth() + 1}`,
-  //       {
-  //         method: "GET",
-  //       },
-  //       true
-  //     );
+  useEffect(() => {
+    const getPlansForMonth = async () => {
+      const res = await mainfetch(
+        `/plans/${activePlanData.planId}/calender?year=${viewMonth.getFullYear()}&month=${
+          viewMonth.getMonth() + 1
+        }`,
+        {
+          method: "GET",
+        },
+        true
+      );
 
-  //     if (!res.ok) {
-  //       throw new Error("Failed to fetch plans");
-  //     }
-  //     const data = await res.json();
-  //     setPlanDatas(data);
-  //   };
-  //   getPlansForMonth();
-  // },[viewMonth]);
-  if (
-    !dailyProgress ||
-    !weeklyProgress ||
-    dailyProgress.length === 0 ||
-    weeklyProgress.length === 0
-  ) {
+      if (!res.ok) {
+        throw new Error("Failed to fetch plans");
+      }
+      const data = await res.json();
+
+      setPlanDatas(data);
+    };
+    getPlansForMonth();
+  }, [viewMonth]);
+
+  if (!planDatas || !dailyProgress || !weeklyProgress) {
     return <div>loading...</div>;
   }
 
@@ -92,6 +116,7 @@ const ViewPlanTemplate = ({
     <Box
       sx={{
         width: "100%",
+        minHeight: "100vh",
         boxSizing: "border-box",
       }}
     >
@@ -144,10 +169,6 @@ const ViewPlanTemplate = ({
             xs: "24px",
             sm: "36px",
           }}
-          marginLeft={{
-            xs: "25px",
-            sm: "0px",
-          }}
           textAlign="left"
         >
           학습 플랜 현황
@@ -160,6 +181,7 @@ const ViewPlanTemplate = ({
           planDatas={planDatas}
         />
       </Box>
+
       <Box
         sx={{
           width: "100%",
@@ -184,6 +206,31 @@ const ViewPlanTemplate = ({
           handlePlanType={handlePlanType}
         />
       </Box>
+      <Typography
+        variant="subtitle1"
+        mt={{
+          xs: "20px",
+          sm: "30px",
+        }}
+        fontSize={{
+          xs: "12px",
+          sm: "16px",
+        }}
+        sx={{
+          textDecoration: "underline",
+          "&:hover": {
+            cursor: "pointer",
+          },
+        }}
+        ml={{
+          xs: "25px",
+          sm: "0px",
+        }}
+        color="var(--c-red)"
+        onClick={handleDeletePlan}
+      >
+        플랜 삭제
+      </Typography>
     </Box>
   );
 };

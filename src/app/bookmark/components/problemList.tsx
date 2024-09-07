@@ -1,8 +1,8 @@
-import BookMarkLineIcon from "@/public/icons/bookmark-line.svg";
 import BookMarkFillIcon from "@/public/icons/bookmark-fill.svg";
+import BookMarkLineIcon from "@/public/icons/bookmark-line.svg";
 import { globalTheme } from "@/src/components/globalStyle";
 import { CheckBox } from "@mui/icons-material";
-import { Box, Card, CardContent, Pagination, ThemeProvider, Typography } from "@mui/material";
+import { Box, Pagination, ThemeProvider, Typography } from "@mui/material";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";

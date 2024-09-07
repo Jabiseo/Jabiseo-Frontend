@@ -52,7 +52,7 @@ const EditPlanTemplate = ({
       "/plans",
       {
         method: "PUT",
-        body: JSON.stringify(makePlanData),
+        body: makePlanData,
       },
       true
     );

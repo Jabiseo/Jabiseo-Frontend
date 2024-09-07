@@ -46,7 +46,7 @@ const MakePlanTemplate = ({
       "/plans",
       {
         method: "POST",
-        body: JSON.stringify(makePlanData),
+        body: makePlanData,
       },
       true
     );

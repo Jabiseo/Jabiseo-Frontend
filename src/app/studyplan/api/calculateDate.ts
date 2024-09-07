@@ -129,7 +129,6 @@ const getDatesOfMonth = (date: Date, createdAt: string, calendarDatas: CalendarT
         360
     );
   });
-
   return {
     dates: returnDates,
     weeks,

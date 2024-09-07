@@ -37,36 +37,7 @@ const StudyPlan = () => {
       setActivePlanData(data);
       setPlanType("VIEW");
     };
-    // getActivePlan();
-    const tem: ActivePlanType = {
-      planId: 12345,
-      certificate: {
-        certificateId: 2,
-        name: "정보처리기능사",
-      },
-      endAt: "2024-09-06",
-      createdAt: "2024-09-03",
-      dailyPlanItems: [
-        {
-          planItemId: 1,
-          activityType: "EXAM",
-          targetValue: 2,
-        },
-      ],
-      weeklyPlanItems: [
-        {
-          planItemId: 1,
-          activityType: "EXAM",
-          targetValue: 3,
-        },
-        {
-          planItemId: 4,
-          activityType: "STUDY",
-          targetValue: 11,
-        },
-      ],
-    };
-    setActivePlanData(tem);
+    getActivePlan();
   }, []);
   return (
     <ThemeProvider theme={globalTheme}>

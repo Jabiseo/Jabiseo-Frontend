@@ -53,7 +53,7 @@ const useMakePlanStates = () => {
       if (plan.activityType === v.activityType) {
         return {
           ...plan,
-          targetValue: value,
+          targetValue: plan.activityType === "TIME" ? value * 60 : value,
         };
       }
       return plan;
@@ -86,7 +86,7 @@ const useMakePlanStates = () => {
       if (plan.activityType === v.activityType) {
         return {
           ...plan,
-          targetValue: value,
+          targetValue: plan.activityType === "TIME" ? value * 60 : value,
         };
       }
       return plan;
@@ -98,14 +98,14 @@ const useMakePlanStates = () => {
     const dailyPlan = activePlan.dailyPlanItems.map(v => {
       const tem = daily.find(d => d.activityType === v.activityType)!;
       return {
-        targetValue: v.targetValue,
+        targetValue: v.activityType === "TIME" ? v.targetValue / 60 : v.targetValue,
         activityType: tem.activityType,
       };
     });
     const weeklyPlan = activePlan.weeklyPlanItems.map(v => {
       const tem = weekly.find(d => d.activityType === v.activityType)!;
       return {
-        targetValue: v.targetValue,
+        targetValue: v.activityType === "TIME" ? v.targetValue / 60 : v.targetValue,
         activityType: tem.activityType,
       };
     });

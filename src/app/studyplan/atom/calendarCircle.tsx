@@ -32,14 +32,14 @@ const fillBackground = (bgColor: string) => keyframes`
   }
 `;
 
-const Main = styled.div<{ size: number; disabled?: boolean }>`
+const Main = styled.div<{ size: number; disabled?: boolean; cursor?: string }>`
   width: ${props => props.size}px;
   height: ${props => props.size}px;
   margin: 10px 0px;
   position: relative;
   background-color: ${props => (props.disabled ? "transparent" : props.theme.bgColor)};
   border-radius: 100%;
-  cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
+  cursor: ${props => props.cursor};
 `;
 
 const Inner = styled.div<{ size: number; disabled?: boolean }>`
@@ -125,6 +125,7 @@ type CalendarCircleProps = {
   handleViewDay?: (day: string) => void;
   handleViewWeek: (week: number) => void;
   achive: boolean;
+  cursor?: string;
 };
 
 const CalendarCircle = memo(
@@ -143,6 +144,7 @@ const CalendarCircle = memo(
     handleViewWeek,
     week,
     achive = false,
+    cursor = "",
   }: CalendarCircleProps) => {
     const [fontColor, setFontColor] = useState(disabled ? "grey" : "inherit");
     const [size, setSize] = useState(isXs ? 30 : isSm ? 48 : 64);
@@ -161,6 +163,7 @@ const CalendarCircle = memo(
       <Main
         size={size}
         disabled={disabled || achive}
+        cursor={cursor}
         onClick={
           !disabled && handleViewDay
             ? () => {
