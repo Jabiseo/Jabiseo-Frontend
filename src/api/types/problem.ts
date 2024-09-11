@@ -21,7 +21,6 @@ interface Problem {
   description: string;
   choices: Chocice[];
   answerNumber: number;
-  theory: string;
   solution: string;
 }
 
@@ -33,6 +32,19 @@ interface ProblemViewType extends Problem {
   viewSolution: boolean;
   viewTheory: boolean;
   problemNumber: number;
+}
+
+interface SimilarProblem {
+  problemId: number;
+  examInfo: ExamInfo;
+  subjectInfo: Subject;
+  isBookmark: boolean;
+  description: string;
+}
+
+interface ProblemDetailType extends Problem {
+  similarProblems?: SimilarProblem[];
+  chooseNumber: number;
 }
 
 interface SubmitResultType {
