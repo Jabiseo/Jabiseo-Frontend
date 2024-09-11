@@ -19,9 +19,10 @@ const SearchResultUI = ({
   const observerRef = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+  // todo : 검색하는 자격증 따라서 problemId 앞에 자격증 이름 붙이기
   const gotoDetailPage = useCallback(
     (problemId: number) => {
-      router.push(`/search/${problemId}`);
+      router.push(`/problem/정보처리기사/${problemId}`);
     },
     [router]
   );

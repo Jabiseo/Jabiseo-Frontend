@@ -311,12 +311,7 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({
                       tabValue={tabValue}
                     />
                   ) : (
-                    <SolutionUI
-                      solution={problem!.theory}
-                      isView={problem!.viewTheory}
-                      handleView={handleViewTheory}
-                      tabValue={tabValue}
-                    />
+                    <></>
                   ))}
               </Grid>
             </Grid>
