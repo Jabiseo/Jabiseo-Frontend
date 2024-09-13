@@ -1,13 +1,14 @@
 import { mainfetch } from "@/src/api/apis/mainFetch";
 import { Box, Grid, Tab, Tabs, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import SolutionUI from "../molecule/solutionUI";
 import ProblemUI from "./problemUI";
 import SimilarProblemList from "./similarProblemList";
+import handleBookmarkModule from "@/src/api/apis/handleBookmark";
 
 interface ProblemMainProps {
   problem: ProblemDetailType;
-  setProblem: React.Dispatch<React.SetStateAction<ProblemViewType>>;
+  setProblem: React.Dispatch<React.SetStateAction<ProblemDetailType>>;
   goToSimilarProblem: (problemId: number) => void;
 }
 const ProblemMain = ({ problem, setProblem, goToSimilarProblem }: ProblemMainProps) => {
@@ -25,36 +26,18 @@ const ProblemMain = ({ problem, setProblem, goToSimilarProblem }: ProblemMainPro
     setProblem(prev => ({ ...prev, chooseNumber: answer }));
   };
 
-  const handleBookmark = async (problemId: number) => {
-    if (isProcessing) return;
-    if (localStorage.getItem("accessToken") === null) {
-      return;
-    }
-
-    setIsProcessing(true);
-
-    const prevIsBookmark = problem.isBookmark;
-    try {
-      const method = problem.isBookmark ? "DELETE" : "POST";
-      const endpoint = "/bookmarks";
-
-      await mainfetch(
-        endpoint,
-        {
-          method,
-          body: {
-            problemId,
-          },
-        },
-        true
+  const handleBookmark = useCallback(
+    (problem: BookMarkProblem) => {
+      handleBookmarkModule<ProblemDetailType>(
+        problem,
+        isProcessing,
+        setIsProcessing,
+        undefined,
+        setProblem
       );
-      setProblem(prev => ({ ...prev, isBookmark: !prevIsBookmark }));
-    } catch (error) {
-      setProblem(prev => ({ ...prev, isBookmark: prevIsBookmark }));
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+    },
+    [isProcessing, setIsProcessing, setProblem]
+  );
 
   return (
     <Box

@@ -2,15 +2,40 @@
 import Appbar from "@/src/components/Appbar";
 import Footer from "@/src/components/Footer";
 import { globalTheme } from "@/src/components/globalStyle";
-import { Box, ThemeProvider, Typography } from "@mui/material";
+import useCertificates from "@/src/hooks/useCertificates";
+import { Box, CircularProgress, SelectChangeEvent, ThemeProvider, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import SearchInputBox from "./atom/searchInputBox";
 import useSearchTextHooks from "./hooks/useSearchTextHooks";
+import CertificateSelect from "./molecule/certificateSelect";
 import SearchResultUI from "./organism/searchResultUI";
-import { useRouter } from "next/navigation";
 
 const SearchMainPage = () => {
-  const { text, handleChangeText, searchResults, handleBookmark, getMoreData } =
-    useSearchTextHooks();
+  const {
+    text,
+    handleChangeText,
+    searchResults,
+    handleBookmark,
+    getMoreData,
+    handleCertificateSelect,
+    selectedCertificate,
+    certificates,
+  } = useSearchTextHooks();
+
+  if (!selectedCertificate) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <ThemeProvider theme={globalTheme}>
@@ -51,16 +76,42 @@ const SearchMainPage = () => {
         >
           문제를 검색해보세요
         </Typography>
-
         <Box
           sx={{
-            position: "relative",
             width: "100%",
-            maxWidth: 718,
             marginTop: "80px",
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              md: "row",
+            },
+            alignItems: "center",
+            justifyContent: {
+              md: "space-between",
+            },
           }}
         >
-          <SearchInputBox text={text} handleChangeText={handleChangeText} />
+          <CertificateSelect
+            certificates={certificates}
+            handleCertificateSelect={handleCertificateSelect}
+            selectedCertificate={selectedCertificate}
+          />
+          <Box
+            sx={{
+              position: "relative",
+              width: {
+                xs: "100%",
+                md: "70%",
+              },
+              maxWidth: 718,
+              marginLeft: {
+                xs: "0",
+                md: "44px",
+              },
+            }}
+          >
+            <SearchInputBox text={text} handleChangeText={handleChangeText} />
+          </Box>
         </Box>
         {searchResults.length === 0 ? (
           <Box
@@ -81,6 +132,7 @@ const SearchMainPage = () => {
             searchResults={searchResults}
             handleBookmark={handleBookmark}
             getMoreData={getMoreData}
+            selectedCertificate={selectedCertificate}
           />
         )}
       </Box>

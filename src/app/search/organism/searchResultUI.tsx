@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 interface SearchResultUIProps {
   text: string;
   searchResults: BookMarkProblem[];
-  handleBookmark: (problemId: number) => void;
+  handleBookmark: (problem: BookMarkProblem) => void;
   getMoreData: () => void;
+  selectedCertificate: CertificateType;
 }
 
 const SearchResultUI = ({
@@ -15,6 +16,7 @@ const SearchResultUI = ({
   searchResults,
   handleBookmark,
   getMoreData,
+  selectedCertificate,
 }: SearchResultUIProps) => {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
@@ -22,9 +24,9 @@ const SearchResultUI = ({
   // todo : 검색하는 자격증 따라서 problemId 앞에 자격증 이름 붙이기
   const gotoDetailPage = useCallback(
     (problemId: number) => {
-      router.push(`/problem/정보처리기사/${problemId}`);
+      router.push(`/problem/${selectedCertificate?.name}/${problemId}`);
     },
-    [router]
+    [router, selectedCertificate]
   );
   useEffect(() => {
     const options = {

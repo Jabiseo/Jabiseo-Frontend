@@ -76,7 +76,7 @@ const ProblemMainPage = ({
       >
         <ProblemMain
           problem={problem}
-          setProblem={setProblem as Dispatch<SetStateAction<ProblemViewType>>}
+          setProblem={setProblem as Dispatch<SetStateAction<ProblemDetailType>>}
           goToSimilarProblem={goToSimilarProblem}
         />
       </MiddleBoxColumn>

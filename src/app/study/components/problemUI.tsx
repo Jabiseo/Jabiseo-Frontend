@@ -4,20 +4,18 @@ import BookMarkLineIcon from "@/public/icons/bookmark-line.svg";
 import SirenLineIcon from "@/public/icons/siren-line.svg";
 import { Box, Container, Typography } from "@mui/material";
 import { memo, useEffect, useState } from "react";
-import Markdown from "react-markdown";
-import rehypeKatex from "rehype-katex";
-import rehypeRaw from "rehype-raw";
-import remarkMath from "remark-math";
 import ProblemChoiceUI from "./problemChoiceUI";
 import ProblemMarkdown from "./problemMarkdown";
+import handleBookmark from "@/src/api/apis/handleBookmark";
 
 const ProblemUI: React.FC<{
   problem: ProblemViewType;
   chooseAnswer: (number: number) => void;
   isSm: boolean;
-  handleBookmark: (problemId: number) => void;
+  handleBookmark: (problem: ProblemViewType) => void;
 }> = memo(({ problem, chooseAnswer, isSm, handleBookmark }) => {
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
+  const [isProcessing, setIsProcessing] = useState(false);
   const changeColor = () => {
     if (problem.chooseNumber === -1) {
       setColors(["white", "white", "white", "white", "white"]);
@@ -37,12 +35,6 @@ const ProblemUI: React.FC<{
         return newColors;
       });
     }
-  };
-  /**
-   * @todo 북마크 기능
-   */
-  const bookmarking = () => {
-    problem.isBookmark = !problem.isBookmark;
   };
   /**
    * @todo 신고하기 기능
@@ -74,7 +66,7 @@ const ProblemUI: React.FC<{
               marginRight: 1,
             }}
             onClick={() => {
-              handleBookmark(problem.problemId);
+              handleBookmark(problem);
             }}
           >
             {problem.isBookmark ? (

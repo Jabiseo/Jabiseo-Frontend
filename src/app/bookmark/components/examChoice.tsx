@@ -2,7 +2,6 @@ import { globalTheme } from "@/src/components/globalStyle";
 import {
   Box,
   FormControl,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -58,11 +57,11 @@ const ExamChoice: React.FC<ExamChoiceProps> = ({
             >
               {exams.map((exam, index) => (
                 <MenuItem
-                  autoFocus={index === 1}
                   key={exam.examId}
                   value={exam.description}
                   sx={{
                     "&.Mui-selected": {
+                      "&.Mui-focusVisible": { background: "#44bbd429" },
                       backgroundColor: "#44bbd429",
                       color: "#44bbd429",
                     },

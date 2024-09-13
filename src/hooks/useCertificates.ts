@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { mainfetch } from "../api/apis/mainFetch";
 
 const useCertificates = () => {
-  const [certificates, setCertificates] = useState<CertificateInfo[]>([]);
+  const [certificates, setCertificates] = useState<CertificateType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,6 +14,7 @@ const useCertificates = () => {
         setCertificates(data);
       } catch (err: any) {
         setError(err.message);
+        throw new Error(err.message);
       } finally {
         setLoading(false);
       }

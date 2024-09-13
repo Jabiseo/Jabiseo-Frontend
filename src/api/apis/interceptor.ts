@@ -10,7 +10,7 @@ export const refreshTokenInterceptor = async () => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    body: refreshToken,
+    body: JSON.stringify({ refreshToken }),
   })
     .then(res => res.json())
     .then(data => data.accessToken)

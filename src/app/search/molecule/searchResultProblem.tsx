@@ -8,7 +8,7 @@ import remarkMath from "remark-math";
 
 interface SearchResultProblemProps {
   problem: BookMarkProblem;
-  handleBookmark: (problemId: number) => void;
+  handleBookmark: (problem: BookMarkProblem) => void;
   gotoDetailPage: (problemId: number) => void;
 }
 
@@ -92,7 +92,7 @@ const SearchResultProblem = ({
 
         <Box
           onClick={() => {
-            handleBookmark(problem.problemId);
+            handleBookmark(problem);
           }}
         >
           {problem.isBookmark ? (
