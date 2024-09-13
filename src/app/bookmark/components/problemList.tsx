@@ -12,7 +12,7 @@ interface BookmarkProblemListProps {
   problems: BookMarkProblem[];
   selectedProblems: number[];
   selectProblem: (problemId: number) => void;
-  handleBookmark: (problemId: number) => void;
+  handleBookmark: (problem: BookMarkProblem) => void;
   totalPage: number;
   handleChangePage: (page: number) => void;
 }
@@ -122,7 +122,7 @@ const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
 
                 <Box
                   onClick={() => {
-                    handleBookmark(problem.problemId);
+                    handleBookmark(problem);
                   }}
                 >
                   {problem.isBookmark ? (

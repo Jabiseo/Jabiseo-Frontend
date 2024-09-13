@@ -5,12 +5,13 @@ import { globalTheme } from "@/src/components/globalStyle";
 import useBookmarks from "@/src/hooks/useBookmarks";
 import useCertificateInfo from "@/src/hooks/useCertificateInfo";
 import { Box, Button, Collapse, SelectChangeEvent, ThemeProvider, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BookMarkModal from "./bookmarkModal";
 import BookMarkSlider from "./bookMarkSlider";
 import ExamChoice from "./examChoice";
 import BookmarkProblemList from "./problemList";
 import SubjectChoice from "./subjectChoice";
+import handleBookmarkModule from "@/src/api/apis/handleBookmark";
 
 const MAX_SELECTED_PROBLEMS = 100;
 
@@ -100,38 +101,12 @@ const MobileBookMarkMain = () => {
     }
   };
 
-  const handleBookmark = async (problemId: number) => {
-    if (isProcessing) return;
-
-    setIsProcessing(true);
-
-    try {
-      const targetProblem = problems.find(problem => problem.problemId === problemId);
-      if (!targetProblem) throw new Error("Problem not found");
-      const method = targetProblem.isBookmark ? "DELETE" : "POST";
-      const endpoint = "/bookmarks";
-
-      await mainfetch(
-        endpoint,
-        {
-          method,
-          body: {
-            problemId,
-          },
-        },
-        true
-      );
-
-      const handledProblems = problems.map(problem =>
-        problem.problemId === problemId ? { ...problem, isBookmark: !problem.isBookmark } : problem
-      );
-
-      setProblems(handledProblems);
-    } catch (error) {
-    } finally {
-      setIsProcessing(false); // 처리 완료
-    }
-  };
+  const handleBookmark = useCallback(
+    (problem: BookMarkProblem) => {
+      handleBookmarkModule<BookMarkProblem>(problem, isProcessing, setIsProcessing, setProblems);
+    },
+    [isProcessing, setIsProcessing, setProblems]
+  );
 
   const selectAllProblems = () => {
     const allProblems = problems.map(problem => problem.problemId);

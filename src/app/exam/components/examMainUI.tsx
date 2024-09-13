@@ -22,6 +22,7 @@ import SmallOmrUI from "../components/smallOmrUI";
 import ExamFooterUI from "./examFooterUI";
 import ExamInfoUI from "./examInfoUI";
 import SubmitResultUI from "./SubmitResultUI";
+import handleBookmarkModule from "@/src/api/apis/handleBookmark";
 
 interface ExamMainUIProps {
   getProblems: ProblemViewType[];
@@ -61,6 +62,11 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({
     if (problem && problem.problemId == problems[problemNumber - 1].problemId) return;
     setProblem(problems[problemNumber - 1]);
   }, [problemNumber, problems]);
+
+  useEffect(() => {
+    if (!problem) return;
+    setProblem(problems[problemNumber - 1]);
+  }, [problems]);
 
   const nextProblem = () => {
     if (problemNumber === problems.length) {
@@ -143,44 +149,10 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({
   };
 
   const handleBookmark = useCallback(
-    async (problemId: number) => {
-      if (isProcessing) return;
-      if (localStorage.getItem("accessToken") === null) {
-        return;
-      }
-
-      setIsProcessing(true);
-
-      try {
-        const targetProblem = problems.find(problem => problem.problemId === problemId);
-        if (!targetProblem) throw new Error("Problem not found");
-        const method = targetProblem.isBookmark ? "DELETE" : "POST";
-        const endpoint = "/bookmarks";
-
-        await mainfetch(
-          endpoint,
-          {
-            method,
-            body: {
-              problemId,
-            },
-          },
-          true
-        );
-
-        setProblems(prevProblems =>
-          prevProblems.map(problem =>
-            problem.problemId === problemId
-              ? { ...problem, isBookmark: !problem.isBookmark }
-              : problem
-          )
-        );
-      } catch (error) {
-      } finally {
-        setIsProcessing(false);
-      }
+    (problem: ProblemViewType) => {
+      handleBookmarkModule<ProblemViewType>(problem, isProcessing, setIsProcessing, setProblems);
     },
-    [isProcessing, problems, mainfetch]
+    [isProcessing, setIsProcessing, setProblems]
   );
 
   const theme = useTheme();

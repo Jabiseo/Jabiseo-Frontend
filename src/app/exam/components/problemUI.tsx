@@ -15,7 +15,7 @@ const ProblemUI: React.FC<{
   problem: ProblemViewType;
   chooseAnswer: (number: number) => void;
   isSm: boolean;
-  handleBookmark: (problemId: number) => void;
+  handleBookmark: (problem: ProblemViewType) => void;
 }> = memo(({ problem, chooseAnswer, isSm, handleBookmark }) => {
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
   const changeColor = () => {
@@ -59,7 +59,7 @@ const ProblemUI: React.FC<{
               marginRight: 1,
             }}
             onClick={() => {
-              handleBookmark(problem.problemId);
+              handleBookmark(problem);
             }}
           >
             {problem.isBookmark ? (
