@@ -29,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "__test__/page.test.tsx",
-    "jest.setup.js"
+    "jest.setup.js",
+    "public/firebase-messaging-sw.js"
   ],
   "exclude": ["node_modules"]
 }

@@ -10,6 +10,7 @@ const useBookmarks = (props: BookMarkProblemsProps) => {
   const [certificateInfo, setCertificateInfo] = useState<CertificateInfo>();
   const [bookmarkedProblems, setBookmarkedProblems] = useState<BookMarkProblem[]>([]);
   const [totalPage, setTotalPage] = useState<number>(0);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [isCertified, setIsCertified] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,6 +63,7 @@ const useBookmarks = (props: BookMarkProblemsProps) => {
           const data = await response.json();
           setBookmarkedProblems(data.problems);
           setTotalPage(data.totalPage);
+          setTotalCount(data.totalCount);
         } else {
           const data = await response.json();
           if (data.errorCode === "MEM_002") {
@@ -77,7 +79,7 @@ const useBookmarks = (props: BookMarkProblemsProps) => {
       fetchBookmarks();
     }
   }, [props.selectedExamId, props.selectedSubjectsId, props.page, loading]);
-  return { bookmarkedProblems, totalPage, isCertified, certificateInfo, loading };
+  return { bookmarkedProblems, totalPage, isCertified, certificateInfo, loading, totalCount };
 };
 
 export default useBookmarks;
