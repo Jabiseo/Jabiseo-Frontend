@@ -51,6 +51,5 @@ export const mainfetch = async <T>(
     headers.Authorization = `Bearer ${newAccessToken}`;
     response = await fetch(url, { ...fetchOptions, headers });
   }
-
   return response;
 };

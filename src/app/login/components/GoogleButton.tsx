@@ -1,8 +1,5 @@
-"use client";
-
 import { mainfetch } from "@/src/api/apis/mainFetch";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-
 const GoogleButton = () => {
   const googleID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   /**
@@ -18,6 +15,7 @@ const GoogleButton = () => {
 
     if (res.status === 200) {
       const data = await res.json();
+      // document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
       window.location.href = "/";

@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import KakaoLogin from "react-kakao-login";
 
@@ -27,6 +25,7 @@ const KakaoButton: React.FC = () => {
 
     if (res.status === 200) {
       const data = await res.json();
+      // document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
       window.location.href = "/";

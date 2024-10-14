@@ -1,4 +1,6 @@
 "use client";
+import { mainfetch } from "@/src/api/apis/mainFetch";
+import { ActivePlanType } from "@/src/api/types/studyplan";
 import Appbar from "@/src/components/Appbar";
 import { MiddleBoxColumn } from "@/src/components/elements/styledElements";
 import Footer from "@/src/components/Footer";
@@ -6,12 +8,10 @@ import { globalTheme } from "@/src/components/globalStyle";
 import { ThemeProvider } from "@mui/material";
 import { useEffect, useState } from "react";
 import UserPlanInfo from "./atom/userPlanInfo";
-import MakePlanTemplate from "./organism/makePlanTemplate";
-import StudyPlanMainTemplate from "./template/studyPlanMainTemplate";
-import ViewPlanTemplate from "./organism/viewPlanTemplate";
 import EditPlanTemplate from "./organism/editPlanTemplate";
-import { ActivePlanType } from "@/src/api/types/studyplan";
-import { mainfetch } from "@/src/api/apis/mainFetch";
+import MakePlanTemplate from "./organism/makePlanTemplate";
+import ViewPlanTemplate from "./organism/viewPlanTemplate";
+import StudyPlanMainTemplate from "./template/studyPlanMainTemplate";
 
 const StudyPlan = () => {
   // 완성 후 "" 을 초기값으로 변경
@@ -42,7 +42,7 @@ const StudyPlan = () => {
   return (
     <ThemeProvider theme={globalTheme}>
       <MiddleBoxColumn>
-        <Appbar />
+        <Appbar background={true} />
         <StudyPlanMainTemplate>
           <UserPlanInfo />
           {planType === "MAKE" && <MakePlanTemplate handlePlanType={handlePlanType} />}

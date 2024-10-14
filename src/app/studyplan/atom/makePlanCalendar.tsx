@@ -7,7 +7,7 @@ const MakePlanCalendar = ({ setEndDate }: { setEndDate: (date: Date) => void }) 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
       <DatePicker
-        defaultValue={dayjs(new Date())}
+        defaultValue={dayjs(new Date()).add(1, "day")}
         slotProps={{
           calendarHeader: { format: "YYYY.MM" },
           layout: {
@@ -55,6 +55,8 @@ const MakePlanCalendar = ({ setEndDate }: { setEndDate: (date: Date) => void }) 
         format="YYYY. MM. DD"
         views={["month", "day"]}
         disablePast
+        shouldDisableDate={date => dayjs(date).isSame(dayjs(), "day")}
+        disableHighlightToday
         showDaysOutsideCurrentMonth
         sx={{
           borderRadius: "8px",

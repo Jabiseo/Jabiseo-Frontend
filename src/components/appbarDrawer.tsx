@@ -156,10 +156,22 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
             textDecoration: "none",
           }}
           component={"a"}
-          href="/assistant"
+          href="/analysis"
         >
           <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
-            학습 비서
+            학습 분석
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            py: 3,
+            textDecoration: "none",
+          }}
+          component={"a"}
+          href="/studyplan"
+        >
+          <Typography variant="h4" fontSize={"18px"} color="var(--c-gray5)">
+            학습 플랜
           </Typography>
         </Box>
         {!isLogin || (

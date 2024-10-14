@@ -49,7 +49,7 @@ const EditPlanTemplate = ({
     };
 
     await mainfetch(
-      "/plans",
+      `/plans/${activePlanData.planId}`,
       {
         method: "PUT",
         body: makePlanData,

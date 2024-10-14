@@ -5,6 +5,7 @@ import { Box, Button, Toolbar, Typography } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import favicon from "@/public/favicon.ico";
+import BiseoChoice from "./biseoChoice";
 interface AppbarToolbarUIProps {
   isLogin: boolean;
   handleLogout: () => void;
@@ -22,7 +23,7 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
   isScroll,
 }) => {
   const [scrollState, setScrollState] = useState<boolean>(true);
-
+  const [showBiseoChoice, setShowBiseoChoice] = useState<boolean>(false);
   useEffect(() => {
     if (isScroll === undefined) return;
     if (isScroll >= 40) {
@@ -119,30 +120,44 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
               북마크
             </Typography>
           </NoHoverTouchButton>
-          <NoHoverTouchButton
-            sx={{ color: "black", display: { xs: "none", md: "flex" } }}
-            href="/assistant"
-            onClick={() => {
-              localStorage.setItem("focusTap", "학습비서");
-            }}
-          >
-            <Typography
-              variant="subtitle1"
-              sx={{
-                color:
-                  focusTap === "학습비서" ? (scrollState ? "var(--c-main)" : "white") : fontColor,
-                filter:
-                  focusTap === "학습비서"
-                    ? scrollState
-                      ? "none"
-                      : "drop-shadow(0px 1px 4px #16396F)"
-                    : "none",
-              }}
-              fontSize={"16px"}
+          <Box sx={{ position: "relative" }}>
+            <NoHoverTouchButton
+              sx={{ color: "black", display: { xs: "none", md: "flex" } }}
+              onMouseEnter={() => setShowBiseoChoice(true)}
+              onMouseLeave={() => setShowBiseoChoice(false)}
             >
-              학습비서
-            </Typography>
-          </NoHoverTouchButton>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  color:
+                    focusTap === "학습비서" ? (scrollState ? "var(--c-main)" : "white") : fontColor,
+                  filter:
+                    focusTap === "학습비서"
+                      ? scrollState
+                        ? "none"
+                        : "drop-shadow(0px 1px 4px #16396F)"
+                      : "none",
+                }}
+                fontSize={"16px"}
+              >
+                학습비서
+              </Typography>
+            </NoHoverTouchButton>
+            {showBiseoChoice && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "calc(100%+10px)",
+                  left: "calc(50% - 90px)",
+                  zIndex: 1000,
+                }}
+                onMouseEnter={() => setShowBiseoChoice(true)}
+                onMouseLeave={() => setShowBiseoChoice(false)}
+              >
+                <BiseoChoice />
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
       <Box
@@ -212,7 +227,14 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
 
 export default AppbarToolbarUI;
 
-const NoHoverTouchButton: React.FC<NoHoverTouchButtonProps> = ({ sx, children, onClick, href }) => {
+const NoHoverTouchButton: React.FC<NoHoverTouchButtonProps> = ({
+  sx,
+  children,
+  onClick,
+  href,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
   return (
     <Button
       disableTouchRipple
@@ -224,6 +246,8 @@ const NoHoverTouchButton: React.FC<NoHoverTouchButtonProps> = ({ sx, children, o
       }}
       onClick={onClick}
       href={href}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {children}
     </Button>
@@ -234,4 +258,6 @@ interface NoHoverTouchButtonProps {
   children: React.ReactNode;
   onClick?: () => any;
   href?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }

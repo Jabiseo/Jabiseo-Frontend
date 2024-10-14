@@ -1,11 +1,11 @@
+import { mainfetch } from "@/src/api/apis/mainFetch";
+import { MakePlanType } from "@/src/api/types/studyplan";
 import useMakePlanStates from "@/src/hooks/useMakePlanStates";
 import { Box, Button, Typography } from "@mui/material";
+
 import { useState } from "react";
 import MakePlanCalendar from "../atom/makePlanCalendar";
-import UserPlanInfo from "../atom/userPlanInfo";
 import ChoiceDailyPlan from "../molecule/choiceDailyPlan";
-import { MakePlanType } from "@/src/api/types/studyplan";
-import { mainfetch } from "@/src/api/apis/mainFetch";
 
 const MakePlanTemplate = ({
   handlePlanType,

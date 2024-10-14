@@ -2,9 +2,7 @@
 import Appbar from "@/src/components/Appbar";
 import Footer from "@/src/components/Footer";
 import { globalTheme } from "@/src/components/globalStyle";
-import useCertificates from "@/src/hooks/useCertificates";
-import { Box, CircularProgress, SelectChangeEvent, ThemeProvider, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, CircularProgress, ThemeProvider, Typography } from "@mui/material";
 import SearchInputBox from "./atom/searchInputBox";
 import useSearchTextHooks from "./hooks/useSearchTextHooks";
 import CertificateSelect from "./molecule/certificateSelect";

@@ -14,7 +14,7 @@ const BookMarkSize = () => {
   });
   return (
     <>
-      <Appbar />
+      <Appbar background={true} />
       {isMobile ? <MobileBookMarkMain /> : <BookMarkMain />}
     </>
   );
