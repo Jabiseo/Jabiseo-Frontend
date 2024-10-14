@@ -72,8 +72,9 @@ const Appbar = ({ background }: { background?: boolean }) => {
               isLogin={isLogin}
               handleLogout={handleLogout}
               certificate={certificate}
-              fontColor={fontColor}
+              fontColor={"white"}
               focusTap={focusTap}
+              isScroll={30}
             />
             <Box
               onClick={toggleDrawer(true)}

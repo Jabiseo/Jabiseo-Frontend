@@ -25,10 +25,10 @@ const useAppbarState = () => {
       focusTap = "마이페이지";
     } else if (path.includes("login")) {
       focusTap = "로그인";
+    } else if (path.includes("studyplan") || path.includes("analysis")) {
+      focusTap = "학습비서";
     } else if (path.includes("learning") || path.includes("study") || path.includes("exam")) {
       focusTap = "문제풀이";
-    } else if (path.includes("assistant")) {
-      focusTap = "학습비서";
     } else {
       focusTap = "메인페이지";
     }

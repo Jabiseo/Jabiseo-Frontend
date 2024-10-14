@@ -12,7 +12,7 @@ const Footer = () => {
         sx={{
           mt: {
             xs: "40px",
-            lg: "60px",
+            lg: "100px",
           },
           minHeight: "260px",
           width: "100%",

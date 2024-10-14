@@ -7,7 +7,13 @@ interface InputBoxProps {
 const InputBox = ({ plan, handleChangeValue }: InputBoxProps) => {
   return (
     <Input
-      value={plan.targetValue === 0 ? "" : plan.targetValue}
+      value={
+        plan.targetValue === 0
+          ? ""
+          : plan.activityType == "TIME"
+          ? plan.targetValue / 3600
+          : plan.targetValue
+      }
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         handleChangeValue(event, plan);
       }}
