@@ -1,5 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import ProgressBar from "../atom/progressBar";
+import { useRouter } from "next/navigation";
+import VulnerableSubjectModal from "./vulnerableSubjectModal";
+import { useState } from "react";
 
 interface VulnerableSubjectItemProps {
   item: VulnerableSubject;
@@ -7,6 +10,10 @@ interface VulnerableSubjectItemProps {
 }
 
 const VulnerableSubjectItem: React.FC<VulnerableSubjectItemProps> = ({ item, index }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   return (
     <Box
       sx={{
@@ -138,7 +145,7 @@ const VulnerableSubjectItem: React.FC<VulnerableSubjectItemProps> = ({ item, ind
             borderRadius: "40px",
             padding: "8px 18px",
           }}
-          href="/learning"
+          onClick={handleModal}
         >
           <Typography
             variant="h4"
@@ -152,6 +159,11 @@ const VulnerableSubjectItem: React.FC<VulnerableSubjectItemProps> = ({ item, ind
           </Typography>
         </Button>
       </Box>
+      <VulnerableSubjectModal
+        isModalOpen={isModalOpen}
+        handleModal={handleModal}
+        subjectId={item.subjectId}
+      />
     </Box>
   );
 };

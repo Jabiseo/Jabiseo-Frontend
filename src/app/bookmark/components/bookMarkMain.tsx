@@ -1,16 +1,16 @@
 "use client";
+import handleBookmarkModule from "@/src/api/apis/handleBookmark";
 import { mainfetch } from "@/src/api/apis/mainFetch";
-import { MiddleBoxColumn, NoHoverButton } from "@/src/components/elements/styledElements";
+import { NoHoverButton } from "@/src/components/elements/styledElements";
 import { globalTheme } from "@/src/components/globalStyle";
 import useBookmarks from "@/src/hooks/useBookmarks";
-import useCertificateInfo from "@/src/hooks/useCertificateInfo";
 import { Box, Button, Grid, SelectChangeEvent, ThemeProvider, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import BookMarkModal from "./bookmarkModal";
 import ExamChoice from "./examChoice";
 import BookmarkProblemList from "./problemList";
 import SubjectChoice from "./subjectChoice";
-import handleBookmarkModule from "@/src/api/apis/handleBookmark";
+import LodingUI from "@/src/components/lodingUI";
 
 const MAX_SELECTED_PROBLEMS = 100;
 
@@ -158,7 +158,7 @@ const BookMarkMain = () => {
   };
 
   if (loading) {
-    return <div>로딩중...</div>;
+    return <LodingUI />;
   }
 
   if (!isCertified) {

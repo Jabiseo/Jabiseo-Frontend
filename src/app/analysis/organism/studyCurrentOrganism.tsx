@@ -3,6 +3,7 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import StudyCurrentBox from "../molecule/studyCurrentBox";
 import { useEffect, useState } from "react";
 import { mainfetch } from "@/src/api/apis/mainFetch";
+import LodingUI from "@/src/components/lodingUI";
 const StudyCurrentOrganism = () => {
   const [analysisToday, setAnalysisToday] = useState<AnalysisToday>();
   const [isLoading, setIsLoading] = useState(true);
@@ -27,18 +28,7 @@ const StudyCurrentOrganism = () => {
   }, []);
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "300px", // 적절한 높이로 조정하세요
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <LodingUI />;
   }
   return (
     <Box

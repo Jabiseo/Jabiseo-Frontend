@@ -216,7 +216,21 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({
             }}
           >
             <Grid container>
-              <Grid item xs={12} md={6}>
+              <Grid
+                item
+                xs={12}
+                md={6}
+                sx={{
+                  borderRight: {
+                    xs: "none",
+                    md: "1px dotted var(--c-gray2)",
+                  },
+                  borderBottom: {
+                    xs: "8px solid var(--c-gray1)",
+                    md: "none",
+                  },
+                }}
+              >
                 {problem ? (
                   <>
                     <ProblemUI
@@ -231,7 +245,7 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({
                 )}
               </Grid>
               <Grid item xs={12} md={6}>
-                <Tabs
+                {/* <Tabs
                   value={tabValue}
                   onChange={handleChange}
                   centered
@@ -258,7 +272,7 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({
                     }
                     sx={{ flex: 1 }}
                   />
-                </Tabs>
+                </Tabs> */}
                 {problem &&
                   (tabValue === 0 ? (
                     <SolutionUI
