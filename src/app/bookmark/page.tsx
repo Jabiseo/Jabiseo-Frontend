@@ -2,10 +2,6 @@
 import BookMarkSize from "./components/bookMarkSize";
 
 const BookMarkPage = () => {
-  return (
-    <>
-      <BookMarkSize />
-    </>
-  );
+  return <BookMarkSize />;
 };
 export default BookMarkPage;

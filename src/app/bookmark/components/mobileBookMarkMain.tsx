@@ -30,7 +30,7 @@ const MobileBookMarkMain = () => {
   const [selectedSubjectsId, setSelectedSubjectsId] = useState<number[]>([]);
   const [page, setPage] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { bookmarkedProblems, totalPage } = useBookmarks({
+  const { bookmarkedProblems, totalPage, totalCount } = useBookmarks({
     selectedExamId,
     selectedSubjectsId,
     page,
@@ -277,7 +277,7 @@ const MobileBookMarkMain = () => {
                 총&nbsp;
               </Typography>
               <Typography fontSize="18px" variant="subtitle1" color="var(--c-main)">
-                {problems.length}
+                {totalCount}
               </Typography>
               <Typography fontSize="18px" variant="subtitle1">
                 개의 북마크

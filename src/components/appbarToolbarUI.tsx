@@ -13,6 +13,7 @@ interface AppbarToolbarUIProps {
   fontColor: string;
   focusTap: string;
   isScroll?: number;
+  background?: boolean;
 }
 
 const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({

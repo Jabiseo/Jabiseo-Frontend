@@ -49,6 +49,8 @@ const useBookmarks = (props: BookMarkProblemsProps) => {
     const fetchBookmarks = async () => {
       if (props.selectedSubjectsId.length === 0) {
         setBookmarkedProblems([]);
+        setTotalPage(0);
+        setTotalCount(0);
         return;
       }
 
@@ -79,6 +81,10 @@ const useBookmarks = (props: BookMarkProblemsProps) => {
       fetchBookmarks();
     }
   }, [props.selectedExamId, props.selectedSubjectsId, props.page, loading]);
+
+  // const handleSelectSubjects = () => {
+
+  // }
   return { bookmarkedProblems, totalPage, totalCount, isCertified, certificateInfo, loading };
 };
 

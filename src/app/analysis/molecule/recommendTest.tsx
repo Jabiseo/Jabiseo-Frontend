@@ -1,6 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
+import { useState } from "react";
+import RecommendTestModal from "./recommendTestModal";
 
 const RecommendTest = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   return (
     <Box
       sx={{
@@ -80,7 +86,7 @@ const RecommendTest = () => {
               },
               transition: "none",
             }}
-            href="/study/recommendations"
+            onClick={handleModal}
           >
             <Typography
               variant="h1"
@@ -97,6 +103,7 @@ const RecommendTest = () => {
           </Button>
         </Box>
       </Box>
+      <RecommendTestModal isModalOpen={isModalOpen} handleModal={handleModal} />
     </Box>
   );
 };
