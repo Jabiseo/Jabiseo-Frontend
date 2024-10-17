@@ -19,23 +19,40 @@ const BookMarkSlider: React.FC<BookMarkSliderProps> = ({
   const [startPosition, setStartPosition] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleDragStart = (clientX: number) => {
     setIsDragging(true);
-    setStartPosition(e.clientX);
+    setStartPosition(clientX);
     if (scrollContainerRef.current !== null) {
       setScrollPosition(scrollContainerRef.current.scrollLeft);
     }
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleDragMove = (clientX: number) => {
     if (!isDragging) return;
-    const dx = e.clientX - startPosition;
+    const dx = clientX - startPosition;
     if (scrollContainerRef.current !== null) {
       scrollContainerRef.current.scrollLeft = scrollPosition - dx;
     }
   };
-  const handleMouseUp = () => {
+
+  const handleDragEnd = () => {
     setIsDragging(false);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    handleDragStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    handleDragMove(e.touches[0].clientX);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleDragStart(e.clientX);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleDragMove(e.clientX);
   };
 
   return (
@@ -50,10 +67,14 @@ const BookMarkSlider: React.FC<BookMarkSliderProps> = ({
           overflow: "hidden",
           cursor: isDragging ? "grabbing" : "grab",
         }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleDragEnd}
+        onTouchCancel={handleDragEnd}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onMouseUp={handleDragEnd}
+        onMouseLeave={handleDragEnd}
       >
         <Button
           sx={{

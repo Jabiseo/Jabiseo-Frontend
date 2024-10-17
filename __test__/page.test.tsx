@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import Home from "../src/app/page";
+import Home from "../src/app/(site)/page";
 
 describe("Page", () => {
   it("메인 페이지 랜딩 테스트", () => {

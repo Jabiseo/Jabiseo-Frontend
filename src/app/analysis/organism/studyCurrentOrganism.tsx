@@ -1,9 +1,9 @@
 import ArrawRight from "@/public/icons/arrow-right.svg";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import StudyCurrentBox from "../molecule/studyCurrentBox";
-import { useEffect, useState } from "react";
 import { mainfetch } from "@/src/api/apis/mainFetch";
-import LodingUI from "@/src/components/lodingUI";
+import LoadingUI from "@/src/components/loadingUI";
+import { Box, Button, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import StudyCurrentBox from "../molecule/studyCurrentBox";
 const StudyCurrentOrganism = () => {
   const [analysisToday, setAnalysisToday] = useState<AnalysisToday>();
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +28,7 @@ const StudyCurrentOrganism = () => {
   }, []);
 
   if (isLoading) {
-    return <LodingUI />;
+    return <LoadingUI />;
   }
   return (
     <Box

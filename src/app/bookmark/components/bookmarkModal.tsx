@@ -55,10 +55,24 @@ const BookMarkModal: React.FC<BookMarkModalProps> = ({
               alignItems: "center",
             }}
           >
-            <Typography variant="h1" fontSize={28} mb={6}>
+            <Typography
+              variant="h1"
+              fontSize={{
+                xs: 20,
+                sm: 28,
+              }}
+              mb={6}
+            >
               문제 풀기
             </Typography>
-            <Typography variant="body2" fontSize={24} mb={4}>
+            <Typography
+              variant="body2"
+              fontSize={{
+                xs: 16,
+                sm: 24,
+              }}
+              mb={4}
+            >
               모드를 선택해주세요
             </Typography>
             <Box sx={{ display: "flex", justifyContent: "flex-end", my: 2 }}>
@@ -75,7 +89,14 @@ const BookMarkModal: React.FC<BookMarkModalProps> = ({
                   },
                 }}
               >
-                <Typography variant="h1" fontSize={20} color="var(--c-sub4)">
+                <Typography
+                  variant="h1"
+                  fontSize={{
+                    xs: 14,
+                    sm: 20,
+                  }}
+                  color="var(--c-sub4)"
+                >
                   공부 모드
                 </Typography>
               </NoHoverButton>
@@ -91,7 +112,14 @@ const BookMarkModal: React.FC<BookMarkModalProps> = ({
                   },
                 }}
               >
-                <Typography variant="h1" fontSize={20} color="var(--c-sub4)">
+                <Typography
+                  variant="h1"
+                  fontSize={{
+                    xs: 14,
+                    sm: 20,
+                  }}
+                  color="var(--c-sub4)"
+                >
                   시험 모드
                 </Typography>
               </NoHoverButton>

@@ -9,10 +9,7 @@ import {
   Container,
   Grid,
   Modal,
-  Tab,
-  Tabs,
   ThemeProvider,
-  Typography,
   useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -121,17 +118,22 @@ const StudyMainUI: React.FC<StudyMainUIProps> = ({
           };
         }),
     };
-    if (localStorage.getItem("accessToken") === null) return;
-    await mainfetch(
-      "/learning",
-      {
-        method: "POST",
-        body: submitResult,
-      },
-      true
-    );
+    const isLogin = localStorage.getItem("accessToken") !== null;
+    if (isLogin) {
+      await mainfetch(
+        "/learning",
+        {
+          method: "POST",
+          body: submitResult,
+        },
+        true
+      );
+    }
 
-    localStorage.setItem("problems", JSON.stringify({ problems: [...problems], certificateInfo }));
+    localStorage.setItem(
+      "problems",
+      JSON.stringify({ problems: [...problems], certificateInfo, learningTime: submitTime })
+    );
     router.push("/result");
   };
 

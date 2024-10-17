@@ -15,6 +15,7 @@ interface BookmarkProblemListProps {
   handleBookmark: (problem: BookMarkProblem) => void;
   totalPage: number;
   handleChangePage: (page: number) => void;
+  page: number;
 }
 
 const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
@@ -24,6 +25,7 @@ const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
   handleBookmark,
   totalPage,
   handleChangePage,
+  page,
 }: BookmarkProblemListProps) => {
   return (
     <ThemeProvider theme={globalTheme}>
@@ -147,6 +149,7 @@ const BookmarkProblemList: React.FC<BookmarkProblemListProps> = ({
             count={totalPage}
             showFirstButton
             showLastButton
+            page={page + 1}
             sx={{
               "& .MuiPaginationItem-root.Mui-selected": {
                 backgroundColor: "var(--c-sub1)",

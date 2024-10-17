@@ -3,6 +3,7 @@ import handleBookmarkModule from "@/src/api/apis/handleBookmark";
 import { mainfetch } from "@/src/api/apis/mainFetch";
 import { NoHoverButton } from "@/src/components/elements/styledElements";
 import { globalTheme } from "@/src/components/globalStyle";
+import LoadingUI from "@/src/components/loadingUI";
 import useBookmarks from "@/src/hooks/useBookmarks";
 import { Box, Button, Grid, SelectChangeEvent, ThemeProvider, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
@@ -10,7 +11,6 @@ import BookMarkModal from "./bookmarkModal";
 import ExamChoice from "./examChoice";
 import BookmarkProblemList from "./problemList";
 import SubjectChoice from "./subjectChoice";
-import LodingUI from "@/src/components/lodingUI";
 
 const MAX_SELECTED_PROBLEMS = 100;
 
@@ -105,7 +105,8 @@ const BookMarkMain = () => {
 
   const selectAllProblems = () => {
     const allProblems = problems.map(problem => problem.problemId);
-    setSelectedProblems(allProblems.slice(0, MAX_SELECTED_PROBLEMS));
+    const newSelectedProblems = [...selectedProblems, ...allProblems];
+    setSelectedProblems(newSelectedProblems.slice(0, MAX_SELECTED_PROBLEMS));
   };
 
   const deselectAllProblems = () => {
@@ -118,6 +119,7 @@ const BookMarkMain = () => {
       exam => exam.description === event.target.value
     )!.examId;
     setSelectedExamId(examId);
+    setPage(0);
   };
 
   useEffect(() => {
@@ -149,8 +151,8 @@ const BookMarkMain = () => {
     };
     const newSelectedSubjects = getNewSelectedSubjects();
     setSelectedSubjects(newSelectedSubjects);
-    // const newSelectedSubjectsId = [];
     setSelectedSubjectsId(newSelectedSubjects.map(subject => subject.subjectId));
+    setPage(0);
   };
 
   const handleChangePage = (page: number) => {
@@ -158,7 +160,7 @@ const BookMarkMain = () => {
   };
 
   if (loading) {
-    return <LodingUI />;
+    return <LoadingUI />;
   }
 
   if (!isCertified) {
@@ -324,6 +326,7 @@ const BookMarkMain = () => {
                 selectedProblems={selectedProblems}
                 selectProblem={selectProblem}
                 handleBookmark={handleBookmark}
+                page={page}
               />
             </Grid>
           </Grid>

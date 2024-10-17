@@ -8,7 +8,7 @@ import AppbarToolbarUI from "./appbarToolbarUI";
 import { globalTheme } from "./globalStyle";
 import { mainfetch } from "../api/apis/mainFetch";
 const ScrollAppbar = ({ isScroll }: { isScroll?: number }) => {
-  const { isLogin, certificate, focusTap } = useAppbarState();
+  const { isLogin, certificate, focusTap, userInfo } = useAppbarState();
   const [open, setOpen] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("transparent");
   const [fontColor, setFontColor] = useState("white");
@@ -52,6 +52,7 @@ const ScrollAppbar = ({ isScroll }: { isScroll?: number }) => {
   if (isLoading) {
     return null; // 또는 로딩 인디케이터를 표시
   }
+
   return (
     <ThemeProvider theme={globalTheme}>
       <AppBar
@@ -114,6 +115,7 @@ const ScrollAppbar = ({ isScroll }: { isScroll?: number }) => {
             toggleDrawer={toggleDrawer}
             isLogin={isLogin}
             handleLogout={handleLogout}
+            userInfo={userInfo}
           />
         </Box>
       </AppBar>
