@@ -194,9 +194,10 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
                 alignItems: "center",
                 justifyContent: "center",
                 width: "100%",
-                position: "absolute",
-                bottom: 150,
-                left: 0,
+                marginTop: {
+                  xs: "20px",
+                  sm: "120px",
+                },
               }}
             >
               <Typography

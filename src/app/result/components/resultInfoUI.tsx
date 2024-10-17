@@ -3,9 +3,10 @@ import { Box, Button, Typography } from "@mui/material";
 interface ResultInfoUIProps {
   isSm: boolean;
   solvedProblem: string;
+  learningTime: string;
 }
 
-const ResultInfoUI: React.FC<ResultInfoUIProps> = ({ solvedProblem, isSm }) => {
+const ResultInfoUI: React.FC<ResultInfoUIProps> = ({ solvedProblem, isSm, learningTime }) => {
   return (
     <Box
       sx={{
@@ -45,7 +46,7 @@ const ResultInfoUI: React.FC<ResultInfoUIProps> = ({ solvedProblem, isSm }) => {
                 맞은 문제 : {solvedProblem}
               </Typography>
               <Typography variant="h4" fontSize="12px">
-                경과시간 : 3분 10초
+                경과시간 : {learningTime}
               </Typography>
             </Box>
 
@@ -79,7 +80,7 @@ const ResultInfoUI: React.FC<ResultInfoUIProps> = ({ solvedProblem, isSm }) => {
               }}
             >
               <Typography variant="h4" fontSize="20px">
-                경과시간 : 3분 10초
+                경과시간 : {learningTime}
               </Typography>
               <Button
                 href="/"

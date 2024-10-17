@@ -110,7 +110,8 @@ const MobileBookMarkMain = () => {
 
   const selectAllProblems = () => {
     const allProblems = problems.map(problem => problem.problemId);
-    setSelectedProblems(allProblems.slice(0, MAX_SELECTED_PROBLEMS));
+    const newSelectedProblems = [...selectedProblems, ...allProblems];
+    setSelectedProblems(newSelectedProblems.slice(0, MAX_SELECTED_PROBLEMS));
   };
 
   const deselectAllProblems = () => {
@@ -123,6 +124,7 @@ const MobileBookMarkMain = () => {
       exam => exam.description === event.target.value
     )!.examId;
     setSelectedExamId(examId);
+    setPage(0);
   };
 
   useEffect(() => {
@@ -154,9 +156,10 @@ const MobileBookMarkMain = () => {
     };
     const newSelectedSubjects = getNewSelectedSubjects();
     setSelectedSubjects(newSelectedSubjects);
-    // const newSelectedSubjectsId = [];
     setSelectedSubjectsId(newSelectedSubjects.map(subject => subject.subjectId));
+    setPage(0);
   };
+
   const handleChangePage = (page: number) => {
     setPage(page);
   };
@@ -305,6 +308,7 @@ const MobileBookMarkMain = () => {
             selectedProblems={selectedProblems}
             selectProblem={selectProblem}
             handleBookmark={handleBookmark}
+            page={page}
           />
         </Box>
 

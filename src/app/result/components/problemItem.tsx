@@ -1,24 +1,27 @@
 "use client";
 import BookMarkFillIcon from "@/public/icons/bookmark-fill.svg";
 import BookMarkLineIcon from "@/public/icons/bookmark-line.svg";
-import SirenLineIcon from "@/public/icons/siren-line.svg";
 import NoteCloseIcon from "@/public/icons/note-close.svg";
 import NoteOpenIcon from "@/public/icons/note-open.svg";
+import SirenLineIcon from "@/public/icons/siren-line.svg";
 import { Box, Collapse, Container, Typography } from "@mui/material";
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
 import ProblemChoiceUI from "./problemChoiceUI";
+import handleBookmarkModule from "@/src/api/apis/handleBookmark";
 
 const ProblemItem: React.FC<{
   props: ProblemViewType;
   isSm: boolean;
-}> = memo(({ props, isSm }) => {
+  setProblems: React.Dispatch<React.SetStateAction<ProblemViewType[]>>;
+}> = memo(({ props, isSm, setProblems }) => {
   const problem = props;
   const [viewSolution, setViewSolution] = useState(false);
   const [colors, setColors] = useState(["white", "white", "white", "white", "white"]);
+  const [isProcessing, setIsProcessing] = useState(false);
   const changeColor = () => {
     if (problem.chooseNumber === 0) {
       setColors(["white", "white", "white", "white", "white"]);
@@ -39,6 +42,12 @@ const ProblemItem: React.FC<{
       });
     }
   };
+  const handleBookmark = useCallback(
+    (problem: BookMarkProblem) => {
+      handleBookmarkModule<ProblemViewType>(problem, isProcessing, setIsProcessing, setProblems);
+    },
+    [isProcessing, setIsProcessing, setProblems]
+  );
   useEffect(() => {
     changeColor();
   }, []);
@@ -65,7 +74,7 @@ const ProblemItem: React.FC<{
           mb: "20px",
           "&:hover": {
             cursor: "pointer",
-            border: "2px solid black",
+            border: "1px solid black",
           },
         }}
       >
@@ -93,7 +102,7 @@ const ProblemItem: React.FC<{
                 },
                 marginRight: 1,
               }}
-              onClick={() => {}}
+              onClick={() => handleBookmark(problem)}
             >
               {problem.isBookmark ? (
                 <BookMarkFillIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
@@ -107,7 +116,9 @@ const ProblemItem: React.FC<{
                   cursor: "pointer",
                 },
               }}
-              onClick={() => {}}
+              onClick={() => {
+                alert("신고 기능 업데이트 예정입니다.");
+              }}
             >
               <SirenLineIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
             </Box>

@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
 
-const LodingUI = () => {
+const LoadingUI = () => {
   return (
     <Box
       sx={{
@@ -15,4 +15,4 @@ const LodingUI = () => {
   );
 };
 
-export default LodingUI;
+export default LoadingUI;

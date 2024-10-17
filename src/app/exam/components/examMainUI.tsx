@@ -116,17 +116,23 @@ const ExamMainUI: React.FC<ExamMainUIProps> = ({
           };
         }),
     };
-    if (localStorage.getItem("accessToken") === null) return;
-    await mainfetch(
-      "/learning",
-      {
-        method: "POST",
-        body: submitResult,
-      },
-      true
-    );
 
-    localStorage.setItem("problems", JSON.stringify({ problems: [...problems], certificateInfo }));
+    const isLogin = localStorage.getItem("accessToken") !== null;
+    if (isLogin) {
+      await mainfetch(
+        "/learning",
+        {
+          method: "POST",
+          body: submitResult,
+        },
+        true
+      );
+    }
+
+    localStorage.setItem(
+      "problems",
+      JSON.stringify({ problems: [...problems], certificateInfo, learningTime: submitTime })
+    );
     router.push("/result");
   };
 
