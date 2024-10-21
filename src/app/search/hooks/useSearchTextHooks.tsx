@@ -6,7 +6,7 @@ import { SelectChangeEvent } from "@mui/material";
 import handleBookmarkModule from "@/src/api/apis/handleBookmark";
 const useSearchTextHooks = () => {
   const [text, setText] = useState("");
-  const [searchResults, setSearchResults] = useState<BookMarkProblem[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchProblemType[]>([]);
   const [isLastResult, setIsLastResult] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,11 +27,15 @@ const useSearchTextHooks = () => {
 
   const getMoreData = useCallback(() => {
     if (searchResults.length === 0 || isLastResult) return;
-    getData(text, searchResults[searchResults.length - 1].problemId);
+    getData(
+      text,
+      searchResults[searchResults.length - 1].score,
+      searchResults[searchResults.length - 1].problemId
+    );
   }, [searchResults, isLastResult]);
   const handleBookmark = useCallback(
-    (problem: BookMarkProblem) => {
-      handleBookmarkModule<BookMarkProblem>(
+    (problem: SearchProblemType) => {
+      handleBookmarkModule<SearchProblemType>(
         problem,
         isProcessing,
         setIsProcessing,
@@ -41,18 +45,20 @@ const useSearchTextHooks = () => {
     [isProcessing, setIsProcessing, setSearchResults]
   );
   const getData = useCallback(
-    async (searchText: string, lastId?: number) => {
+    async (searchText: string, lastScore?: number, lastId?: number) => {
       if (isLoading || !selectedCertificate?.certificateId) return;
       setIsLoading(true);
+      const isLogin = localStorage.getItem("accessToken") ? true : false;
+      console.log(isLogin);
       try {
         const response = await mainfetch(
-          `/problems/search?title=${searchText}${
+          `/problems/search?query=${searchText}${lastScore ? `&last-score=${lastScore}` : ""}${
             lastId ? `&last-id=${lastId}` : ""
           }&certificate-id=${selectedCertificate?.certificateId}`,
           {
             method: "GET",
           },
-          true
+          isLogin
         );
         if (!response.ok) {
           throw new Error("검색 요청에 실패했습니다.");
@@ -72,7 +78,7 @@ const useSearchTextHooks = () => {
     [isLoading, selectedCertificate]
   );
   const debouncedSearch = useCallback(
-    debounce(async (searchText: string, lastId?: number) => {
+    debounce(async (searchText: string, lastScore?: number, lastId?: number) => {
       getData(searchText);
     }, 300),
     [selectedCertificate]

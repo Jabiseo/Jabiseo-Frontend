@@ -89,7 +89,7 @@ const ProblemMain = ({ problem, setProblem, goToSimilarProblem }: ProblemMainPro
               <Tab
                 label={
                   <Typography variant="h4" fontSize="16px">
-                    이론
+                    유사문제
                   </Typography>
                 }
                 sx={{ flex: 1 }}

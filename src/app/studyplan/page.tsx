@@ -14,7 +14,6 @@ import ViewPlanTemplate from "./organism/viewPlanTemplate";
 import StudyPlanMainTemplate from "./template/studyPlanMainTemplate";
 
 const StudyPlan = () => {
-  // 완성 후 "" 을 초기값으로 변경
   const [planType, setPlanType] = useState<"MAKE" | "EDIT" | "VIEW">();
   const [activePlanData, setActivePlanData] = useState<ActivePlanType | null>(null);
   const handlePlanType = (type: "MAKE" | "EDIT" | "VIEW") => {

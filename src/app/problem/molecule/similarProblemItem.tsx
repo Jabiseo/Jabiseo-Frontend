@@ -5,6 +5,11 @@ interface SimilarProblemItemProps {
   goToSimilarProblem: (problemId: number) => void;
 }
 const SimilarProblemItem = ({ similarProblem, goToSimilarProblem }: SimilarProblemItemProps) => {
+  const removeExclamationSentence = (description: string) => {
+    return description.replace(/![^)]*\)/g, "");
+  };
+
+  const cleanedDescription = removeExclamationSentence(similarProblem.description);
   return (
     <Box
       sx={{
@@ -43,7 +48,7 @@ const SimilarProblemItem = ({ similarProblem, goToSimilarProblem }: SimilarProbl
         }}
         variant="subtitle1"
       >
-        {similarProblem.description}
+        {cleanedDescription}
       </Typography>
     </Box>
   );

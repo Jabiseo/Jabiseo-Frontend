@@ -3,25 +3,18 @@ const nextConfig = {
   reactStrictMode: false,
   output: "standalone",
   images: {
-    domains: [],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "picsum.photos",
-        port: "",
-        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "github.com",
-        port: "",
-        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "dkvmrny1lb9jp.cloudfront.net",
-        port: "",
-        pathname: "/**",
       },
     ],
   },

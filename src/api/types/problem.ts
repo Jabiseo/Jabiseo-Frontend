@@ -42,6 +42,10 @@ interface SimilarProblem {
   description: string;
 }
 
+interface SearchProblemType extends SimilarProblem {
+  score: number;
+}
+
 interface ProblemDetailType extends Problem {
   similarProblems?: SimilarProblem[];
   chooseNumber: number;
