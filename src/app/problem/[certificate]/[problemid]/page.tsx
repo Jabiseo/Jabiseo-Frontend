@@ -26,12 +26,13 @@ const ProblemMainPage = ({
   };
   useEffect(() => {
     const getProblem = async () => {
+      const isLogin = localStorage.getItem("accessToken") !== null;
       const res = await mainfetch(
         `/problems/${problemid}`,
         {
           method: "GET",
         },
-        false
+        isLogin
       );
       if (res.status !== 200) {
         window.location.href = "/";

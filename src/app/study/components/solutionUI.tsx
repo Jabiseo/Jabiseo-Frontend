@@ -48,7 +48,7 @@ const SolutionUI: React.FC<SolutionUIProps> = props => {
                   }}
                 >
                   <Typography
-                    variant="h3"
+                    variant="subtitle1"
                     fontSize={{
                       xs: "14px",
                       sm: "18px",

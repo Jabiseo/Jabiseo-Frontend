@@ -7,8 +7,8 @@ import rehypeRaw from "rehype-raw";
 import remarkMath from "remark-math";
 
 interface SearchResultProblemProps {
-  problem: BookMarkProblem;
-  handleBookmark: (problem: BookMarkProblem) => void;
+  problem: SearchProblemType;
+  handleBookmark: (problem: SearchProblemType) => void;
   gotoDetailPage: (problemId: number) => void;
 }
 
@@ -91,7 +91,8 @@ const SearchResultProblem = ({
         </Box>
 
         <Box
-          onClick={() => {
+          onClick={e => {
+            e.stopPropagation();
             handleBookmark(problem);
           }}
         >

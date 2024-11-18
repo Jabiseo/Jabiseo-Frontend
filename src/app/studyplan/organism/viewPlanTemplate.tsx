@@ -5,6 +5,8 @@ import { differenceInDays, format } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import CalendarUI from "../molecule/calendarUI";
 import PlanList from "../molecule/planList";
+import { getWeek } from "date-fns/getWeek";
+import { startOfMonth } from "date-fns/startOfMonth";
 
 function formatDayDate(dateString: string) {
   // 날짜 문자열을 '-' 기준으로 분리
@@ -25,7 +27,14 @@ const ViewPlanTemplate = ({
   const [viewMonth, setViewMonth] = useState(new Date());
   // 보고있는 날짜를 저장하는 state
   const [viewDay, setViewDay] = useState<string>(format(new Date(), "yyyy-MM-dd"));
-  const [viewWeek, setViewWeek] = useState<number>(1);
+  const [viewWeek, setViewWeek] = useState<number>(() => {
+    const currentDate = new Date();
+    return (
+      getWeek(currentDate, { weekStartsOn: 1 }) -
+      getWeek(startOfMonth(currentDate), { weekStartsOn: 1 }) +
+      1
+    );
+  });
   const [planDatas, setPlanDatas] = useState<CalendarType | undefined>();
   const [dailyProgress, setDailyProgress] = useState<Plan[]>();
   const [weeklyProgress, setWeeklyProgress] = useState<Plan[]>();

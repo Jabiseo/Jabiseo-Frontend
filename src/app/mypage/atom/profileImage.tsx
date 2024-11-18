@@ -56,6 +56,7 @@ const ProfileImage = ({ initialProfileImage, isSm, isEdit }: ProfileImageProps) 
     }
     const data = await response.json();
     setProfileImage(data.profileImage);
+    alert("프로필 이미지 업로드에 성공했습니다.");
   };
 
   useEffect(() => {

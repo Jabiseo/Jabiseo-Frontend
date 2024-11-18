@@ -5,6 +5,7 @@ import { MiddleBoxColumn } from "@/src/components/elements/styledElements";
 import StudyMainUI from "../components/studyMainUI";
 import dynamic from "next/dynamic";
 import useProblems from "@/src/hooks/useProblems";
+import LoadingUI from "@/src/components/loadingUI";
 
 const StudyHeader = dynamic(() => import("@/src/app/study/components/studyHeader"), {
   loading: () => <p>Header Loading</p>,
@@ -13,7 +14,7 @@ const StudyHeader = dynamic(() => import("@/src/app/study/components/studyHeader
 const studyPage = () => {
   const { getProblems, certificateInfo, loading, error } = useProblems();
   if (loading) {
-    return <div>로딩중...</div>;
+    return <LoadingUI />;
   }
   return (
     <MiddleBoxColumn

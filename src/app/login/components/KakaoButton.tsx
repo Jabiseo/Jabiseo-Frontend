@@ -1,28 +1,28 @@
 import Image from "next/image";
 import KakaoLogin from "react-kakao-login";
 
-import { mainfetch } from "@/src/api/apis/mainFetch";
-
 const KakaoButton: React.FC = () => {
   const kakaoClientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
 
-  /**
-   *
-   * @param data
-   * @todo idToken 서버로 전송 및 토큰 받아오기
-   */
   const kakaoOnSuccess = async (data: any) => {
     const idToken = data.response.id_token;
     submitIdToken(idToken);
   };
 
   const submitIdToken = async (idToken: string) => {
-    const res = await mainfetch(
-      "/auth/login",
-      { method: "POST", body: { idToken, oauthServer: "KAKAO" } },
-      false
-    );
-
+    const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ idToken, oauthServer: "KAKAO" }),
+      headers: {
+        "X-Device-Id": localStorage.getItem("X-Device-Id") ?? "",
+        "Content-Type": "application/json",
+      },
+    });
+    // const res = await mainfetch(
+    //   "/auth/login",
+    //   { method: "POST", body: { idToken, oauthServer: "KAKAO" } },
+    //   false
+    // );
     if (res.status === 200) {
       const data = await res.json();
       // document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;

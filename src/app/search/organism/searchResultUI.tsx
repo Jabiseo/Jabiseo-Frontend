@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 
 interface SearchResultUIProps {
   text: string;
-  searchResults: BookMarkProblem[];
-  handleBookmark: (problem: BookMarkProblem) => void;
+  searchResults: SearchProblemType[];
+  handleBookmark: (problem: SearchProblemType) => void;
   getMoreData: () => void;
   selectedCertificate: CertificateType;
 }
