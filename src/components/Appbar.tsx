@@ -19,13 +19,14 @@ const Appbar = ({ background }: { background?: boolean }) => {
   };
 
   const handleLogout = async () => {
-    await mainfetch(
-      "/auth/logout",
-      {
-        method: "POST",
+    await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/auth/logout", {
+      method: "POST",
+      headers: {
+        "X-Device-Id": localStorage.getItem("X-Device-Id") ?? "",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      true
-    );
+    });
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userInfo");

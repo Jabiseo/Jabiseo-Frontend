@@ -46,6 +46,7 @@ const NickNameMolecule = ({
       }
       const data = await response.json();
       handleChangeNickname(data.nickname);
+      alert("닉네임 변경에 성공했습니다.");
     };
     fetchNickname();
   };

@@ -60,6 +60,7 @@ const EditCertificate: React.FC<EditCertificateProps> = ({
         return;
       }
       handleInitialCertificateChange(certificate);
+      alert("자격증 변경에 성공했습니다.");
     };
 
     fetchCertificate();

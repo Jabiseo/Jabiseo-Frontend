@@ -37,15 +37,17 @@ const ScrollAppbar = ({ isScroll }: { isScroll?: number }) => {
   };
 
   const handleLogout = async () => {
+    await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/auth/logout", {
+      method: "POST",
+      headers: {
+        "X-Device-Id": localStorage.getItem("X-Device-Id") ?? "",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    await mainfetch(
-      "/auth/logout",
-      {
-        method: "POST",
-      },
-      true
-    );
+    localStorage.removeItem("userInfo");
     window.location.href = "/";
   };
 

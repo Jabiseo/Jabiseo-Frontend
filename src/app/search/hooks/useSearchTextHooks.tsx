@@ -49,7 +49,7 @@ const useSearchTextHooks = () => {
       if (isLoading || !selectedCertificate?.certificateId) return;
       setIsLoading(true);
       const isLogin = localStorage.getItem("accessToken") ? true : false;
-      console.log(isLogin);
+
       try {
         const response = await mainfetch(
           `/problems/search?query=${searchText}${lastScore ? `&last-score=${lastScore}` : ""}${

@@ -1,4 +1,3 @@
-import { mainfetch } from "@/src/api/apis/mainFetch";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 const GoogleButton = () => {
   const googleID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -7,11 +6,19 @@ const GoogleButton = () => {
    * @todo idToken 서버로 전송 및 토큰 받아오기
    */
   const submitIdToken = async (idToken: string) => {
-    const res = await mainfetch(
-      "/auth/login",
-      { method: "POST", body: { idToken, oauthServer: "GOOGLE" } },
-      false
-    );
+    const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ idToken, oauthServer: "GOOGLE" }),
+      headers: {
+        "X-Device-Id": localStorage.getItem("X-Device-Id") ?? "",
+        "Content-Type": "application/json",
+      },
+    });
+    // const res = await mainfetch(
+    //   "/auth/login",
+    //   { method: "POST", body: { idToken, oauthServer: "GOOGLE" } },
+    //   false
+    // );
 
     if (res.status === 200) {
       const data = await res.json();

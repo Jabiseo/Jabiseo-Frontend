@@ -5,8 +5,20 @@ import GoogleButton from "./components/GoogleButton";
 import { Box, ThemeProvider, Typography, createTheme, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Appbar from "@/src/components/Appbar";
+import { useEffect } from "react";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const Login = () => {
+  useEffect(() => {
+    if (localStorage.getItem("X-Device-Id")) return;
+
+    FingerprintJS.load()
+      .then(fp => fp.get())
+      .then(result => {
+        const visitorId = result.visitorId;
+        localStorage.setItem("X-Device-Id", visitorId);
+      });
+  }, []);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const th = createTheme({
