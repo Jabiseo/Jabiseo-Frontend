@@ -210,9 +210,9 @@ const AppbarToolbarUI: React.FC<AppbarToolbarUIProps> = ({
             >
               <PersionIcon width={28} height={28} color={fontColor} />
             </NoHoverTouchButton>
-            <NoHoverTouchButton href="/noti" sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}>
+            {/* <NoHoverTouchButton href="/noti" sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}>
               <NotiIcon width={24} height={24} color={fontColor} />
-            </NoHoverTouchButton>
+            </NoHoverTouchButton> */}
             <NoHoverTouchButton
               href="/search"
               sx={{ padding: 0, minHeight: 0, minWidth: 0, mx: 1 }}

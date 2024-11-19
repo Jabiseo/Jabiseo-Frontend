@@ -63,7 +63,7 @@ const MakePlanCalendar = ({ setEndDate }: { setEndDate: (date: Date) => void }) 
         }}
         onChange={date => {
           if (date) {
-            setEndDate(date.toDate());
+            setEndDate(date.add(9, "hour").toDate());
           }
         }}
       />

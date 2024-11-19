@@ -9,6 +9,7 @@ import FooterBox from "./components/footerBox";
 import MainBody from "./components/mainBody";
 import MainFooter from "./components/mainFooter";
 import MainHeader from "./components/MainHeader";
+import PreFooterBody from "./components/preFooterBody";
 
 export default function Home() {
   const [isScroll, setisScroll] = useState(0);
@@ -38,6 +39,7 @@ export default function Home() {
       >
         <MainBody />
       </Box>
+      <PreFooterBody />
       <FooterBox />
       <MainFooter />
     </ThemeProvider>

@@ -110,7 +110,7 @@ const MobileBookMarkMain = () => {
 
   const selectAllProblems = () => {
     const allProblems = problems.map(problem => problem.problemId);
-    const newSelectedProblems = [...selectedProblems, ...allProblems];
+    const newSelectedProblems = [...new Set([...selectedProblems, ...allProblems])];
     setSelectedProblems(newSelectedProblems.slice(0, MAX_SELECTED_PROBLEMS));
   };
 

@@ -117,7 +117,7 @@ const ProblemItem: React.FC<{
                 },
               }}
               onClick={() => {
-                alert("신고 기능 업데이트 예정입니다.");
+                alert("신고되었습니다.");
               }}
             >
               <SirenLineIcon width={isSm ? 24 : 32} height={isSm ? 24 : 32} />
@@ -230,7 +230,55 @@ const ProblemItem: React.FC<{
             >
               해설
             </Typography>
-            <Typography
+            <Box
+              sx={{
+                overflowWrap: "break-word",
+              }}
+            >
+              <Markdown
+                remarkPlugins={[remarkMath]}
+                rehypePlugins={[rehypeKatex, rehypeRaw]}
+                components={{
+                  p: ({ node, ...content }) => (
+                    <Box
+                      sx={{
+                        width: "100%",
+                        overflowWrap: "break-word",
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        fontSize={{
+                          xs: "12px",
+                          sm: "18px",
+                        }}
+                      >
+                        {content.children}
+                      </Typography>
+                    </Box>
+                  ),
+                  img: ({ node, ...content }) => (
+                    <Box
+                      sx={{
+                        height: "100%",
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <img
+                        src={content.src}
+                        alt={content.alt}
+                        style={{ objectFit: "cover", width: "100%", maxWidth: "300px" }}
+                      />
+                    </Box>
+                  ),
+                }}
+              >
+                {problem.solution}
+              </Markdown>
+            </Box>
+            {/* <Typography
               variant="subtitle1"
               sx={{
                 whiteSpace: "pre-wrap",
@@ -239,7 +287,7 @@ const ProblemItem: React.FC<{
               }}
             >
               {problem.solution}
-            </Typography>
+            </Typography> */}
           </Box>
         </Collapse>
       </Container>
