@@ -72,6 +72,7 @@ const AppbarDrawer: React.FC<AppbarDrawerProps> = ({
                 href="/mypage"
               >
                 <Image
+                  loader={() => userInfo?.profileImage || ""}
                   src={userInfo ? userInfo.profileImage : ""}
                   alt="profile"
                   width={40}

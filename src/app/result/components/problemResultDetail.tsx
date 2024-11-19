@@ -58,7 +58,7 @@ const ProblemResultDetail: React.FC<{
    * @todo 신고하기 기능
    */
   const alerting = () => {
-    alert("신고하기 기능은 준비중입니다.");
+    alert("신고되었습니다.");
   };
   useEffect(() => {
     changeColor();

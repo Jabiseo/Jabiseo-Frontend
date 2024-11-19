@@ -2,6 +2,8 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { Metadata } from "next";
 import GoogleAnalytics from "../components/google.analytics";
 import "./globals.css";
+import { Suspense } from "react";
+import LoadingUI from "../components/loadingUI";
 
 export const metadata: Metadata = {
   title: "AI 비서 자비서",
@@ -21,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {process.env.NEXT_PUBLIC_GA_ID ? <GoogleAnalytics /> : <div>GA환경변수값필요</div>}
-        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+        <AppRouterCacheProvider>
+          <Suspense fallback={<LoadingUI />}>{children}</Suspense>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

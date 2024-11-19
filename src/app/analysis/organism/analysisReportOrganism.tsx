@@ -9,24 +9,25 @@ const AnalysisReportOrganism = () => {
   const { userInfo, loading, error } = useUserInfo();
   const [isLoading, setIsLoading] = useState(true);
   const [vulnerableSubjects, setVulnerableSubjects] = useState<VulnerableSubject[]>();
-  const [vulnerableTags, setVulnerableTags] = useState<VulnerableTag[]>();
+  // const [vulnerableTags, setVulnerableTags] = useState<VulnerableTag[]>();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [subjectsResponse, tagsResponse] = await Promise.all([
-          mainfetch("/analyses/vulnerable-subjects", { method: "GET" }, true),
-          mainfetch("/analyses/vulnerable-tags", { method: "GET" }, true),
-        ]);
+        const subjectsResponse = await mainfetch(
+          "/analyses/vulnerable-subjects",
+          { method: "GET" },
+          true
+        );
 
-        if (!subjectsResponse.ok || !tagsResponse.ok) {
+        if (!subjectsResponse.ok) {
           throw new Error("데이터를 가져오는 데 실패했습니다.");
         }
 
         const subjectsData = await subjectsResponse.json();
-        const tagsData = await tagsResponse.json();
+        // const tagsData = await tagsResponse.json();
 
         setVulnerableSubjects(subjectsData);
-        setVulnerableTags(tagsData);
+        // setVulnerableTags(tagsData);
       } catch (err) {
       } finally {
         setIsLoading(false);
@@ -115,11 +116,11 @@ const AnalysisReportOrganism = () => {
           userName={userInfo!.nickname}
           vulnerableSubjects={vulnerableSubjects!}
         />
-        <VulnerableTagsBox
+        {/* <VulnerableTagsBox
           title="태그별 리포트"
           userName={userInfo!.nickname}
           VulnerableTags={vulnerableTags!}
-        />
+        /> */}
       </Box>
     </Box>
   );

@@ -90,6 +90,7 @@ const ProfileImage = ({ initialProfileImage, isSm, isEdit }: ProfileImageProps) 
         }}
       >
         <Image
+          loader={() => profileImage}
           src={profileImage}
           alt="profile"
           width={isSm ? 64 : 96}

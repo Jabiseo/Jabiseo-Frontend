@@ -6,6 +6,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import MakePlanCalendar from "../atom/makePlanCalendar";
 import ChoiceDailyPlan from "../molecule/choiceDailyPlan";
+import dayjs from "dayjs";
 
 const MakePlanTemplate = ({
   handlePlanType,
@@ -22,7 +23,7 @@ const MakePlanTemplate = ({
     handleChangeValueDaily,
     handleChangeValueWeekly,
   } = useMakePlanStates();
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(dayjs(new Date()).add(1, "day").toDate());
   const handleMakePlan = async () => {
     const makePlanData: MakePlanType = {
       endAt: endDate,
@@ -42,7 +43,7 @@ const MakePlanTemplate = ({
       }),
     };
 
-    await mainfetch(
+    const res = await mainfetch(
       "/plans",
       {
         method: "POST",
@@ -50,6 +51,10 @@ const MakePlanTemplate = ({
       },
       true
     );
+    if (res.ok) {
+      window.location.reload();
+      return;
+    }
     handlePlanType("VIEW");
   };
   return (

@@ -84,7 +84,11 @@ const PlanList: React.FC<PlanListProps> = ({ planItems, text, handlePlanType }) 
         </Box>
       </Box>
       {planItems.length === 0 ? (
-        <Typography>문제 풀이 기록이 없습니다.</Typography>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}
+        >
+          <Typography>문제 풀이 기록이 없습니다.</Typography>
+        </Box>
       ) : (
         <Box
           sx={{
