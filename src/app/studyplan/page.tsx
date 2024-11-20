@@ -35,6 +35,7 @@ const StudyPlan = () => {
       }
       const data = await res.json();
       setActivePlanData(data);
+
       setPlanType("VIEW");
     };
     getActivePlan();
