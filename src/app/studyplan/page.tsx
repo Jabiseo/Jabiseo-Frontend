@@ -30,7 +30,8 @@ const StudyPlan = () => {
 
       if (!res.ok) {
         window.location.href = "/";
-        throw new Error("알 수 없는 오류가 발생했습니다.");
+        alert("먼저 마이페이지에서 자격증을 설정해주세요.");
+        return;
       }
       const data = await res.json();
       setActivePlanData(data);

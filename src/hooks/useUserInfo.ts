@@ -29,7 +29,8 @@ const useUserInfo = () => {
         }
 
         if (!infoResponse.ok || !certificateResponse.ok || !certificatesResponse.ok) {
-          throw new Error("Failed to get user information, certificate, or certificates");
+          window.location.href = "/";
+          return;
         }
         const infoData = await infoResponse.json();
         const certificateData = await certificateResponse.json();

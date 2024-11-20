@@ -14,7 +14,7 @@ const useCertificates = () => {
         setCertificates(data);
       } catch (err: any) {
         setError(err.message);
-        throw new Error(err.message);
+        return;
       } finally {
         setLoading(false);
       }
