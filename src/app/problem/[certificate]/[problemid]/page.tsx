@@ -36,7 +36,7 @@ const ProblemMainPage = ({
       );
       if (res.status !== 200) {
         window.location.href = "/";
-        throw new Error("문제를 불러오는데 실패했습니다.");
+        return;
       }
       const data = await res.json();
       data.chooseNumber = -1;

@@ -61,7 +61,8 @@ const useSearchTextHooks = () => {
           isLogin
         );
         if (!response.ok) {
-          throw new Error("검색 요청에 실패했습니다.");
+          alert("검색 요청에 실패했습니다.");
+          return;
         }
         const data = await response.json();
         if (data.length === 0) {

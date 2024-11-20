@@ -85,7 +85,8 @@ const useAppbarState = () => {
               JSON.stringify({ nickname: infoData.nickname, profileImage: infoData.profileImage })
             );
           } catch (err: any) {
-            throw new Error(err);
+            window.location.href = "/";
+            return;
           }
         };
 

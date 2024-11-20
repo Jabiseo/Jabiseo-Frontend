@@ -108,7 +108,9 @@ const ViewPlanTemplate = ({
       );
 
       if (!res.ok) {
-        throw new Error("Failed to fetch plans");
+        alert("먼저 마이페이지에서 자격증을 설정해주세요.");
+        window.location.href = "/";
+        return;
       }
       const data = await res.json();
 

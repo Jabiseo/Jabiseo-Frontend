@@ -20,7 +20,9 @@ const AnalysisReportOrganism = () => {
         );
 
         if (!subjectsResponse.ok) {
-          throw new Error("데이터를 가져오는 데 실패했습니다.");
+          alert("먼저 마이페이지에서 자격증을 설정해주세요.");
+          window.location.href = "/";
+          return;
         }
 
         const subjectsData = await subjectsResponse.json();
