@@ -45,8 +45,8 @@ const ViewPlanTemplate = ({
     if (getDailyProgress) {
       getDailyProgress.planItems.map(plan => {
         if (plan.activityType === "TIME") {
-          plan.completedValue = Math.floor(plan.completedValue! / 60);
-          plan.targetValue = Math.floor(plan.targetValue! / 60);
+          plan.completedValue = Math.floor(plan.completedValue! / 3600);
+          plan.targetValue = Math.floor(plan.targetValue! / 3600);
         }
       });
     }
@@ -59,8 +59,8 @@ const ViewPlanTemplate = ({
     if (getWeeklyProgress) {
       getWeeklyProgress.planItems.map(plan => {
         if (plan.activityType === "TIME") {
-          plan.completedValue = Math.floor(plan.completedValue! / 60);
-          plan.targetValue = Math.floor(plan.targetValue! / 60);
+          plan.completedValue = Math.floor(plan.completedValue! / 3600);
+          plan.targetValue = Math.floor(plan.targetValue! / 3600);
         }
       });
     }

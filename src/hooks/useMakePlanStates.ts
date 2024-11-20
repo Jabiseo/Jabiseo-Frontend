@@ -98,14 +98,14 @@ const useMakePlanStates = () => {
     const dailyPlan = activePlan.dailyPlanItems.map(v => {
       const tem = daily.find(d => d.activityType === v.activityType)!;
       return {
-        targetValue: v.activityType === "TIME" ? v.targetValue / 3600 : v.targetValue,
+        targetValue: v.activityType === "TIME" ? v.targetValue * 3600 : v.targetValue,
         activityType: tem.activityType,
       };
     });
     const weeklyPlan = activePlan.weeklyPlanItems.map(v => {
       const tem = weekly.find(d => d.activityType === v.activityType)!;
       return {
-        targetValue: v.activityType === "TIME" ? v.targetValue / 3600 : v.targetValue,
+        targetValue: v.activityType === "TIME" ? v.targetValue * 3600 : v.targetValue,
         activityType: tem.activityType,
       };
     });
@@ -120,6 +120,7 @@ const useMakePlanStates = () => {
         weeklyPlan.find(d => d.activityType === v.activityType)?.targetValue || 0;
     });
   };
+
   return {
     daily,
     weekly,

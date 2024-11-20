@@ -25,7 +25,6 @@ const EditPlanTemplate = ({
     initActivePlan,
   } = useMakePlanStates();
   const [endDate, setEndDate] = useState<Date>(new Date());
-
   useEffect(() => {
     initActivePlan(activePlanData);
   }, []);

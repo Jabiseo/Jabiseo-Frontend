@@ -16,7 +16,7 @@ const renderTypeDescription = (activityType: Plan["activityType"], targetValue: 
     case "PROBLEM":
       return "문제 풀이 " + targetValue + "개 풀기 ";
     case "TIME":
-      return "공부 " + Math.floor(targetValue / 60) + "시간 하기";
+      return "공부 " + targetValue + "시간 하기";
   }
 };
 

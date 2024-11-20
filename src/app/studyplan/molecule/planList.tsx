@@ -13,6 +13,7 @@ interface PlanListProps {
 const PlanList: React.FC<PlanListProps> = ({ planItems, text, handlePlanType }) => {
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box
       marginTop={{
